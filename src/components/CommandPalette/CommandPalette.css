@@ -1,0 +1,229 @@
+/* CommandPalette — MAGI command entry. A prompt line over a scrolling list
+   of grouped rows, all monospace, centred near the top of the viewport where
+   a terminal prompt belongs. Orange marks the cursor row; cyan marks the
+   characters the query actually matched. */
+
+.kanso-cmdk {
+  position: fixed;
+  inset: 0;
+  z-index: var(--kanso-z-modal);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 12vh var(--kanso-spacing-xl) var(--kanso-spacing-xl);
+}
+
+.kanso-cmdk__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--kanso-color-scrim);
+  animation: kanso-cmdk-scrim-in var(--kanso-motion-duration-overlay-enter)
+    var(--kanso-motion-ease-mechanical) both;
+}
+
+.kanso-cmdk--closing .kanso-cmdk__scrim {
+  animation: kanso-cmdk-scrim-out var(--kanso-motion-duration-overlay-exit)
+    var(--kanso-motion-ease-mechanical) both;
+}
+
+.kanso-cmdk__panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(40rem, 100%);
+  max-height: 70vh;
+  background: var(--kanso-color-bg);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+  border-top: var(--kanso-shape-accent-rule) solid var(--kanso-color-primary);
+  box-shadow: var(--kanso-shadow-float);
+  animation: kanso-cmdk-panel-in var(--kanso-motion-duration-panel-enter)
+    var(--kanso-motion-ease-mechanical) both;
+}
+
+.kanso-cmdk--closing .kanso-cmdk__panel {
+  animation: kanso-cmdk-panel-out var(--kanso-motion-duration-panel-exit)
+    var(--kanso-motion-ease-mechanical) both;
+}
+
+/* --- prompt ------------------------------------------------------------- */
+.kanso-cmdk__prompt {
+  display: flex;
+  align-items: center;
+  gap: var(--kanso-spacing-lg);
+  padding: var(--kanso-spacing-lg) var(--kanso-spacing-xl);
+  border-bottom: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+  background: var(--kanso-color-well);
+}
+
+.kanso-cmdk__caret {
+  flex: 0 0 auto;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-md);
+  font-weight: var(--kanso-type-weight-bold);
+  line-height: 1;
+  color: var(--kanso-color-primary);
+}
+
+.kanso-cmdk__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-md);
+  letter-spacing: var(--kanso-type-tracking-wide);
+  text-transform: uppercase;
+  color: var(--kanso-color-text);
+  caret-color: var(--kanso-color-info);
+  line-height: var(--kanso-type-leading-tight);
+}
+
+.kanso-cmdk__input::placeholder {
+  color: var(--kanso-color-muted);
+  opacity: 1;
+  letter-spacing: var(--kanso-type-tracking-label);
+}
+
+.kanso-cmdk__count {
+  flex: 0 0 auto;
+  font-family: var(--kanso-type-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-wider);
+  color: var(--kanso-color-muted);
+}
+
+/* --- list --------------------------------------------------------------- */
+.kanso-cmdk__list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--kanso-spacing-md) 0;
+}
+
+.kanso-cmdk__group + .kanso-cmdk__group {
+  border-top: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+  margin-top: var(--kanso-spacing-md);
+  padding-top: var(--kanso-spacing-md);
+}
+
+.kanso-cmdk__group-label {
+  padding: var(--kanso-spacing-sm) var(--kanso-spacing-xl);
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-xs);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-widest);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+  line-height: var(--kanso-type-leading-tight);
+}
+
+.kanso-cmdk__row {
+  display: flex;
+  align-items: center;
+  gap: var(--kanso-spacing-md);
+  padding: var(--kanso-spacing-md) var(--kanso-spacing-xl);
+  cursor: pointer;
+  border-left: var(--kanso-shape-accent-rule) solid transparent;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-base);
+  letter-spacing: var(--kanso-type-tracking-wide);
+  color: var(--kanso-color-text-dim);
+  line-height: var(--kanso-type-leading-tight);
+  transition:
+    background-color var(--kanso-motion-duration-instant) var(--kanso-motion-ease-mechanical),
+    color var(--kanso-motion-duration-instant) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-cmdk__row--active {
+  background: var(--kanso-color-primary-wash);
+  border-left-color: var(--kanso-color-primary);
+  color: var(--kanso-color-text);
+}
+
+.kanso-cmdk__row-mark {
+  flex: 0 0 auto;
+  width: 0.75em;
+  font-size: var(--kanso-type-size-sm);
+  color: var(--kanso-color-primary);
+  line-height: 1;
+}
+
+.kanso-cmdk__row-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.kanso-cmdk__hit {
+  background: transparent;
+  color: var(--kanso-color-info);
+  font-weight: var(--kanso-type-weight-bold);
+}
+
+.kanso-cmdk__row-hint {
+  flex: 0 0 auto;
+  padding-left: var(--kanso-spacing-xl);
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-wider);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+}
+
+.kanso-cmdk__empty {
+  margin: 0;
+  padding: var(--kanso-spacing-2xl) var(--kanso-spacing-xl);
+  text-align: center;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+}
+
+/* --- legend -------------------------------------------------------------- */
+.kanso-cmdk__legend {
+  display: flex;
+  align-items: center;
+  gap: var(--kanso-spacing-xl);
+  padding: var(--kanso-spacing-md) var(--kanso-spacing-xl);
+  border-top: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+  background: var(--kanso-color-panel);
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-xs);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+}
+
+.kanso-cmdk__legend b {
+  color: var(--kanso-color-primary);
+  font-weight: var(--kanso-type-weight-bold);
+}
+
+/* --- motion --------------------------------------------------------------- */
+@keyframes kanso-cmdk-scrim-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes kanso-cmdk-scrim-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes kanso-cmdk-panel-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes kanso-cmdk-panel-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-4px); }
+}

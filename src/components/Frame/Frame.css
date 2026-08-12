@@ -1,0 +1,134 @@
+/* Frame — targeting container. Every line is 1px and unlit; the only
+   depth cue is the inset hairline. Colour arrives via --kanso-frame-color,
+   set inline by the component. */
+.kanso-frame {
+  /* Local defaults so the frame still renders correctly if the inline
+     style is ever stripped (SSR, sanitised HTML, a CSS-only consumer). */
+  --kanso-frame-color: var(--kanso-color-primary);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: var(--kanso-spacing-xl) var(--kanso-spacing-lg) var(--kanso-spacing-lg);
+  background: var(--kanso-glass-bg-heavy);
+  border: 1px solid
+    color-mix(in srgb, var(--kanso-frame-color) 33%, transparent);
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--kanso-frame-color) 7%, transparent);
+}
+
+.kanso-frame__grid {
+  color: var(--kanso-frame-color);
+}
+
+.kanso-frame__rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+}
+
+/* Rails sit at the far end of the bracket arms, so they track bracketSize
+   instead of drifting away from it. */
+.kanso-frame__rail--top {
+  top: var(--kanso-shape-bracket);
+  background: color-mix(in srgb, var(--kanso-frame-color) 33%, transparent);
+}
+
+.kanso-frame__rail--bottom {
+  bottom: calc(var(--kanso-shape-bracket) * 0.56);
+  background: color-mix(in srgb, var(--kanso-frame-color) 13%, transparent);
+}
+
+/* --- corner brackets --------------------------------------------------- */
+.kanso-frame__bracket {
+  position: absolute;
+  width: var(--kanso-shape-bracket);
+  height: var(--kanso-shape-bracket);
+  pointer-events: none;
+}
+
+.kanso-frame__bracket--tl {
+  top: 0;
+  left: 0;
+  border-top: 1px solid var(--kanso-frame-color);
+  border-left: 1px solid var(--kanso-frame-color);
+}
+
+.kanso-frame__bracket--tr {
+  top: 0;
+  right: 0;
+  border-top: 1px solid var(--kanso-frame-color);
+  border-right: 1px solid var(--kanso-frame-color);
+}
+
+.kanso-frame__bracket--bl {
+  bottom: 0;
+  left: 0;
+  border-bottom: 1px solid var(--kanso-frame-color);
+  border-left: 1px solid var(--kanso-frame-color);
+}
+
+.kanso-frame__bracket--br {
+  bottom: 0;
+  right: 0;
+  border-bottom: 1px solid var(--kanso-frame-color);
+  border-right: 1px solid var(--kanso-frame-color);
+}
+
+/* --- header: label + readout -------------------------------------------
+   In normal flow, lifted so it straddles the top rule. Absolutely
+   positioned children contribute nothing to intrinsic width, so a label
+   longer than the body used to overhang the frame and collide with the
+   corner brackets — which is exactly what broke the small variants. */
+.kanso-frame__header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: baseline;
+  gap: var(--kanso-spacing-xl);
+  /* Cancel the frame's own top padding, then lift half a line so the text
+     centres on the border rather than sitting under it. */
+  margin-top: calc(-1 * var(--kanso-spacing-xl) - 0.5em);
+  margin-bottom: var(--kanso-spacing-lg);
+}
+
+/* Black gutter punched through the rule behind each piece of text. */
+.kanso-frame__label,
+.kanso-frame__readout {
+  background: var(--kanso-color-bg);
+  padding: 0 var(--kanso-spacing-md);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.kanso-frame__label {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-bold);
+  letter-spacing: var(--kanso-type-tracking-widest);
+  text-transform: uppercase;
+  color: var(--kanso-frame-color);
+}
+
+.kanso-frame__readout {
+  margin-left: auto;
+  font-family: var(--kanso-type-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--kanso-type-size-xs);
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+  pointer-events: none;
+}
+
+.kanso-frame__body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+}

@@ -1,0 +1,15 @@
+{
+  "ease-mechanical": { "$type": "cubicBezier", "$value": [0.83, 0, 0.17, 1] },
+  "ease-out": { "$type": "cubicBezier", "$value": [0.16, 1, 0.3, 1] },
+  "ease-in": { "$type": "cubicBezier", "$value": [0.7, 0, 0.84, 0] },
+  "duration-instant": { "$type": "duration", "$value": 60 },
+  "duration-tick": { "$type": "duration", "$value": 120 },
+  "duration-overlay-enter": { "$type": "duration", "$value": 140 },
+  "duration-overlay-exit": { "$type": "duration", "$value": 90 },
+  "duration-panel-enter": { "$type": "duration", "$value": 160 },
+  "duration-panel-exit": { "$type": "duration", "$value": 100 },
+  "duration-crawl": { "$type": "duration", "$value": 1200 },
+  "duration-pulse": { "$type": "duration", "$value": 1400 },
+  "duration-sweep": { "$type": "duration", "$value": 2000 },
+  "duration-blink": { "$type": "duration", "$value": 1000 }
+}

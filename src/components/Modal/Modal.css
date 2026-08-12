@@ -1,0 +1,209 @@
+/* Modal — NERV command dialog. Scrim + hairline panel + orange accent rule,
+   framed by four L-brackets. Enter 160ms, exit 100ms, mechanical, no bounce.
+   Depth is the black shadow and the hairline; nothing glows but the rule. */
+
+.kanso-modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--kanso-z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--kanso-spacing-3xl) var(--kanso-spacing-xl);
+}
+
+.kanso-modal__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--kanso-color-scrim);
+  animation: kanso-modal-scrim-in var(--kanso-motion-duration-overlay-enter)
+    var(--kanso-motion-ease-mechanical) both;
+}
+
+.kanso-modal--blur .kanso-modal__scrim {
+  backdrop-filter: blur(var(--kanso-glass-blur-sm));
+  -webkit-backdrop-filter: blur(var(--kanso-glass-blur-sm));
+}
+
+.kanso-modal--closing .kanso-modal__scrim {
+  animation: kanso-modal-scrim-out var(--kanso-motion-duration-overlay-exit)
+    var(--kanso-motion-ease-mechanical) both;
+}
+
+/* --- panel ------------------------------------------------------------- */
+.kanso-modal__panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+  max-height: 100%;
+  background: var(--kanso-color-panel);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+  border-top: var(--kanso-shape-accent-rule) solid var(--kanso-color-primary);
+  box-shadow: var(--kanso-shadow-float);
+  outline: none;
+  animation: kanso-modal-panel-in var(--kanso-motion-duration-panel-enter)
+    var(--kanso-motion-ease-mechanical) both;
+}
+
+.kanso-modal--closing .kanso-modal__panel {
+  animation: kanso-modal-panel-out var(--kanso-motion-duration-panel-exit)
+    var(--kanso-motion-ease-mechanical) both;
+}
+
+.kanso-modal__panel--sm { width: 24rem; }
+.kanso-modal__panel--md { width: 33rem; }
+.kanso-modal__panel--lg { width: 48rem; }
+
+.kanso-modal__panel--full {
+  width: 100%;
+  height: 100%;
+  flex: 1 1 auto;
+}
+
+/* --- targeting frame ----------------------------------------------------
+   The brackets used to float 4px inside the panel border, which drew a
+   second, smaller rectangle and made the dialog read as two mismatched
+   frames. They now sit *on* the panel's own edge — pulled out by exactly
+   the border widths — so each L is a brighter reinforcement of a corner
+   the border already draws, not a frame of its own. */
+.kanso-modal__bracket {
+  position: absolute;
+  width: var(--kanso-shape-bracket);
+  height: var(--kanso-shape-bracket);
+  pointer-events: none;
+  border: 0 solid var(--kanso-color-primary);
+}
+
+.kanso-modal__bracket--tl,
+.kanso-modal__bracket--tr {
+  /* The top edge is the 2px accent rule, so the top pair aligns to that. */
+  top: calc(-1 * var(--kanso-shape-accent-rule));
+  border-top-width: var(--kanso-shape-accent-rule);
+}
+
+.kanso-modal__bracket--bl,
+.kanso-modal__bracket--br {
+  bottom: calc(-1 * var(--kanso-shape-hairline));
+  border-bottom-width: var(--kanso-shape-hairline);
+}
+
+.kanso-modal__bracket--tl,
+.kanso-modal__bracket--bl {
+  left: calc(-1 * var(--kanso-shape-hairline));
+  border-left-width: var(--kanso-shape-hairline);
+}
+
+.kanso-modal__bracket--tr,
+.kanso-modal__bracket--br {
+  right: calc(-1 * var(--kanso-shape-hairline));
+  border-right-width: var(--kanso-shape-hairline);
+}
+
+/* --- header ------------------------------------------------------------ */
+.kanso-modal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--kanso-spacing-xl);
+  padding: var(--kanso-spacing-xl) var(--kanso-spacing-2xl) var(--kanso-spacing-lg);
+  border-bottom: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+}
+
+.kanso-modal__heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-sm);
+  min-width: 0;
+}
+
+.kanso-modal__title {
+  margin: 0;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-md);
+  font-weight: var(--kanso-type-weight-bold);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  color: var(--kanso-color-primary);
+  line-height: var(--kanso-type-leading-tight);
+}
+
+.kanso-modal__subtitle {
+  margin: 0;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-wider);
+  color: var(--kanso-color-muted);
+  line-height: var(--kanso-type-leading-snug);
+}
+
+.kanso-modal__close {
+  flex: 0 0 auto;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+  color: var(--kanso-color-text-dim);
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-base);
+  line-height: 1;
+  transition:
+    color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    border-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    background-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-modal__close:hover {
+  color: var(--kanso-color-danger);
+  border-color: var(--kanso-color-danger-dim);
+  background: var(--kanso-color-danger-film);
+}
+
+/* --- body / footer ------------------------------------------------------ */
+.kanso-modal__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--kanso-spacing-2xl);
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-base);
+  color: var(--kanso-color-text);
+  line-height: var(--kanso-type-leading-normal);
+}
+
+.kanso-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--kanso-spacing-md);
+  padding: var(--kanso-spacing-lg) var(--kanso-spacing-2xl);
+  border-top: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+  background: var(--kanso-color-bg);
+}
+
+/* --- motion ------------------------------------------------------------ */
+@keyframes kanso-modal-scrim-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes kanso-modal-scrim-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes kanso-modal-panel-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes kanso-modal-panel-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(4px); }
+}

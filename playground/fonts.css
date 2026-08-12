@@ -1,0 +1,30 @@
+/* Self-hosted faces for the gallery.
+ *
+ * These were loaded from the Google Fonts CDN until one of its JetBrains
+ * Mono subset URLs 404'd — Google rotates the hashed woff2 paths and a
+ * cached stylesheet can outlive the file it points at. A design system that
+ * ships into Electron apps and offline local tools has no business depending
+ * on a CDN at runtime, so the faces are vendored via @fontsource.
+ *
+ * These are devDependencies: @kanso/ui still does not bundle fonts (see
+ * KANSO.md §11). This file is the playground's own font loading, and it
+ * doubles as the reference for how a consuming app should do it.
+ *
+ * Only the weights the system actually uses are imported. Adding a weight
+ * here without a matching token is how a 300kB font payload starts. */
+
+/* mono — all UI text and every data readout */
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "@fontsource/jetbrains-mono/700.css";
+
+/* stamp — wordmarks, banners, selector chips */
+@import "@fontsource/bebas-neue/400.css";
+
+/* display — EVA title cards (weight-black is 900) */
+@import "@fontsource/noto-serif-display/700.css";
+@import "@fontsource/noto-serif-display/900.css";
+
+/* jp — institutional subtitles */
+@import "@fontsource/shippori-mincho-b1/400.css";
+@import "@fontsource/shippori-mincho-b1/700.css";

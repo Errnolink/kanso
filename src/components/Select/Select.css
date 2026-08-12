@@ -1,0 +1,89 @@
+/* Select — native picker in Kanso chrome (NERV parameter-picker lineage).
+   Inherits the well, sizes and states from Input.css `.kanso-field`
+   / `.kanso-input`; this file adds the arrow cell, the native control
+   resets, and as much of the open popup as the platform exposes. */
+
+.kanso-select {
+  position: relative;
+}
+
+.kanso-select__control {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  padding-right: var(--kanso-spacing-2xl);
+  text-transform: uppercase;
+  letter-spacing: var(--kanso-type-tracking-wider);
+  color: var(--kanso-color-text);
+  /* Tells the engine to render the *native popup* — scrollbar, hover
+     highlight, drop shadow, all the parts CSS cannot reach — from the dark
+     side of the OS theme instead of the light one. Without this the list
+     is a white sheet no matter what the options are painted. */
+  color-scheme: dark;
+  /* The popup body inherits the control's own background in Blink, so the
+     control cannot be `transparent` here or the sheet comes back white.
+     `well` is what the field is already painted, so the closed state is
+     unchanged. */
+  background-color: var(--kanso-color-well);
+}
+
+/* Keep the control's fill in step with the well it sits in. */
+.kanso-input:focus-within .kanso-select__control {
+  background-color: var(--kanso-color-bg);
+}
+
+.kanso-select__control:disabled {
+  cursor: not-allowed;
+}
+
+/* --- the popup list -----------------------------------------------------
+   The popup is OS chrome: only the row background, colour and font are
+   reachable, and only in Blink/Gecko. Everything below is a nudge, not a
+   guarantee — see the platform note in Select.tsx. */
+.kanso-select__control option,
+.kanso-select__control optgroup {
+  background-color: var(--kanso-color-panel);
+  color: var(--kanso-color-text);
+  font-family: var(--kanso-type-mono);
+  font-weight: var(--kanso-type-weight-regular);
+}
+
+.kanso-select__control optgroup {
+  color: var(--kanso-color-primary);
+  font-weight: var(--kanso-type-weight-bold);
+  text-transform: uppercase;
+}
+
+/* The selected row reads as the system's own voice — orange on a near-black
+   fill, matching every other "this one is active" state in Kanso. */
+.kanso-select__control option:checked {
+  background-color: var(--kanso-color-primary-deep);
+  color: var(--kanso-color-primary-hot);
+}
+
+.kanso-select__control option:disabled {
+  color: var(--kanso-color-muted);
+}
+
+.kanso-select__arrow {
+  position: absolute;
+  right: var(--kanso-spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-xs);
+  line-height: 1;
+  color: var(--kanso-color-primary-dim);
+  transition: color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-select:focus-within .kanso-select__arrow,
+.kanso-select:hover .kanso-select__arrow {
+  color: var(--kanso-color-primary);
+}
+
+.kanso-field--invalid .kanso-select__arrow {
+  color: var(--kanso-color-danger);
+}

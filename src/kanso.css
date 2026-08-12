@@ -1,0 +1,62 @@
+/* Kanso — the single stylesheet.
+   Cascade order matters: tokens, then the base layer, then components.
+   Components never import their own CSS; everything is aggregated here so
+   consumers get one file and one predictable cascade. */
+
+/* --- tokens ------------------------------------------------------------ */
+@import "./tokens.css";
+
+/* --- base -------------------------------------------------------------- */
+@import "./base/reset.css";
+@import "./base/shapes.css";
+@import "./base/text.css";
+@import "./base/surfaces.css";
+@import "./base/a11y.css";
+
+/* --- chrome ------------------------------------------------------------ */
+@import "./components/Panel/Panel.css";
+@import "./components/Frame/Frame.css";
+@import "./components/Divider/Divider.css";
+@import "./components/HazardStripe/HazardStripe.css";
+@import "./components/Bars/Bars.css";
+@import "./components/Scanlines/Scanlines.css";
+
+/* --- controls ---------------------------------------------------------- */
+@import "./components/Button/Button.css";
+@import "./components/IconButton/IconButton.css";
+@import "./components/Chip/Chip.css";
+@import "./components/Input/Input.css";
+@import "./components/Select/Select.css";
+@import "./components/Toggle/Toggle.css";
+@import "./components/Slider/Slider.css";
+@import "./components/Segmented/Segmented.css";
+
+/* --- telemetry --------------------------------------------------------- */
+@import "./components/TermBox/TermBox.css";
+@import "./components/Meter/Meter.css";
+@import "./components/Gauge/Gauge.css";
+@import "./components/Sparkline/Sparkline.css";
+@import "./components/BrailleGraph/BrailleGraph.css";
+@import "./components/BarChart/BarChart.css";
+@import "./components/SegmentBar/SegmentBar.css";
+@import "./components/CoreGrid/CoreGrid.css";
+@import "./components/Progress/Progress.css";
+@import "./components/LED/LED.css";
+
+/* --- display ----------------------------------------------------------- */
+@import "./components/Badge/Badge.css";
+@import "./components/Readout/Readout.css";
+@import "./components/DataList/DataList.css";
+@import "./components/Table/Table.css";
+@import "./components/Terminal/Terminal.css";
+@import "./components/Skeleton/Skeleton.css";
+
+/* --- overlays ---------------------------------------------------------- */
+@import "./components/Modal/Modal.css";
+@import "./components/Toast/Toast.css";
+@import "./components/Tooltip/Tooltip.css";
+@import "./components/Menu/Menu.css";
+@import "./components/CommandPalette/CommandPalette.css";
+@import "./components/Alert/Alert.css";
+@import "./components/BootSequence/BootSequence.css";
+@import "./components/Spinner/Spinner.css";

@@ -1,0 +1,113 @@
+/* TermBox — btop box frame. The rules are borders, the corners are glyphs.
+   No border-radius anywhere: `--rounded` only swaps the corner characters. */
+
+.kanso-termbox {
+  --kanso-termbox-frame: var(--kanso-color-border);
+  --kanso-termbox-accent: var(--kanso-color-primary);
+  position: relative;
+  display: block;
+  /* A box is a container: it fills the width it is given. Without this it
+     shrink-wraps its content inside a flex parent and ends up a small
+     rectangle pinned to the top-left of an otherwise empty card. */
+  width: 100%;
+  min-width: 0;
+  background: var(--kanso-color-bg);
+  border: var(--kanso-shape-hairline) solid var(--kanso-termbox-frame);
+}
+
+.kanso-termbox--heavy {
+  border-width: var(--kanso-shape-accent-rule);
+  --kanso-termbox-frame: var(--kanso-color-border-highlight);
+}
+
+.kanso-termbox--double {
+  border-style: double;
+  border-width: 3px;
+  --kanso-termbox-frame: var(--kanso-color-border-highlight);
+}
+
+/* --- corner marks ------------------------------------------------------ */
+/* Centred on the border joint so the glyph arms run into the CSS rules. */
+.kanso-termbox__corner {
+  position: absolute;
+  z-index: var(--kanso-z-raised);
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-base);
+  line-height: 1;
+  color: var(--kanso-termbox-accent);
+  background: var(--kanso-color-bg);
+  pointer-events: none;
+}
+
+.kanso-termbox__corner--tl { top: 0; left: 0; transform: translate(-50%, -50%); }
+.kanso-termbox__corner--tr { top: 0; right: 0; transform: translate(50%, -50%); }
+.kanso-termbox__corner--bl { bottom: 0; left: 0; transform: translate(-50%, 50%); }
+.kanso-termbox__corner--br { bottom: 0; right: 0; transform: translate(50%, 50%); }
+
+/* --- title over the top rule ------------------------------------------- */
+.kanso-termbox__title {
+  position: absolute;
+  top: 0;
+  left: calc(var(--kanso-spacing-lg) + var(--kanso-spacing-xs));
+  z-index: var(--kanso-z-raised);
+  display: flex;
+  align-items: center;
+  gap: var(--kanso-spacing-sm);
+  padding: 0 var(--kanso-spacing-sm);
+  background: var(--kanso-color-bg);
+  transform: translateY(-50%);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.kanso-termbox__rule {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-base);
+  line-height: 1;
+  color: var(--kanso-termbox-frame);
+}
+
+.kanso-termbox__hotkey {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-bold);
+  line-height: 1;
+  color: var(--kanso-color-ink);
+  background: var(--kanso-termbox-accent);
+  padding: 1px var(--kanso-spacing-sm);
+}
+
+.kanso-termbox__label {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--kanso-termbox-accent);
+}
+
+.kanso-termbox__right {
+  position: absolute;
+  top: 0;
+  right: calc(var(--kanso-spacing-lg) + var(--kanso-spacing-xs));
+  z-index: var(--kanso-z-raised);
+  display: flex;
+  align-items: center;
+  gap: var(--kanso-spacing-sm);
+  padding: 0 var(--kanso-spacing-sm);
+  background: var(--kanso-color-bg);
+  transform: translateY(-50%);
+  font-family: var(--kanso-type-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-wide);
+  line-height: 1;
+  color: var(--kanso-color-text-dim);
+  white-space: nowrap;
+}
+
+.kanso-termbox__body {
+  padding: var(--kanso-spacing-lg) var(--kanso-spacing-lg) var(--kanso-spacing-md);
+  color: var(--kanso-color-text);
+}

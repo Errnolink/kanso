@@ -1,0 +1,78 @@
+/* Terminal — log feed. Level colours: info green, warn orange, error red
+   with one faint shadow, system cyan. Stripe at 1.5% white. */
+
+.kanso-terminal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--kanso-color-well);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+}
+
+.kanso-terminal__title {
+  display: flex;
+  align-items: center;
+  gap: var(--kanso-spacing-sm);
+  padding: var(--kanso-spacing-md) var(--kanso-spacing-lg);
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--kanso-color-muted);
+  background: var(--kanso-color-panel-2);
+  border-bottom: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+}
+
+.kanso-terminal__prompt { color: var(--kanso-color-primary); }
+
+.kanso-terminal__body {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--kanso-spacing-sm) 0;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-base);
+  line-height: var(--kanso-type-leading-snug);
+  scrollbar-width: thin;
+}
+
+.kanso-terminal__line {
+  display: flex;
+  gap: var(--kanso-spacing-md);
+  padding: 1px var(--kanso-spacing-lg);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.kanso-terminal__line:nth-child(even) {
+  background: var(--kanso-color-zebra);
+}
+
+.kanso-terminal__ts {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  color: var(--kanso-color-muted);
+  user-select: none;
+}
+
+.kanso-terminal__text { min-width: 0; }
+
+.kanso-terminal__line--info .kanso-terminal__text { color: var(--kanso-color-success); }
+.kanso-terminal__line--warn .kanso-terminal__text { color: var(--kanso-color-primary); }
+.kanso-terminal__line--system .kanso-terminal__text { color: var(--kanso-color-info); }
+
+.kanso-terminal__line--error .kanso-terminal__text {
+  color: var(--kanso-color-danger);
+  text-shadow: 0 0 var(--kanso-effect-phosphor-blur) rgba(255, 48, 48, 0.3);
+}
+
+.kanso-terminal__cursor {
+  color: var(--kanso-color-primary);
+  animation: kanso-cursor var(--kanso-motion-duration-blink) step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kanso-terminal__cursor { animation: none; }
+}

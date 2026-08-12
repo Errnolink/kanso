@@ -1,0 +1,115 @@
+/* IconButton — square glyph key (NERV console keycap lineage).
+   Square cell, small chamfer, hairline edge. Depth comes from the border
+   and the black ground only; hover brightens, it does not bloom. */
+
+.kanso-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  padding: 0;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1;
+  background: var(--kanso-color-panel);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+  color: var(--kanso-color-primary);
+  transition:
+    background-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    border-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    transform var(--kanso-motion-duration-instant) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-icon-btn__glyph {
+  display: block;
+  font-family: var(--kanso-type-mono);
+  font-weight: var(--kanso-type-weight-medium);
+  line-height: 1;
+}
+
+.kanso-icon-btn__glyph > svg {
+  display: block;
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+.kanso-icon-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.kanso-icon-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* --- sizes ------------------------------------------------------------- */
+.kanso-icon-btn--sm {
+  width: 1.375rem;
+  height: 1.375rem;
+  font-size: var(--kanso-type-size-sm);
+}
+
+.kanso-icon-btn--md {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: var(--kanso-type-size-base);
+}
+
+.kanso-icon-btn--lg {
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: var(--kanso-type-size-md);
+}
+
+/* --- variants ---------------------------------------------------------- */
+.kanso-icon-btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--kanso-color-text-dim);
+}
+
+.kanso-icon-btn--ghost:hover:not(:disabled) {
+  background: var(--kanso-color-primary-film);
+  border-color: var(--kanso-color-border);
+  color: var(--kanso-color-primary);
+}
+
+.kanso-icon-btn--outline {
+  background: var(--kanso-color-panel);
+  border-color: var(--kanso-color-primary-dim);
+  color: var(--kanso-color-primary);
+}
+
+.kanso-icon-btn--outline:hover:not(:disabled) {
+  background: var(--kanso-color-primary-wash);
+  border-color: var(--kanso-color-primary);
+  color: var(--kanso-color-primary-hot);
+}
+
+.kanso-icon-btn--solid {
+  background: var(--kanso-color-primary);
+  border-color: var(--kanso-color-primary);
+  color: var(--kanso-color-ink);
+}
+
+.kanso-icon-btn--solid:hover:not(:disabled) {
+  background: var(--kanso-color-primary-hot);
+  border-color: var(--kanso-color-primary-hot);
+  box-shadow: var(--kanso-shadow-glow-primary);
+}
+
+.kanso-icon-btn--danger {
+  background: var(--kanso-color-panel);
+  border-color: var(--kanso-color-danger-dim);
+  color: var(--kanso-color-danger);
+}
+
+.kanso-icon-btn--danger:hover:not(:disabled) {
+  background: rgba(255, 48, 48, 0.08);
+  border-color: var(--kanso-color-danger);
+  box-shadow: var(--kanso-shadow-glow-danger);
+}

@@ -1,0 +1,394 @@
+/* Kanso gallery — chrome for the docs page itself. Everything visual here
+   is built from Kanso tokens; the page is a dogfooding test as much as a
+   showcase. */
+
+body {
+  margin: 0;
+  background: var(--kanso-color-bg);
+  color: var(--kanso-color-text);
+  font-family: var(--kanso-type-mono);
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+/* --- sidebar ------------------------------------------------------------ */
+.nav {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  overflow-y: auto;
+  padding: var(--kanso-spacing-xl) 0 var(--kanso-spacing-3xl);
+  border-right: 1px solid var(--kanso-color-border);
+  background: var(--kanso-color-panel);
+  z-index: var(--kanso-z-hud);
+}
+
+.nav-group {
+  margin-bottom: var(--kanso-spacing-xl);
+}
+
+.nav-group-label {
+  padding: var(--kanso-spacing-md) var(--kanso-spacing-xl);
+  font-size: var(--kanso-type-size-xs);
+  letter-spacing: var(--kanso-type-tracking-widest);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+  border-bottom: 1px solid var(--kanso-color-border);
+  margin-bottom: var(--kanso-spacing-sm);
+}
+
+.nav-link {
+  display: block;
+  padding: 3px var(--kanso-spacing-xl);
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-wider);
+  text-transform: uppercase;
+  color: var(--kanso-color-text-dim);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    border-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.nav-link:hover {
+  color: var(--kanso-color-primary);
+  text-decoration: none;
+}
+
+.nav-link--active {
+  color: var(--kanso-color-primary);
+  border-left-color: var(--kanso-color-primary);
+  background: var(--kanso-color-primary-film);
+}
+
+/* --- page --------------------------------------------------------------- */
+.page {
+  min-width: 0;
+  padding: 0 var(--kanso-spacing-3xl) var(--kanso-spacing-4xl);
+}
+
+.masthead {
+  padding: var(--kanso-spacing-3xl) 0 var(--kanso-spacing-2xl);
+  margin-bottom: var(--kanso-spacing-2xl);
+  border-bottom: 1px solid var(--kanso-color-border);
+}
+
+.wordmark {
+  display: flex;
+  align-items: baseline;
+  gap: var(--kanso-spacing-xl);
+  margin-bottom: var(--kanso-spacing-md);
+}
+
+.wordmark-mark {
+  font-family: var(--kanso-type-jp);
+  font-size: var(--kanso-type-size-3xl);
+  color: var(--kanso-color-text-dim);
+}
+
+.wordmark-name {
+  font-family: var(--kanso-type-stamp);
+  font-size: var(--kanso-type-size-4xl);
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  color: var(--kanso-color-primary);
+  text-shadow: 0 0 24px rgba(255, 152, 48, 0.4);
+  transform: var(--kanso-type-compress);
+  transform-origin: left center;
+}
+
+.tagline {
+  max-width: 62ch;
+  margin: 0 0 var(--kanso-spacing-xl);
+  font-size: var(--kanso-type-size-base);
+  line-height: var(--kanso-type-leading-normal);
+  color: var(--kanso-color-text-dim);
+}
+
+.masthead-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--kanso-spacing-md);
+}
+
+/* --- section ------------------------------------------------------------ */
+.sec {
+  padding-top: var(--kanso-spacing-3xl);
+  scroll-margin-top: var(--kanso-spacing-xl);
+}
+
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--kanso-spacing-lg);
+  padding-bottom: var(--kanso-spacing-md);
+  border-bottom: 1px solid var(--kanso-color-border);
+  margin-bottom: var(--kanso-spacing-lg);
+}
+
+.sec-index {
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  color: var(--kanso-color-muted);
+}
+
+.sec-title {
+  font-size: var(--kanso-type-size-2xl);
+  color: var(--kanso-color-text);
+}
+
+.sec-lineage {
+  margin-left: auto;
+  font-size: var(--kanso-type-size-xs);
+  letter-spacing: var(--kanso-type-tracking-widest);
+  padding: 2px var(--kanso-spacing-md);
+  border: 1px solid currentColor;
+}
+
+.sec-lineage--nerv { color: var(--kanso-color-primary); }
+.sec-lineage--eva { color: var(--kanso-color-phosphor-violet); }
+.sec-lineage--btop { color: var(--kanso-color-success); }
+.sec-lineage--cyber { color: var(--kanso-color-magenta); }
+.sec-lineage--core { color: var(--kanso-color-info); }
+
+.sec-blurb {
+  max-width: 76ch;
+  margin: 0 0 var(--kanso-spacing-xl);
+  font-size: var(--kanso-type-size-base);
+  line-height: var(--kanso-type-leading-normal);
+  color: var(--kanso-color-text-dim);
+}
+
+.sec-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-xl);
+}
+
+/* --- demo card ---------------------------------------------------------- */
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--kanso-spacing-xl);
+}
+
+.demo {
+  border: 1px solid var(--kanso-color-border);
+  background: var(--kanso-color-panel);
+  min-width: 0;
+}
+
+.demo--wide {
+  grid-column: 1 / -1;
+}
+
+.demo-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--kanso-spacing-md);
+  padding: var(--kanso-spacing-sm) var(--kanso-spacing-lg);
+  border-bottom: 1px solid var(--kanso-color-border);
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.demo-title {
+  font-size: var(--kanso-type-size-xs);
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+}
+
+.demo-toggle {
+  margin-left: auto;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-xs);
+  letter-spacing: var(--kanso-type-tracking-wider);
+  color: var(--kanso-color-muted);
+  border: 1px solid var(--kanso-color-border);
+  background: transparent;
+  padding: 1px var(--kanso-spacing-md);
+  cursor: pointer;
+  transition: color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    border-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.demo-toggle:hover {
+  color: var(--kanso-color-info);
+  border-color: var(--kanso-color-info);
+}
+
+.demo-note {
+  margin: 0;
+  padding: var(--kanso-spacing-md) var(--kanso-spacing-lg) 0;
+  font-size: var(--kanso-type-size-sm);
+  line-height: var(--kanso-type-leading-snug);
+  color: var(--kanso-color-muted);
+}
+
+.demo-stage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--kanso-spacing-lg);
+  padding: var(--kanso-spacing-xl);
+  min-width: 0;
+  overflow-x: auto;
+}
+
+/* Flex children default to `min-width: auto`, which lets wide demo content
+   (braille art, tables) push past the card instead of shrinking. */
+.demo-stage > * {
+  min-width: 0;
+}
+
+.demo-stage--stack {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* A "live" stage stands in for the map/video a glass panel would float
+   over — glass against a flat panel tells you nothing. */
+.demo-stage--live {
+  background-color: #06131a;
+  background-image:
+    linear-gradient(115deg, rgba(32, 240, 255, 0.16) 0%, transparent 55%),
+    linear-gradient(300deg, rgba(124, 58, 237, 0.22) 0%, transparent 60%),
+    repeating-linear-gradient(0deg, rgba(32, 240, 255, 0.06) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(90deg, rgba(32, 240, 255, 0.06) 0 1px, transparent 1px 22px);
+}
+
+.demo-code {
+  margin: 0;
+  padding: var(--kanso-spacing-lg);
+  border-top: 1px solid var(--kanso-color-border);
+  background: var(--kanso-color-well);
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  line-height: var(--kanso-type-leading-snug);
+  color: var(--kanso-color-text-dim);
+  overflow-x: auto;
+  white-space: pre;
+  user-select: text;
+}
+
+/* --- shared demo bits --------------------------------------------------- */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--kanso-spacing-lg);
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-lg);
+  min-width: 0;
+  width: 100%;
+}
+
+.swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--kanso-spacing-md);
+  width: 100%;
+}
+
+.swatch {
+  display: flex;
+  align-items: center;
+  gap: var(--kanso-spacing-md);
+  border: 1px solid var(--kanso-color-border);
+  padding: var(--kanso-spacing-sm);
+  min-width: 0;
+}
+
+.swatch-chip {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border: 1px solid var(--kanso-color-border-highlight);
+}
+
+.swatch-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.swatch-name {
+  font-size: var(--kanso-type-size-sm);
+  color: var(--kanso-color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.swatch-value {
+  font-size: var(--kanso-type-size-xs);
+  color: var(--kanso-color-muted);
+}
+
+.type-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--kanso-spacing-xl);
+  width: 100%;
+  padding-bottom: var(--kanso-spacing-sm);
+  border-bottom: 1px solid var(--kanso-color-border);
+}
+
+.type-label {
+  width: 94px;
+  flex-shrink: 0;
+  font-size: var(--kanso-type-size-xs);
+  letter-spacing: var(--kanso-type-tracking-wider);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+}
+
+.type-demo {
+  color: var(--kanso-color-text);
+  min-width: 0;
+}
+
+.shape-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 108px;
+  height: 56px;
+  background: var(--kanso-color-primary-dim);
+  color: var(--kanso-color-ink);
+  font-size: var(--kanso-type-size-xs);
+  letter-spacing: var(--kanso-type-tracking-wider);
+}
+
+.count {
+  font-size: var(--kanso-type-size-2xl);
+  font-variant-numeric: tabular-nums;
+  color: var(--kanso-color-primary);
+  min-width: 3ch;
+  text-align: center;
+}
+
+.footer {
+  margin-top: var(--kanso-spacing-4xl);
+  padding-top: var(--kanso-spacing-xl);
+  border-top: 1px solid var(--kanso-color-border);
+  font-size: var(--kanso-type-size-xs);
+  letter-spacing: var(--kanso-type-tracking-widest);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+  display: flex;
+  gap: var(--kanso-spacing-xl);
+}
+
+@media (max-width: 900px) {
+  .shell { grid-template-columns: 1fr; }
+  .nav { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--kanso-color-border); }
+  .page { padding: 0 var(--kanso-spacing-xl) var(--kanso-spacing-3xl); }
+}

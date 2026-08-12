@@ -1,0 +1,66 @@
+/* SegmentBar — stacked composition bar with hairline joints. */
+
+.kanso-segbar {
+  display: block;
+  width: 100%;
+}
+
+.kanso-segbar__track {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  height: 10px;
+  background: var(--kanso-color-well);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+}
+
+.kanso-segbar__segment {
+  display: block;
+  height: 100%;
+  box-shadow: inset -1px 0 0 var(--kanso-color-ink);
+  transition: width var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-segbar__segment:last-child {
+  box-shadow: none;
+}
+
+.kanso-segbar__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--kanso-spacing-md) var(--kanso-spacing-xl);
+  margin: var(--kanso-spacing-md) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kanso-segbar__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kanso-spacing-sm);
+}
+
+.kanso-segbar__swatch {
+  width: 6px;
+  height: 6px;
+  flex: none;
+}
+
+.kanso-segbar__name {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--kanso-color-muted);
+}
+
+.kanso-segbar__pct {
+  font-family: var(--kanso-type-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-size: var(--kanso-type-size-sm);
+  line-height: 1;
+  color: var(--kanso-color-text);
+}

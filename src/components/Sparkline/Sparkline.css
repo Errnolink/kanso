@@ -1,0 +1,38 @@
+/* Sparkline — 1px telemetry trace. Straight segments only, no smoothing. */
+
+.kanso-sparkline {
+  display: inline-block;
+  line-height: 0;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Fluid: take the container's width, keep the declared height exact.
+   `preserveAspectRatio="none"` stretches the viewBox horizontally and the
+   non-scaling stroke keeps the trace at 1px, so there is no distortion —
+   only more horizontal resolution. */
+.kanso-sparkline--fluid {
+  display: block;
+  width: 100%;
+}
+
+.kanso-sparkline--fluid .kanso-sparkline__svg {
+  width: 100%;
+}
+
+.kanso-sparkline__svg {
+  display: block;
+  overflow: visible;
+  max-width: 100%;
+}
+
+.kanso-sparkline__line {
+  stroke-width: 1;
+  stroke-linejoin: miter;
+  stroke-linecap: butt;
+  transition: stroke var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-sparkline__area {
+  stroke: none;
+}

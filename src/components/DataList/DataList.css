@@ -1,0 +1,55 @@
+/* DataList — NERV parameter block. Separators live between rows only. */
+
+.kanso-datalist {
+  display: block;
+  margin: 0;
+  width: 100%;
+}
+
+.kanso-datalist__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--kanso-spacing-xl);
+  padding: var(--kanso-spacing-md) 0;
+  border-bottom: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+}
+
+.kanso-datalist__row:last-child {
+  border-bottom: none;
+}
+
+.kanso-datalist--dense .kanso-datalist__row {
+  padding: var(--kanso-spacing-sm) 0;
+}
+
+.kanso-datalist__label {
+  margin: 0;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--kanso-color-primary);
+  white-space: nowrap;
+}
+
+.kanso-datalist__value {
+  margin: 0;
+  font-family: var(--kanso-type-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-size: var(--kanso-type-size-base);
+  line-height: 1;
+  color: var(--kanso-color-text);
+  text-align: right;
+  transition: color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-datalist__value--nominal { color: var(--kanso-ramp-nominal); }
+.kanso-datalist__value--caution { color: var(--kanso-ramp-caution); }
+.kanso-datalist__value--elevated { color: var(--kanso-ramp-elevated); }
+.kanso-datalist__value--warning { color: var(--kanso-ramp-warning); }
+.kanso-datalist__value--critical { color: var(--kanso-ramp-critical); }
+.kanso-datalist__value--info { color: var(--kanso-color-info); }

@@ -1,0 +1,76 @@
+/* Spinner — scanning reticle (NERV) and braille throbber (btop).
+   The ring is four corner brackets rotating around a square, because the
+   system has no circles; the glyph mode is literally what a terminal draws. */
+
+.kanso-spinner {
+  --kanso-spinner-color: var(--kanso-color-primary);
+  --kanso-spinner-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kanso-spacing-md);
+  color: var(--kanso-spinner-color);
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.kanso-spinner--sm { --kanso-spinner-size: 0.75rem; }
+.kanso-spinner--md { --kanso-spinner-size: 1rem; }
+.kanso-spinner--lg { --kanso-spinner-size: 1.5rem; }
+
+.kanso-spinner--primary { --kanso-spinner-color: var(--kanso-color-primary); }
+.kanso-spinner--info { --kanso-spinner-color: var(--kanso-color-info); }
+.kanso-spinner--success { --kanso-spinner-color: var(--kanso-color-success); }
+.kanso-spinner--warning { --kanso-spinner-color: var(--kanso-color-warning); }
+.kanso-spinner--danger { --kanso-spinner-color: var(--kanso-color-danger); }
+.kanso-spinner--accent { --kanso-spinner-color: var(--kanso-color-accent); }
+.kanso-spinner--dim { --kanso-spinner-color: var(--kanso-color-muted); }
+
+/* --- ring --------------------------------------------------------------- */
+.kanso-spinner__ring {
+  display: block;
+  width: var(--kanso-spinner-size);
+  height: var(--kanso-spinner-size);
+  overflow: visible;
+}
+
+.kanso-spinner__arc path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+
+.kanso-spinner__arc {
+  transform-origin: 50% 50%;
+}
+
+.kanso-spinner__arc--outer {
+  animation: kanso-spin var(--kanso-motion-duration-sweep) linear infinite;
+}
+
+.kanso-spinner__arc--inner {
+  opacity: 0.5;
+  animation: kanso-spin calc(var(--kanso-motion-duration-sweep) * 0.75) linear
+    infinite reverse;
+}
+
+/* --- glyph -------------------------------------------------------------- */
+.kanso-spinner__glyph {
+  display: inline-block;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-spinner-size);
+  line-height: 1;
+  width: 1ch;
+  text-align: center;
+}
+
+/* --- caption ------------------------------------------------------------ */
+.kanso-spinner__label {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+  line-height: 1;
+}

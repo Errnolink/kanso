@@ -1,0 +1,79 @@
+/* LED — indicator lamp. Exactly one halo per state, and one recipe for it:
+   states swap only the colour, so the intensity is set in one place. */
+
+.kanso-led {
+  --kanso-led-color: var(--kanso-color-muted);
+  --kanso-led-halo: none;
+  --kanso-led-glow: 0 0 var(--kanso-shadow-halo-blur)
+    color-mix(
+      in srgb,
+      var(--kanso-led-color) calc(var(--kanso-shadow-halo-alpha) * 100%),
+      transparent
+    );
+  --kanso-led-size: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kanso-spacing-sm);
+  line-height: 1;
+}
+
+.kanso-led__dot {
+  display: block;
+  flex: none;
+  width: var(--kanso-led-size);
+  height: var(--kanso-led-size);
+  background: var(--kanso-led-color);
+  box-shadow: var(--kanso-led-halo);
+  transition:
+    background-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    box-shadow var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-led__label {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--kanso-color-text-dim);
+}
+
+/* sizes */
+.kanso-led--sm { --kanso-led-size: 4px; }
+.kanso-led--md { --kanso-led-size: 6px; }
+.kanso-led--lg { --kanso-led-size: 9px; }
+
+/* states */
+.kanso-led--ok {
+  --kanso-led-color: var(--kanso-color-success);
+  --kanso-led-halo: var(--kanso-led-glow);
+}
+
+.kanso-led--warn {
+  --kanso-led-color: var(--kanso-color-primary);
+  --kanso-led-halo: var(--kanso-led-glow);
+}
+
+.kanso-led--crit {
+  --kanso-led-color: var(--kanso-color-danger);
+  --kanso-led-halo: var(--kanso-led-glow);
+}
+
+.kanso-led--info {
+  --kanso-led-color: var(--kanso-color-info);
+  --kanso-led-halo: var(--kanso-led-glow);
+}
+
+.kanso-led--off {
+  --kanso-led-color: var(--kanso-ramp-void);
+  --kanso-led-halo: inset 0 0 0 1px var(--kanso-color-border-highlight);
+}
+
+.kanso-led--blink .kanso-led__dot {
+  animation: kanso-blink var(--kanso-motion-duration-blink) step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kanso-led--blink .kanso-led__dot { animation: none; }
+}

@@ -1,0 +1,147 @@
+/* Kanso base — surface skins.
+   Three depths of surface and one family of bevel fills. A surface never
+   carries a border-radius, a gray background, or a colored drop shadow;
+   depth is expressed with hairlines and black shadow only. */
+
+/* Flat panel — the default. Opaque, hairline border, black shadow. */
+.kanso-surface {
+  background: var(--kanso-color-panel);
+  border: 1px solid var(--kanso-color-border);
+  box-shadow: var(--kanso-shadow-panel);
+}
+
+/* Raised control surface — inputs, list rows, table heads. */
+.kanso-surface-raised {
+  background: var(--kanso-color-panel-2);
+  border: 1px solid var(--kanso-color-border);
+}
+
+/* Recessed well — graph beds, meter tracks, code blocks. */
+.kanso-surface-well {
+  background: var(--kanso-color-well);
+  border: 1px solid var(--kanso-color-border);
+}
+
+/* Alpha bed — put this behind an image that may have transparency, so its
+   alpha pixels read as transparent instead of blending into the panel.
+   Requires a positioned ancestor; the image needs its own stacking context. */
+.kanso-surface-checker {
+  position: relative;
+}
+
+.kanso-surface-checker::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: var(--kanso-color-panel);
+  background-image:
+    linear-gradient(45deg, var(--kanso-color-panel-3) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--kanso-color-panel-3) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--kanso-color-panel-3) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--kanso-color-panel-3) 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+}
+
+/* Absolutely-positioned overlay layers opt out — forcing them relative
+   would stack them below the base image as a vertical duplicate. */
+.kanso-surface-checker > :not(.kanso-abs) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Glass — floating HUD chrome over live content (maps, media, video).
+   Only use where something is actually visible behind it; over a flat
+   background it is a more expensive way to draw a dark rectangle. */
+.kanso-glass {
+  background: var(--kanso-glass-bg);
+  backdrop-filter: blur(var(--kanso-glass-blur));
+  -webkit-backdrop-filter: blur(var(--kanso-glass-blur));
+  border: 1px solid var(--kanso-glass-border);
+  box-shadow: var(--kanso-shadow-float);
+}
+
+.kanso-glass--heavy {
+  background: var(--kanso-glass-bg-heavy);
+}
+
+/* --- bevel fills -------------------------------------------------------
+   The one place Kanso allows a gradient. Contract for every fill:
+   3-stop vertical gradient, inset top highlight + bottom dark edge, one
+   tight colored halo, dark ink text, brightness-only hover. */
+
+.kanso-fill-amber,
+.kanso-fill-lime,
+.kanso-fill-cyan,
+.kanso-fill-green,
+.kanso-fill-red,
+.kanso-fill-violet {
+  border: none;
+  font-weight: var(--kanso-type-weight-bold);
+}
+
+.kanso-fill-amber {
+  background: linear-gradient(180deg, #ffb844 0%, #eb8f00 55%, #c96e00 100%);
+  color: #221100;
+  box-shadow: var(--kanso-shadow-bevel), 0 0 10px rgba(255, 183, 0, 0.35);
+}
+
+.kanso-fill-lime {
+  background: linear-gradient(180deg, #d9f99d 0%, #a3e635 55%, #65a30d 100%);
+  color: #1a3205;
+  box-shadow: var(--kanso-shadow-bevel), 0 0 10px rgba(163, 230, 53, 0.35);
+}
+
+.kanso-fill-cyan {
+  background: linear-gradient(180deg, #67e8f9 0%, #06b6d4 55%, #0e7490 100%);
+  color: #03212a;
+  box-shadow: var(--kanso-shadow-bevel), 0 0 10px rgba(32, 240, 255, 0.35);
+}
+
+.kanso-fill-green {
+  background: linear-gradient(180deg, #6ee7b7 0%, #10b981 55%, #047857 100%);
+  color: #03261a;
+  box-shadow: var(--kanso-shadow-bevel), 0 0 10px rgba(16, 185, 129, 0.35);
+}
+
+.kanso-fill-red {
+  background: linear-gradient(180deg, #fca5b5 0%, #ef4444 55%, #b91c1c 100%);
+  color: #2a0606;
+  box-shadow: var(--kanso-shadow-bevel), 0 0 10px rgba(239, 68, 68, 0.35);
+}
+
+.kanso-fill-violet {
+  background: linear-gradient(180deg, #c4b5fd 0%, #7c3aed 55%, #4c1d95 100%);
+  color: #16062e;
+  box-shadow: var(--kanso-shadow-bevel), 0 0 10px rgba(124, 58, 237, 0.35);
+}
+
+.kanso-fill-amber:hover,
+.kanso-fill-lime:hover,
+.kanso-fill-cyan:hover,
+.kanso-fill-green:hover,
+.kanso-fill-red:hover,
+.kanso-fill-violet:hover {
+  filter: brightness(1.07);
+}
+
+/* Idle counterpart to the fills — unselected tab, disabled ticket. */
+.kanso-fill-dim {
+  background: #17130d;
+  color: #857763;
+}
+
+.kanso-fill-dim:hover {
+  color: var(--kanso-color-warning);
+  filter: brightness(1.15);
+}
+
+/* --- accent rule ------------------------------------------------------
+   A 2px colored top edge is how a surface declares its role. Orange =
+   command, red = destructive, cyan = informational, violet = system. */
+.kanso-rule-primary { border-top: var(--kanso-shape-accent-rule) solid var(--kanso-color-primary); }
+.kanso-rule-danger { border-top: var(--kanso-shape-accent-rule) solid var(--kanso-color-danger); }
+.kanso-rule-info { border-top: var(--kanso-shape-accent-rule) solid var(--kanso-color-info); }
+.kanso-rule-success { border-top: var(--kanso-shape-accent-rule) solid var(--kanso-color-success); }
+.kanso-rule-accent { border-top: var(--kanso-shape-accent-rule) solid var(--kanso-color-accent); }

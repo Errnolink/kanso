@@ -1,0 +1,62 @@
+/* Tooltip — instrument callout (NERV lineage). A true-black slab with a dim
+   orange hairline, a top-right chamfer, and small uppercase tracked mono.
+   The edge facing the anchor brightens to full primary — that tick does the
+   pointing, so there is no arrow triangle and no shadow bloom. */
+
+.kanso-tooltip {
+  position: fixed;
+  z-index: var(--kanso-z-tooltip);
+  max-width: 16rem;
+  padding: var(--kanso-spacing-md) var(--kanso-spacing-lg);
+  pointer-events: none;
+  /* True black, not `panel`. The callout has to separate from whatever card
+     it floats over, and every surface in Kanso is darkest at the top of the
+     stack. */
+  background: var(--kanso-color-ink);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-primary-dim);
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  text-transform: uppercase;
+  color: var(--kanso-color-text);
+  line-height: var(--kanso-type-leading-snug);
+  white-space: normal;
+  /* Hidden until measured, so it never flashes at 0,0. */
+  opacity: 0;
+}
+
+/* The chamfer crops the border, so the slab was open at the top-right.
+   Same fix as the input well: a band drawn along the diagonal in the
+   element's own paint, which a clip-path cannot crop. */
+.kanso-tooltip::after {
+  content: "";
+  position: absolute;
+  top: calc(-1 * var(--kanso-shape-hairline));
+  right: calc(-1 * var(--kanso-shape-hairline));
+  width: var(--kanso-shape-cut);
+  height: var(--kanso-shape-cut);
+  background: linear-gradient(
+    to bottom left,
+    transparent 50%,
+    var(--kanso-color-primary-dim) 50%,
+    var(--kanso-color-primary-dim) calc(50% + var(--kanso-shape-hairline)),
+    transparent calc(50% + var(--kanso-shape-hairline))
+  );
+}
+
+.kanso-tooltip--placed {
+  animation: kanso-tooltip-in var(--kanso-motion-duration-overlay-enter)
+    var(--kanso-motion-ease-mechanical) both;
+}
+
+/* Full-strength tick on the edge facing the anchor. */
+.kanso-tooltip--top { border-bottom-color: var(--kanso-color-primary); }
+.kanso-tooltip--bottom { border-top-color: var(--kanso-color-primary); }
+.kanso-tooltip--left { border-right-color: var(--kanso-color-primary); }
+.kanso-tooltip--right { border-left-color: var(--kanso-color-primary); }
+
+@keyframes kanso-tooltip-in {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}

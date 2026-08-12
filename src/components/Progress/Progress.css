@@ -1,0 +1,88 @@
+/* Progress — determinate fill or a sweeping indeterminate band. */
+
+.kanso-progress {
+  --kanso-progress-tint: var(--kanso-color-primary);
+  display: block;
+  width: 100%;
+}
+
+.kanso-progress__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--kanso-spacing-md);
+  margin-bottom: var(--kanso-spacing-sm);
+}
+
+.kanso-progress__label {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--kanso-color-muted);
+}
+
+.kanso-progress__value {
+  font-family: var(--kanso-type-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-bold);
+  line-height: 1;
+  color: var(--kanso-progress-tint);
+}
+
+.kanso-progress__track {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  background: var(--kanso-color-well);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+}
+
+.kanso-progress--sm .kanso-progress__track { height: 4px; }
+.kanso-progress--md .kanso-progress__track { height: 8px; }
+
+.kanso-progress__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--kanso-progress-tint);
+  transform: scaleX(var(--kanso-progress-frac, 0));
+  transform-origin: left center;
+  transition: transform var(--kanso-motion-duration-panel-enter) var(--kanso-motion-ease-mechanical);
+}
+
+/* --- indeterminate ------------------------------------------------------ */
+.kanso-progress__band {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 28%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--kanso-progress-tint) 45%,
+    var(--kanso-progress-tint) 55%,
+    transparent 100%
+  );
+  animation: kanso-progress-sweep var(--kanso-motion-duration-sweep)
+    var(--kanso-motion-ease-mechanical) infinite;
+  will-change: transform;
+}
+
+@keyframes kanso-progress-sweep {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(357%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kanso-progress__band {
+    animation: none;
+    width: 100%;
+    background: var(--kanso-progress-tint);
+    opacity: 0.35;
+  }
+}

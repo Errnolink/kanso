@@ -1,0 +1,108 @@
+/* Table — manifest sheet. Zebra at 1.5% white, hover lift, orange wash on
+   the selected row. Numeric columns are right-aligned by the column def. */
+
+.kanso-table__scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.kanso-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-base);
+  color: var(--kanso-color-text);
+  background: var(--kanso-color-panel);
+}
+
+/* --- head --------------------------------------------------------------- */
+.kanso-table__th {
+  padding: var(--kanso-spacing-md) var(--kanso-spacing-lg);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--kanso-color-muted);
+  background: var(--kanso-color-panel-2);
+  border-bottom: var(--kanso-shape-hairline) solid var(--kanso-color-border-highlight);
+  white-space: nowrap;
+}
+
+.kanso-table__th--active { color: var(--kanso-color-primary); }
+
+/* Without this a sortable head is pixel-identical to a static one. */
+.kanso-table__th--sortable {
+  cursor: pointer;
+  transition: color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-table__th--sortable:hover { color: var(--kanso-color-text-dim); }
+
+.kanso-table__sortbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kanso-spacing-sm);
+  padding: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-table__sortbtn:hover { color: var(--kanso-color-primary); }
+
+.kanso-table__sortmark {
+  font-size: var(--kanso-type-size-xs);
+  min-width: 1ch;
+}
+
+/* --- body --------------------------------------------------------------- */
+.kanso-table__cell {
+  padding: var(--kanso-spacing-md) var(--kanso-spacing-lg);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  line-height: var(--kanso-type-leading-snug);
+  border-bottom: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+}
+
+.kanso-table--dense .kanso-table__th,
+.kanso-table--dense .kanso-table__cell {
+  padding: var(--kanso-spacing-sm) var(--kanso-spacing-md);
+}
+
+.kanso-table__cell--left { text-align: left; }
+.kanso-table__cell--center { text-align: center; }
+.kanso-table__cell--right { text-align: right; }
+
+.kanso-table__th.kanso-table__cell--right { text-align: right; }
+.kanso-table__th.kanso-table__cell--center { text-align: center; }
+
+.kanso-table__row:nth-child(even) {
+  background: var(--kanso-color-zebra);
+}
+
+.kanso-table__row {
+  transition: background-color var(--kanso-motion-duration-instant) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-table--selectable .kanso-table__row { cursor: pointer; }
+
+.kanso-table__row:hover {
+  background: var(--kanso-color-row-hover);
+}
+
+.kanso-table__row--selected,
+.kanso-table__row--selected:hover,
+.kanso-table__row--selected:nth-child(even) {
+  background: var(--kanso-color-primary-wash);
+  color: var(--kanso-color-primary);
+}
+
+.kanso-table__row--selected .kanso-table__cell {
+  border-bottom-color: color-mix(in srgb, var(--kanso-color-primary) 30%, transparent);
+}

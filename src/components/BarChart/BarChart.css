@@ -1,0 +1,62 @@
+/* BarChart — labelled horizontal bars on a fixed label gutter so every
+   track starts on the same vertical rule. */
+
+.kanso-barchart {
+  --kanso-barchart-gutter: 8ch;
+  /* Local default so a bar still paints if the inline style is stripped. */
+  --kanso-barchart-paint: linear-gradient(90deg, var(--kanso-color-primary), var(--kanso-color-primary));
+  display: flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-sm);
+  width: 100%;
+}
+
+.kanso-barchart__row {
+  display: grid;
+  grid-template-columns: var(--kanso-barchart-gutter) 1fr max-content;
+  align-items: center;
+  gap: var(--kanso-spacing-md);
+}
+
+.kanso-barchart__label {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--kanso-color-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kanso-barchart__track {
+  position: relative;
+  overflow: hidden;
+  height: 8px;
+  background: var(--kanso-color-well);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+}
+
+.kanso-barchart__fill {
+  position: absolute;
+  inset: 0;
+  transform: scaleX(var(--kanso-barchart-frac, 0));
+  transform-origin: left center;
+  background-image: var(--kanso-barchart-paint);
+  background-size: var(--kanso-barchart-span, 100%) 100%;
+  background-repeat: no-repeat;
+  transition: transform var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-barchart__value {
+  font-family: var(--kanso-type-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-bold);
+  line-height: 1;
+  text-align: right;
+  transition: color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}

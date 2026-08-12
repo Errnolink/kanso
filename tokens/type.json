@@ -1,0 +1,34 @@
+{
+  "display": { "$type": "fontFamily", "$value": "\"Noto Serif Display\", serif" },
+  "mono": { "$type": "fontFamily", "$value": "\"JetBrains Mono\", ui-monospace, \"Cascadia Code\", Consolas, monospace" },
+  "stamp": { "$type": "fontFamily", "$value": "\"Bebas Neue\", \"Arial Narrow\", sans-serif" },
+  "jp": { "$type": "fontFamily", "$value": "\"Shippori Mincho B1\", serif" },
+
+  "size-xs": { "$type": "fontSize", "$value": "0.5rem" },
+  "size-sm": { "$type": "fontSize", "$value": "0.625rem" },
+  "size-base": { "$type": "fontSize", "$value": "0.75rem" },
+  "size-md": { "$type": "fontSize", "$value": "0.875rem" },
+  "size-lg": { "$type": "fontSize", "$value": "1rem" },
+  "size-xl": { "$type": "fontSize", "$value": "1.125rem" },
+  "size-2xl": { "$type": "fontSize", "$value": "1.25rem" },
+  "size-3xl": { "$type": "fontSize", "$value": "1.75rem" },
+  "size-4xl": { "$type": "fontSize", "$value": "2.5rem" },
+
+  "weight-regular": { "$type": "fontWeight", "$value": "400" },
+  "weight-medium": { "$type": "fontWeight", "$value": "500" },
+  "weight-bold": { "$type": "fontWeight", "$value": "700" },
+  "weight-black": { "$type": "fontWeight", "$value": "900" },
+
+  "tracking-normal": { "$type": "letterSpacing", "$value": "0" },
+  "tracking-wide": { "$type": "letterSpacing", "$value": "0.025em" },
+  "tracking-wider": { "$type": "letterSpacing", "$value": "0.05em" },
+  "tracking-label": { "$type": "letterSpacing", "$value": "0.14em" },
+  "tracking-stamp": { "$type": "letterSpacing", "$value": "0.2em" },
+  "tracking-widest": { "$type": "letterSpacing", "$value": "0.24em" },
+
+  "leading-tight": { "$type": "number", "$value": "1" },
+  "leading-snug": { "$type": "number", "$value": "1.35" },
+  "leading-normal": { "$type": "number", "$value": "1.55" },
+
+  "compress": { "$type": "other", "$value": "scaleX(0.82)" }
+}

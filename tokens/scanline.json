@@ -1,0 +1,5 @@
+{
+  "period": { "$type": "dimension", "$value": "4px" },
+  "opacity": { "$type": "number", "$value": 0.06 },
+  "duration": { "$type": "duration", "$value": 10000 }
+}

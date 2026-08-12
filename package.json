@@ -1,0 +1,55 @@
+{
+  "name": "@kanso/ui",
+  "version": "0.2.0",
+  "description": "Kanso — the in-house design language. Tokens + React components distilled from NERV-UI, Evangelion interface design, btop telemetry and cyberpunk chrome.",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/kanso.cjs",
+  "module": "./dist/kanso.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/kanso.js",
+      "require": "./dist/kanso.cjs"
+    },
+    "./kanso.css": "./dist/kanso.css",
+    "./tokens.css": "./dist/tokens.css",
+    "./tokens.json": "./dist/tokens.json"
+  },
+  "scripts": {
+    "build:tokens": "node scripts/build-tokens.mjs",
+    "check:contrast": "node scripts/check-contrast.mjs",
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run build:tokens && npm run check:contrast && npm run typecheck",
+    "build": "npm run build:tokens && vite build",
+    "dev": "npm run build:tokens && vite",
+    "preview": "vite preview",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@fontsource/bebas-neue": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@fontsource/noto-serif-display": "^5.3.0",
+    "@fontsource/shippori-mincho-b1": "^5.3.0",
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "playwright-core": "^1.62.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.7",
+    "vite-plugin-dts": "^4.3.0"
+  },
+  "dependencies": {
+    "animejs": "^4.5.0"
+  }
+}

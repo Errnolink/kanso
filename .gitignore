@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.vite/
+
+# server-manager dev state — machine-local (pid, port, cwd, log path)
+.server-logs/
+.servers.json

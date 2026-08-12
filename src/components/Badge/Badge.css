@@ -1,0 +1,83 @@
+/* Badge — a label, not a control. It sits one step below Chip on the type
+   ramp so the two never read as the same affordance. */
+.kanso-badge {
+  --kanso-badge-font: var(--kanso-type-size-base);
+  --kanso-badge-pad-y: var(--kanso-spacing-sm);
+  --kanso-badge-pad-x: var(--kanso-spacing-md);
+  --kanso-badge-cut: var(--kanso-shape-cut);
+  --kanso-badge-remove-font: var(--kanso-type-size-md);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kanso-spacing-sm);
+  padding: var(--kanso-badge-pad-y) var(--kanso-badge-pad-x);
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-badge-font);
+  font-weight: var(--kanso-type-weight-bold);
+  letter-spacing: var(--kanso-type-tracking-wider);
+  line-height: 1;
+  color: var(--kanso-color-ink);
+  white-space: nowrap;
+  clip-path: polygon(
+    var(--kanso-badge-cut) 0,
+    100% 0,
+    100% calc(100% - var(--kanso-badge-cut)),
+    calc(100% - var(--kanso-badge-cut)) 100%,
+    0 100%,
+    0 var(--kanso-badge-cut)
+  );
+}
+
+/* sizes — md is the default; sm is the old dense treatment, one step up
+   from the 8px it used to be so it is still readable. */
+.kanso-badge--sm {
+  --kanso-badge-font: var(--kanso-type-size-sm);
+  --kanso-badge-pad-y: var(--kanso-spacing-xs);
+  --kanso-badge-pad-x: var(--kanso-spacing-sm);
+  --kanso-badge-cut: var(--kanso-shape-cut-sm);
+  --kanso-badge-remove-font: var(--kanso-type-size-base);
+}
+
+.kanso-badge--md {
+  --kanso-badge-font: var(--kanso-type-size-base);
+  --kanso-badge-pad-y: var(--kanso-spacing-sm);
+  --kanso-badge-pad-x: var(--kanso-spacing-md);
+  --kanso-badge-cut: var(--kanso-shape-cut);
+  --kanso-badge-remove-font: var(--kanso-type-size-md);
+}
+
+.kanso-badge--lg {
+  --kanso-badge-font: var(--kanso-type-size-md);
+  --kanso-badge-pad-y: var(--kanso-spacing-sm);
+  --kanso-badge-pad-x: var(--kanso-spacing-lg);
+  --kanso-badge-cut: var(--kanso-shape-cut);
+  --kanso-badge-remove-font: var(--kanso-type-size-lg);
+}
+
+.kanso-badge--default { background: var(--kanso-color-primary); }
+.kanso-badge--success { background: var(--kanso-color-success); }
+.kanso-badge--warning { background: var(--kanso-color-warning); }
+.kanso-badge--info { background: var(--kanso-color-info); }
+
+.kanso-badge--danger {
+  background: color-mix(in srgb, var(--kanso-color-danger) 10%, transparent);
+  color: var(--kanso-color-danger);
+  border: 1px solid color-mix(in srgb, var(--kanso-color-danger) 40%, transparent);
+}
+
+.kanso-badge--removable { padding-right: var(--kanso-badge-pad-y); }
+
+.kanso-badge__remove {
+  color: currentColor;
+  line-height: 1;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-badge-remove-font);
+  opacity: 0.6;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  transition: opacity var(--kanso-motion-duration-overlay-exit)
+    var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-badge__remove:hover { opacity: 1; }

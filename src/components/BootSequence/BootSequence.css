@@ -1,0 +1,78 @@
+/* BootSequence — EVA cold open. A terminal log on true black: dim mono
+   lines, an orange prompt, a block cursor on the line still being typed,
+   and a right-aligned status stamp once a line settles. */
+
+.kanso-boot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-lg);
+  width: 100%;
+  padding: var(--kanso-spacing-xl);
+  background: var(--kanso-color-bg);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-base);
+  line-height: var(--kanso-type-leading-snug);
+  cursor: default;
+}
+
+.kanso-boot__lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-sm);
+}
+
+.kanso-boot__line {
+  display: flex;
+  align-items: baseline;
+  gap: var(--kanso-spacing-md);
+  min-width: 0;
+}
+
+.kanso-boot__prompt {
+  flex: 0 0 auto;
+  color: var(--kanso-color-primary);
+  font-weight: var(--kanso-type-weight-bold);
+}
+
+.kanso-boot__text {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--kanso-color-text-dim);
+  letter-spacing: var(--kanso-type-tracking-wide);
+  overflow-wrap: anywhere;
+}
+
+.kanso-boot__cursor {
+  flex: 0 0 auto;
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  background: var(--kanso-color-primary);
+  animation: kanso-cursor var(--kanso-motion-duration-blink) step-end infinite;
+  transform: translateY(2px);
+}
+
+.kanso-boot__stamp {
+  flex: 0 0 auto;
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-bold);
+  letter-spacing: var(--kanso-type-tracking-wider);
+  white-space: nowrap;
+}
+
+.kanso-boot__stamp--ok { color: var(--kanso-ramp-nominal); }
+.kanso-boot__stamp--warn { color: var(--kanso-ramp-elevated); }
+.kanso-boot__stamp--fail { color: var(--kanso-ramp-critical); }
+
+.kanso-boot__skip {
+  margin: 0;
+  font-size: var(--kanso-type-size-xs);
+  letter-spacing: var(--kanso-type-tracking-widest);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+  animation: kanso-pulse var(--kanso-motion-duration-sweep) ease-in-out infinite;
+}

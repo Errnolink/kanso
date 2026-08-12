@@ -1,0 +1,45 @@
+/* BrailleGraph — text plot. The art is decorative; the accessible summary
+   next to it carries the numbers. */
+
+.kanso-braille {
+  display: block;
+  /* As a flex child the default `min-width: auto` would size this to the
+     art's full character width, so the inner overflow-x below would never
+     engage and the glyphs would bleed past the container instead. */
+  min-width: 0;
+  max-width: 100%;
+}
+
+.kanso-braille__label {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--kanso-color-muted);
+  margin-bottom: var(--kanso-spacing-sm);
+}
+
+.kanso-braille__art {
+  margin: 0;
+  padding: 0;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-base);
+  line-height: var(--kanso-type-leading-tight);
+  letter-spacing: var(--kanso-type-tracking-normal);
+  white-space: pre;
+  /* Auto-fit sizes the art to this box, so it should never need to scroll;
+     the guard is for an explicit `columns` wider than the container. */
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  background: var(--kanso-color-well);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+  padding: var(--kanso-spacing-sm);
+}
+
+.kanso-braille__row {
+  display: block;
+  transition: color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}

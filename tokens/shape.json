@@ -1,0 +1,16 @@
+{
+  "notch": { "$type": "dimension", "$value": "12px" },
+  "notch-sm": { "$type": "dimension", "$value": "8px" },
+  "cut": { "$type": "dimension", "$value": "6px" },
+  "cut-sm": { "$type": "dimension", "$value": "5px" },
+  "cut-lg": { "$type": "dimension", "$value": "9px" },
+  "shear": { "$type": "dimension", "$value": "5px" },
+  "bracket": { "$type": "dimension", "$value": "18px" },
+  "hairline": { "$type": "dimension", "$value": "1px" },
+  "accent-rule": { "$type": "dimension", "$value": "2px" },
+  "hazard-height": { "$type": "dimension", "$value": "6px" },
+  "hazard-period": { "$type": "dimension", "$value": "10px" },
+  "bar-height": { "$type": "dimension", "$value": "24px" },
+  "scrollbar": { "$type": "dimension", "$value": "8px" },
+  "scrollbar-thin": { "$type": "dimension", "$value": "3px" }
+}

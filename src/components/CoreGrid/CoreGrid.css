@@ -1,0 +1,118 @@
+/* CoreGrid — dense per-core meter matrix. One text row per core:
+   label, track, value, all on the same baseline.
+
+   `columns` is the *maximum* column count: the track list is auto-fit so a
+   narrow panel drops to fewer, wider cells rather than crushing every cell
+   past the point where the label and the number can be read. */
+
+.kanso-coregrid {
+  --kanso-coregrid-columns: 4;
+  /* Smallest cell that still fits label + bar + a 3-digit value. Not a
+     token: it is a layout minimum derived from this cell's own content. */
+  --kanso-coregrid-cell-min: 4.75rem;
+  --kanso-coregrid-gap-x: var(--kanso-spacing-lg);
+  --kanso-coregrid-gap-y: var(--kanso-spacing-md);
+  --kanso-coregrid-cell-gap: var(--kanso-spacing-sm);
+  --kanso-coregrid-font: var(--kanso-type-size-base);
+  /* Box height; the hairline border eats 1px top and bottom. */
+  --kanso-coregrid-track-h: calc(var(--kanso-spacing-md) + var(--kanso-shape-hairline) * 2);
+  /* Local default so a cell still paints if the inline style is stripped. */
+  --kanso-coregrid-paint: linear-gradient(90deg, var(--kanso-color-primary), var(--kanso-color-primary));
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(
+      min(
+        100%,
+        max(
+          var(--kanso-coregrid-cell-min),
+          (100% - (var(--kanso-coregrid-columns) - 1) * var(--kanso-coregrid-gap-x)) /
+            var(--kanso-coregrid-columns)
+        )
+      ),
+      1fr
+    )
+  );
+  column-gap: var(--kanso-coregrid-gap-x);
+  row-gap: var(--kanso-coregrid-gap-y);
+  width: 100%;
+}
+
+/* sizes — md is the default wall; sm is the old hairline density. */
+.kanso-coregrid--sm {
+  --kanso-coregrid-cell-min: 4rem;
+  --kanso-coregrid-gap-x: var(--kanso-spacing-lg);
+  --kanso-coregrid-gap-y: var(--kanso-spacing-sm);
+  --kanso-coregrid-cell-gap: var(--kanso-spacing-sm);
+  --kanso-coregrid-font: var(--kanso-type-size-sm);
+  --kanso-coregrid-track-h: calc(var(--kanso-spacing-sm) + var(--kanso-shape-hairline) * 2);
+}
+
+.kanso-coregrid--md {
+  --kanso-coregrid-cell-min: 4.75rem;
+  --kanso-coregrid-gap-x: var(--kanso-spacing-lg);
+  --kanso-coregrid-gap-y: var(--kanso-spacing-md);
+  --kanso-coregrid-cell-gap: var(--kanso-spacing-sm);
+  --kanso-coregrid-font: var(--kanso-type-size-base);
+  --kanso-coregrid-track-h: calc(var(--kanso-spacing-md) + var(--kanso-shape-hairline) * 2);
+}
+
+.kanso-coregrid--lg {
+  --kanso-coregrid-cell-min: 7.5rem;
+  --kanso-coregrid-gap-x: var(--kanso-spacing-xl);
+  --kanso-coregrid-gap-y: var(--kanso-spacing-lg);
+  --kanso-coregrid-cell-gap: var(--kanso-spacing-md);
+  --kanso-coregrid-font: var(--kanso-type-size-md);
+  --kanso-coregrid-track-h: calc(var(--kanso-spacing-lg) + var(--kanso-shape-hairline) * 2);
+}
+
+.kanso-coregrid__cell {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  align-items: center;
+  gap: var(--kanso-coregrid-cell-gap);
+  min-width: 0;
+}
+
+.kanso-coregrid__label {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-coregrid-font);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-wide);
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--kanso-color-text-dim);
+  white-space: nowrap;
+}
+
+.kanso-coregrid__track {
+  position: relative;
+  overflow: hidden;
+  height: var(--kanso-coregrid-track-h);
+  min-width: var(--kanso-spacing-2xl);
+  background: var(--kanso-color-well);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+}
+
+.kanso-coregrid__fill {
+  position: absolute;
+  inset: 0;
+  transform: scaleX(var(--kanso-coregrid-frac, 0));
+  transform-origin: left center;
+  background-image: var(--kanso-coregrid-paint);
+  background-size: var(--kanso-coregrid-span, 100%) 100%;
+  background-repeat: no-repeat;
+  transition: transform var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-coregrid__value {
+  font-family: var(--kanso-type-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-size: var(--kanso-coregrid-font);
+  font-weight: var(--kanso-type-weight-bold);
+  line-height: 1;
+  min-width: 3ch;
+  text-align: right;
+  transition: color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}

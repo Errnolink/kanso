@@ -1,0 +1,9 @@
+{
+  "nominal": { "$type": "color", "$value": "#50ff50" },
+  "caution": { "$type": "color", "$value": "#a3e635" },
+  "elevated": { "$type": "color", "$value": "#ffb700" },
+  "warning": { "$type": "color", "$value": "#ff9830" },
+  "critical": { "$type": "color", "$value": "#ff3030" },
+  "cool": { "$type": "color", "$value": "#20f0ff" },
+  "void": { "$type": "color", "$value": "#1f1f23" }
+}

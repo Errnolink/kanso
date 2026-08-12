@@ -1,0 +1,73 @@
+.kanso-divider {
+  --kanso-divider-color: var(--kanso-color-primary);
+  border: 0 solid var(--kanso-divider-color);
+}
+
+.kanso-divider--primary { --kanso-divider-color: var(--kanso-color-primary); }
+.kanso-divider--info { --kanso-divider-color: var(--kanso-color-info); }
+.kanso-divider--success { --kanso-divider-color: var(--kanso-color-success); }
+.kanso-divider--danger { --kanso-divider-color: var(--kanso-color-danger); }
+.kanso-divider--muted { --kanso-divider-color: var(--kanso-color-border-highlight); }
+
+/* --- horizontal --------------------------------------------------------- */
+.kanso-divider--horizontal {
+  width: 100%;
+  border-top-width: 1px;
+  opacity: 0.5;
+}
+
+.kanso-divider--dashed { border-top-style: dashed; }
+.kanso-divider--dotted { border-top-style: dotted; }
+
+/* A labelled divider stops being a border and becomes a flex rule so the
+   label can punch a gap in it. */
+.kanso-divider--labeled {
+  display: flex;
+  align-items: center;
+  gap: var(--kanso-spacing-md);
+  border-top: none;
+  opacity: 1;
+}
+
+.kanso-divider--labeled::before,
+.kanso-divider--labeled::after {
+  content: "";
+  height: 1px;
+  background: var(--kanso-divider-color);
+  opacity: 0.5;
+}
+
+.kanso-divider--labeled::before { width: var(--kanso-spacing-2xl); flex: 0 0 auto; }
+.kanso-divider--labeled::after { flex: 1; }
+
+.kanso-divider--center::before { flex: 1; width: auto; }
+.kanso-divider--end::before { flex: 1; width: auto; }
+.kanso-divider--end::after { flex: 0 0 var(--kanso-spacing-2xl); }
+
+.kanso-divider__label {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-xs);
+  font-weight: var(--kanso-type-weight-bold);
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  text-transform: uppercase;
+  color: var(--kanso-divider-color);
+  white-space: nowrap;
+}
+
+/* --- vertical ----------------------------------------------------------- */
+/* Fades at both ends — a hard vertical hairline reads as a table border. */
+.kanso-divider--vertical {
+  width: 1px;
+  align-self: stretch;
+  min-height: 1em;
+  margin: 0 var(--kanso-spacing-sm);
+  border: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--kanso-divider-color) 12%,
+    var(--kanso-divider-color) 88%,
+    transparent 100%
+  );
+  opacity: 0.5;
+}

@@ -1,0 +1,191 @@
+/* Slider — linear parameter rail (btop meter × NERV trim control).
+   4px well track, orange travelled portion, 12px square thumb with one
+   tight glow. The fill position arrives as `--kanso-slider-pct`. */
+
+.kanso-slider {
+  --kanso-slider-pct: 0%;
+  --kanso-slider-track-h: 4px;
+  --kanso-slider-thumb: 12px;
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-md);
+  min-width: 10rem;
+}
+
+.kanso-slider--block {
+  display: flex;
+  width: 100%;
+}
+
+.kanso-slider--disabled {
+  opacity: 0.4;
+}
+
+.kanso-slider__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--kanso-spacing-lg);
+}
+
+.kanso-slider__label {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+  line-height: var(--kanso-type-leading-tight);
+}
+
+.kanso-slider__readout {
+  font-family: var(--kanso-type-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-size: var(--kanso-type-size-base);
+  letter-spacing: var(--kanso-type-tracking-wide);
+  color: var(--kanso-color-primary);
+  line-height: var(--kanso-type-leading-tight);
+}
+
+.kanso-slider__hint {
+  margin: 0;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  color: var(--kanso-color-muted);
+  line-height: var(--kanso-type-leading-snug);
+}
+
+.kanso-slider__rail {
+  position: relative;
+  display: block;
+  padding-bottom: 0;
+}
+
+/* --- the input --------------------------------------------------------- */
+.kanso-slider__input {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  height: var(--kanso-slider-thumb);
+  background: transparent;
+  cursor: pointer;
+}
+
+.kanso-slider__input:disabled {
+  cursor: not-allowed;
+}
+
+.kanso-slider__input:focus {
+  outline: none;
+}
+
+.kanso-slider__input:focus-visible {
+  outline: var(--kanso-effect-focus-ring) solid var(--kanso-color-focus);
+  outline-offset: var(--kanso-effect-focus-offset);
+}
+
+/* track — webkit */
+.kanso-slider__input::-webkit-slider-runnable-track {
+  height: var(--kanso-slider-track-h);
+  background:
+    linear-gradient(
+      90deg,
+      var(--kanso-color-primary) 0 var(--kanso-slider-pct),
+      transparent var(--kanso-slider-pct) 100%
+    ),
+    var(--kanso-color-well);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+  border-radius: 0;
+}
+
+/* track — firefox */
+.kanso-slider__input::-moz-range-track {
+  height: var(--kanso-slider-track-h);
+  background: var(--kanso-color-well);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+  border-radius: 0;
+}
+
+.kanso-slider__input::-moz-range-progress {
+  height: var(--kanso-slider-track-h);
+  background: var(--kanso-color-primary);
+  border-radius: 0;
+}
+
+/* thumb — webkit */
+.kanso-slider__input::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: var(--kanso-slider-thumb);
+  height: var(--kanso-slider-thumb);
+  border-radius: 0;
+  background: var(--kanso-color-primary);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-ink);
+  box-shadow: var(--kanso-shadow-glow-primary);
+  /* Centre the square on the 4px rail. */
+  margin-top: calc((var(--kanso-slider-track-h) - var(--kanso-slider-thumb)) / 2);
+  transition: background-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-slider__input:hover::-webkit-slider-thumb {
+  background: var(--kanso-color-primary-hot);
+}
+
+.kanso-slider__input:disabled::-webkit-slider-thumb {
+  background: var(--kanso-color-muted);
+  box-shadow: none;
+}
+
+/* thumb — firefox */
+.kanso-slider__input::-moz-range-thumb {
+  width: var(--kanso-slider-thumb);
+  height: var(--kanso-slider-thumb);
+  border-radius: 0;
+  background: var(--kanso-color-primary);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-ink);
+  box-shadow: var(--kanso-shadow-glow-primary);
+}
+
+.kanso-slider__input:hover::-moz-range-thumb {
+  background: var(--kanso-color-primary-hot);
+}
+
+.kanso-slider__input:disabled::-moz-range-thumb {
+  background: var(--kanso-color-muted);
+  box-shadow: none;
+}
+
+/* --- ticks ------------------------------------------------------------- */
+.kanso-slider__ticks {
+  position: relative;
+  display: block;
+  height: 5px;
+  margin-top: var(--kanso-spacing-xs);
+  /* Ticks align to thumb centres, which inset by half a thumb at each end. */
+  margin-inline: calc(var(--kanso-slider-thumb) / 2);
+  pointer-events: none;
+}
+
+.kanso-slider__tick {
+  position: absolute;
+  top: 0;
+  width: var(--kanso-shape-hairline);
+  height: 5px;
+  background: var(--kanso-color-border-highlight);
+  transform: translateX(-50%);
+}
+
+/* --- sizes ------------------------------------------------------------- */
+.kanso-slider--sm {
+  --kanso-slider-track-h: 3px;
+  --kanso-slider-thumb: 10px;
+}
+
+.kanso-slider--lg {
+  --kanso-slider-track-h: 6px;
+  --kanso-slider-thumb: 14px;
+}

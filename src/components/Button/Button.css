@@ -1,0 +1,85 @@
+.kanso-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--kanso-spacing-sm);
+  font-family: var(--kanso-type-mono);
+  font-weight: var(--kanso-type-weight-bold);
+  letter-spacing: var(--kanso-type-tracking-wider);
+  line-height: 1;
+  color: var(--kanso-color-ink);
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid transparent;
+  background: none;
+  clip-path: polygon(
+    var(--kanso-shape-cut-sm) 0,
+    100% 0,
+    100% calc(100% - var(--kanso-shape-cut-sm)),
+    calc(100% - var(--kanso-shape-cut-sm)) 100%,
+    0 100%,
+    0 var(--kanso-shape-cut-sm)
+  );
+  /* tick, not overlay-enter — a button is a control, not a menu. */
+  transition:
+    background-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    border-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    box-shadow var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.kanso-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* sizes */
+.kanso-btn--sm { padding: var(--kanso-spacing-sm) var(--kanso-spacing-md); font-size: var(--kanso-type-size-sm); }
+.kanso-btn--md { padding: var(--kanso-spacing-md) var(--kanso-spacing-lg); font-size: var(--kanso-type-size-base); }
+.kanso-btn--lg { padding: var(--kanso-spacing-lg) var(--kanso-spacing-xl); font-size: var(--kanso-type-size-md); }
+
+/* variants */
+.kanso-btn--primary {
+  background: var(--kanso-color-primary);
+  color: var(--kanso-color-ink);
+}
+
+.kanso-btn--primary:hover:not(:disabled) {
+  background: var(--kanso-color-primary-hot);
+  box-shadow: var(--kanso-shadow-glow-primary);
+}
+
+.kanso-btn--secondary {
+  background: color-mix(in srgb, var(--kanso-color-primary) 15%, transparent);
+  color: var(--kanso-color-primary);
+  border-color: color-mix(in srgb, var(--kanso-color-primary) 50%, transparent);
+}
+
+.kanso-btn--secondary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--kanso-color-primary) 25%, transparent);
+}
+
+.kanso-btn--ghost {
+  color: var(--kanso-color-text);
+  border-color: var(--kanso-color-border);
+}
+
+.kanso-btn--ghost:hover:not(:disabled) {
+  color: var(--kanso-color-primary);
+  border-color: var(--kanso-color-border-highlight);
+}
+
+.kanso-btn--danger {
+  background: color-mix(in srgb, var(--kanso-color-danger) 15%, transparent);
+  color: var(--kanso-color-danger);
+  border-color: color-mix(in srgb, var(--kanso-color-danger) 40%, transparent);
+}
+
+.kanso-btn--danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--kanso-color-danger) 25%, transparent);
+  box-shadow: var(--kanso-shadow-glow-danger);
+}

@@ -1,0 +1,109 @@
+/* Kanso base — typographic roles.
+   Four families, four roles. Never mix a role's family with another's
+   tracking; the pairings below are the whole type system.
+
+     .kanso-title    display serif, compressed  — EVA title cards
+     .kanso-stamp    condensed sans             — banners, big readouts
+     .kanso-label    mono, uppercase, tracked   — every field label
+     .kanso-value    mono, tabular              — every number
+     .kanso-jp       mincho                     — institutional subtitles */
+
+.kanso-title {
+  font-family: var(--kanso-type-display);
+  font-weight: var(--kanso-type-weight-black);
+  text-transform: uppercase;
+  letter-spacing: var(--kanso-type-tracking-label);
+  line-height: var(--kanso-type-leading-tight);
+  /* Signature mechanical horizontal compression. */
+  transform: var(--kanso-type-compress);
+  transform-origin: left center;
+}
+
+.kanso-stamp {
+  font-family: var(--kanso-type-stamp);
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  line-height: var(--kanso-type-leading-tight);
+  text-transform: uppercase;
+}
+
+.kanso-label {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+  line-height: var(--kanso-type-leading-tight);
+}
+
+.kanso-label--accent {
+  color: var(--kanso-color-primary);
+}
+
+.kanso-value {
+  font-family: var(--kanso-type-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  /* JetBrains Mono ships coding ligatures on. In a readout that turns
+     `!=`, `->` and `>=` into single glyphs, which is wrong for data. */
+  font-variant-ligatures: none;
+  color: var(--kanso-color-text);
+}
+
+.kanso-jp {
+  font-family: var(--kanso-type-jp);
+  letter-spacing: var(--kanso-type-tracking-wider);
+}
+
+/* --- phosphor glow ----------------------------------------------------
+   CRT emission. One class per text node — never stack two. Each is a
+   single subdued 4px shadow; stacking reads as bloom, which the system
+   explicitly rejects. */
+
+.kanso-phosphor-orange {
+  color: var(--kanso-color-phosphor-orange);
+  text-shadow: 0 0 var(--kanso-effect-phosphor-blur) rgba(255, 152, 48, 0.3);
+}
+
+.kanso-phosphor-amber {
+  color: var(--kanso-color-phosphor-amber);
+  text-shadow: 0 0 var(--kanso-effect-phosphor-blur) rgba(255, 183, 0, 0.3);
+}
+
+.kanso-phosphor-lime {
+  color: var(--kanso-color-phosphor-lime);
+  text-shadow: 0 0 var(--kanso-effect-phosphor-blur) rgba(163, 230, 53, 0.3);
+}
+
+.kanso-phosphor-violet {
+  color: var(--kanso-color-phosphor-violet);
+  text-shadow: 0 0 var(--kanso-effect-phosphor-blur) rgba(124, 58, 237, 0.3);
+}
+
+.kanso-phosphor-cyan {
+  color: var(--kanso-color-phosphor-cyan);
+  text-shadow: 0 0 var(--kanso-effect-phosphor-blur) rgba(32, 240, 255, 0.3);
+}
+
+.kanso-phosphor-green {
+  color: var(--kanso-color-phosphor-green);
+  text-shadow: 0 0 var(--kanso-effect-phosphor-blur) rgba(80, 255, 80, 0.3);
+}
+
+.kanso-phosphor-red {
+  color: var(--kanso-color-phosphor-red);
+  text-shadow: 0 0 var(--kanso-effect-phosphor-blur) rgba(255, 48, 48, 0.3);
+}
+
+.kanso-phosphor-dim {
+  color: var(--kanso-color-text-dim);
+}
+
+/* --- text state colors ------------------------------------------------ */
+.kanso-text-dim { color: var(--kanso-color-text-dim); }
+.kanso-text-muted { color: var(--kanso-color-muted); }
+.kanso-text-nominal { color: var(--kanso-ramp-nominal); }
+.kanso-text-caution { color: var(--kanso-ramp-caution); }
+.kanso-text-elevated { color: var(--kanso-ramp-elevated); }
+.kanso-text-warning { color: var(--kanso-ramp-warning); }
+.kanso-text-critical { color: var(--kanso-ramp-critical); }

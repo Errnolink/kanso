@@ -1,0 +1,243 @@
+/* Toggle family — Checkbox, Radio, Switch (NERV console-switch lineage).
+   One layout, three faces. Every control is a real <input> stretched
+   invisibly over its drawn face, so state, focus and AT semantics stay
+   native and only the paint is ours.
+
+   One sanctioned break from rule 2 ("no rounded corners"): the radio's
+   inner dot is a circle. Owner's call — a square-in-square radio was
+   unreadable at this size and indistinguishable from a checkbox. It is the
+   only `border-radius` in the system; the outer box stays square. */
+
+.kanso-toggle {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--kanso-spacing-md);
+  cursor: pointer;
+  user-select: none;
+  min-width: 0;
+}
+
+.kanso-toggle--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.kanso-toggle__control {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  /* Optical alignment with the first text line. */
+  margin-top: 1px;
+}
+
+.kanso-toggle__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: inherit;
+  z-index: 1;
+}
+
+.kanso-toggle__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-xs);
+  min-width: 0;
+}
+
+.kanso-toggle__label {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-base);
+  letter-spacing: var(--kanso-type-tracking-wide);
+  color: var(--kanso-color-text);
+  line-height: var(--kanso-type-leading-tight);
+}
+
+.kanso-toggle__description {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-wide);
+  color: var(--kanso-color-muted);
+  line-height: var(--kanso-type-leading-snug);
+}
+
+/* --- checkbox ----------------------------------------------------------
+   16px box. The tick is an SVG path, not a font glyph — a text ✓ renders as
+   a √-shaped radical in several mono faces and its weight and baseline move
+   with the font stack. Geometry drawn as geometry cannot drift. */
+.kanso-checkbox__box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  background: var(--kanso-color-well);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border-highlight);
+  transition:
+    border-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    background-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-checkbox__mark {
+  display: block;
+  width: 0.75rem;
+  height: 0.75rem;
+  color: var(--kanso-color-primary);
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity var(--kanso-motion-duration-instant) var(--kanso-motion-ease-mechanical),
+    transform var(--kanso-motion-duration-instant) var(--kanso-motion-ease-mechanical);
+}
+
+/* Indeterminate bar — "some of the set". Drawn on the box so it is
+   independent of the tick and the two can never collide. */
+.kanso-checkbox__box::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0.5rem;
+  height: var(--kanso-shape-accent-rule);
+  background: var(--kanso-color-primary);
+  transform: translate(-50%, -50%) scaleX(0);
+  transition: transform var(--kanso-motion-duration-instant) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-toggle__input:hover:not(:disabled) + .kanso-checkbox__box {
+  border-color: var(--kanso-color-primary-dim);
+}
+
+.kanso-toggle__input:checked + .kanso-checkbox__box {
+  border-color: var(--kanso-color-primary);
+  background: var(--kanso-color-primary-wash);
+}
+
+.kanso-toggle__input:checked + .kanso-checkbox__box .kanso-checkbox__mark {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Indeterminate outranks checked — the bar replaces the tick. */
+.kanso-toggle__input:indeterminate + .kanso-checkbox__box {
+  border-color: var(--kanso-color-primary);
+  background: var(--kanso-color-primary-wash);
+}
+
+.kanso-toggle__input:indeterminate + .kanso-checkbox__box .kanso-checkbox__mark {
+  opacity: 0;
+}
+
+.kanso-toggle__input:indeterminate + .kanso-checkbox__box::after {
+  transform: translate(-50%, -50%) scaleX(1);
+}
+
+/* --- radio -------------------------------------------------------------
+   Square box, round dot. The circle is the one sanctioned `border-radius`
+   in Kanso (see the header note): it is what makes "pick exactly one" read
+   at a glance next to a checkbox. */
+.kanso-radio__box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  background: var(--kanso-color-well);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border-highlight);
+  transition: border-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-radio__core {
+  display: block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--kanso-color-primary);
+  opacity: 0;
+  transform: scale(0.4);
+  transition:
+    opacity var(--kanso-motion-duration-instant) var(--kanso-motion-ease-mechanical),
+    transform var(--kanso-motion-duration-instant) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-toggle__input:hover:not(:disabled) + .kanso-radio__box {
+  border-color: var(--kanso-color-primary-dim);
+}
+
+.kanso-toggle__input:checked + .kanso-radio__box {
+  border-color: var(--kanso-color-primary);
+  background: var(--kanso-color-primary-wash);
+}
+
+.kanso-toggle__input:checked + .kanso-radio__box .kanso-radio__core {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* --- switch ------------------------------------------------------------ */
+.kanso-switch__track {
+  display: block;
+  position: relative;
+  width: 2rem;
+  height: 1rem;
+  padding: 2px;
+  background: var(--kanso-color-well);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border-highlight);
+  transition:
+    background-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    border-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-switch__thumb {
+  display: block;
+  width: 0.75rem;
+  height: 0.75rem;
+  background: var(--kanso-color-muted);
+  transform: translateX(0);
+  transition:
+    transform var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    background-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-toggle__input:hover:not(:disabled) + .kanso-switch__track {
+  border-color: var(--kanso-color-primary-dim);
+}
+
+.kanso-toggle__input:checked + .kanso-switch__track {
+  background: var(--kanso-color-primary-wash);
+  border-color: var(--kanso-color-primary);
+}
+
+.kanso-toggle__input:checked + .kanso-switch__track .kanso-switch__thumb {
+  /* 32px track - 2*1px border - 2*2px pad - 12px thumb = 14px travel. */
+  transform: translateX(0.875rem);
+  background: var(--kanso-color-primary);
+  box-shadow: var(--kanso-shadow-glow-primary);
+}
+
+/* --- focus ------------------------------------------------------------- */
+.kanso-toggle__input:focus-visible + .kanso-checkbox__box,
+.kanso-toggle__input:focus-visible + .kanso-radio__box,
+.kanso-toggle__input:focus-visible + .kanso-switch__track {
+  outline: var(--kanso-effect-focus-ring) solid var(--kanso-color-focus);
+  outline-offset: var(--kanso-effect-focus-offset);
+}
+
+/* --- group scaffold ----------------------------------------------------
+   A column of toggles reads as one instrument cluster. */
+.kanso-toggle-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-lg);
+}
+
+.kanso-toggle-group--row {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--kanso-spacing-xl);
+}

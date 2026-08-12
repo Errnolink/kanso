@@ -1,0 +1,25 @@
+/* Skeleton — opacity pulse only. No sweeping gradient: it repaints every
+   frame and a virtualized grid shows dozens of these at once. */
+
+.kanso-skeleton {
+  display: block;
+  background: var(--kanso-color-panel-2);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+  /* ease-in-out stays literal: every motion token is a hard mechanical
+     curve, and a breathing placeholder needs a symmetric one. */
+  animation: kanso-pulse var(--kanso-motion-duration-pulse) ease-in-out infinite;
+}
+
+.kanso-skeleton__stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-md);
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kanso-skeleton {
+    animation: none;
+    opacity: 0.7;
+  }
+}

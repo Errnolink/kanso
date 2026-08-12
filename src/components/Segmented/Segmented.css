@@ -1,0 +1,87 @@
+/* Segmented — EVA mode selector. Sheared plates in a hairline rack; the
+   live segment is solid orange with dark ink, the rest sit on the dim fill.
+   Segments overlap their shear by a pixel so the rack reads continuous. */
+
+.kanso-segmented {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 2px;
+  padding: 2px;
+  background: var(--kanso-color-well);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+}
+
+.kanso-segmented--block {
+  display: flex;
+  width: 100%;
+}
+
+.kanso-segmented--block .kanso-segmented__item {
+  flex: 1 1 0;
+}
+
+.kanso-segmented__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--kanso-spacing-sm);
+  flex: 0 0 auto;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--kanso-type-mono);
+  font-weight: var(--kanso-type-weight-bold);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  line-height: 1;
+  transition:
+    background-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    filter var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-segmented__item:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  filter: none;
+}
+
+.kanso-segmented__item--active {
+  background: var(--kanso-color-primary);
+  color: var(--kanso-color-ink);
+  box-shadow: var(--kanso-shadow-glow-primary);
+}
+
+.kanso-segmented__item--active:hover {
+  background: var(--kanso-color-primary-hot);
+}
+
+.kanso-segmented__icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.kanso-segmented__label {
+  display: inline-block;
+  line-height: 1;
+}
+
+/* --- sizes ------------------------------------------------------------- */
+.kanso-segmented--sm .kanso-segmented__item {
+  padding: var(--kanso-spacing-sm) var(--kanso-spacing-lg);
+  font-size: var(--kanso-type-size-xs);
+  min-height: 1.25rem;
+}
+
+.kanso-segmented--md .kanso-segmented__item {
+  padding: var(--kanso-spacing-md) var(--kanso-spacing-xl);
+  font-size: var(--kanso-type-size-sm);
+  min-height: 1.625rem;
+}
+
+.kanso-segmented--lg .kanso-segmented__item {
+  padding: var(--kanso-spacing-lg) var(--kanso-spacing-2xl);
+  font-size: var(--kanso-type-size-base);
+  min-height: 2rem;
+}

@@ -1,0 +1,128 @@
+.kanso-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Inset hairline — reads as glass thickness at the frame edge. */
+.kanso-panel::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  pointer-events: none;
+  border: 1px solid var(--kanso-glass-inset);
+  z-index: 1;
+}
+
+.kanso-panel__header {
+  display: flex;
+  align-items: center;
+  gap: var(--kanso-spacing-lg);
+  padding: var(--kanso-spacing-md) var(--kanso-spacing-xl);
+  border-bottom: 1px solid var(--kanso-color-border);
+  background: var(--kanso-color-primary-film);
+  flex-shrink: 0;
+}
+
+.kanso-panel__title {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  text-transform: uppercase;
+  color: var(--kanso-color-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kanso-panel__meta {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-xs);
+  letter-spacing: var(--kanso-type-tracking-wider);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+  white-space: nowrap;
+}
+
+.kanso-panel__actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--kanso-spacing-md);
+  flex-shrink: 0;
+}
+
+/* Header tint follows the accent rule so the two always agree. Primary is
+   also the base tint, but stated here so the set reads as one block. */
+.kanso-panel__header--primary {
+  background: var(--kanso-color-primary-film);
+}
+.kanso-panel__header--primary .kanso-panel__title {
+  color: var(--kanso-color-primary);
+}
+
+.kanso-panel__header--danger {
+  background: var(--kanso-color-danger-film);
+}
+.kanso-panel__header--danger .kanso-panel__title {
+  color: var(--kanso-color-danger);
+}
+
+.kanso-panel__header--info {
+  background: var(--kanso-color-info-film);
+}
+.kanso-panel__header--info .kanso-panel__title {
+  color: var(--kanso-color-info);
+}
+
+.kanso-panel__header--success {
+  background: var(--kanso-color-success-film);
+}
+.kanso-panel__header--success .kanso-panel__title {
+  color: var(--kanso-color-success);
+}
+
+.kanso-panel__header--accent {
+  background: var(--kanso-color-accent-film);
+}
+.kanso-panel__header--accent .kanso-panel__title {
+  color: var(--kanso-color-phosphor-violet);
+}
+
+.kanso-panel__header--none {
+  background: transparent;
+}
+.kanso-panel__header--none .kanso-panel__title {
+  color: var(--kanso-color-text-dim);
+}
+
+.kanso-panel__body {
+  padding: var(--kanso-spacing-xl);
+  flex: 1;
+  min-height: 0;
+}
+
+.kanso-panel__body--scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.kanso-panel__body--flush {
+  padding: 0;
+}
+
+.kanso-panel__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--kanso-spacing-md);
+  padding: var(--kanso-spacing-md) var(--kanso-spacing-xl);
+  border-top: 1px solid var(--kanso-color-border);
+  background: var(--kanso-color-sunken);
+  font-size: var(--kanso-type-size-sm);
+  color: var(--kanso-color-muted);
+  flex-shrink: 0;
+}

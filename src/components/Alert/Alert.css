@@ -1,0 +1,102 @@
+/* Alert — inline caution placard (NERV lineage). Left accent bar in the
+   level colour over an 8% wash of the same hue. The wash is the only tinted
+   background in the system; it is a state, not decoration. */
+
+.kanso-alert {
+  --kanso-alert-color: var(--kanso-ramp-cool);
+  --kanso-alert-wash: rgba(32, 240, 255, 0.08);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--kanso-spacing-lg);
+  width: 100%;
+  padding: var(--kanso-spacing-lg) var(--kanso-spacing-xl);
+  background: var(--kanso-alert-wash);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+  border-left: 3px solid var(--kanso-alert-color);
+}
+
+.kanso-alert--info {
+  --kanso-alert-color: var(--kanso-color-info);
+  --kanso-alert-wash: rgba(32, 240, 255, 0.08);
+}
+
+.kanso-alert--success {
+  --kanso-alert-color: var(--kanso-color-success);
+  --kanso-alert-wash: rgba(80, 255, 80, 0.08);
+}
+
+.kanso-alert--warning {
+  --kanso-alert-color: var(--kanso-color-warning);
+  --kanso-alert-wash: rgba(255, 183, 0, 0.08);
+}
+
+.kanso-alert--danger {
+  --kanso-alert-color: var(--kanso-color-danger);
+  --kanso-alert-wash: rgba(255, 48, 48, 0.08);
+}
+
+.kanso-alert__glyph {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  margin-top: 1px;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-bold);
+  line-height: 1;
+  color: var(--kanso-alert-color);
+  border: var(--kanso-shape-hairline) solid var(--kanso-alert-color);
+}
+
+.kanso-alert__text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-sm);
+}
+
+.kanso-alert__title {
+  margin: 0;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-bold);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  color: var(--kanso-alert-color);
+  line-height: var(--kanso-type-leading-tight);
+}
+
+.kanso-alert__body {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-base);
+  letter-spacing: var(--kanso-type-tracking-wide);
+  color: var(--kanso-color-text-dim);
+  line-height: var(--kanso-type-leading-snug);
+  overflow-wrap: anywhere;
+}
+
+.kanso-alert__close {
+  flex: 0 0 auto;
+  width: 1rem;
+  height: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  color: var(--kanso-color-muted);
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  line-height: 1;
+  transition: color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-alert__close:hover {
+  color: var(--kanso-alert-color);
+}

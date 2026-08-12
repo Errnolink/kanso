@@ -1,0 +1,197 @@
+/* Kanso design tokens — generated from tokens/*.json. Do not edit. */
+:root {
+
+  /* color */
+  --kanso-color-primary: #ff9830;
+  --kanso-color-primary-hot: #ffcc50;
+  --kanso-color-primary-dim: #c87020;
+  --kanso-color-primary-deep: #8a4a00;
+  --kanso-color-primary-glow: rgba(255, 152, 48, 0.25);
+  --kanso-color-primary-wash: rgba(255, 152, 48, 0.08);
+  --kanso-color-primary-film: rgba(255, 152, 48, 0.04);
+  --kanso-color-success: #50ff50;
+  --kanso-color-success-dim: #30bb30;
+  --kanso-color-success-deep: #184d18;
+  --kanso-color-success-film: rgba(80, 255, 80, 0.04);
+  --kanso-color-info: #20f0ff;
+  --kanso-color-info-dim: #10a0b0;
+  --kanso-color-info-deep: #005a66;
+  --kanso-color-info-film: rgba(32, 240, 255, 0.04);
+  --kanso-color-danger: #ff3030;
+  --kanso-color-danger-dim: #b91c1c;
+  --kanso-color-danger-deep: #660000;
+  --kanso-color-danger-film: rgba(255, 48, 48, 0.04);
+  --kanso-color-warning: #ffb700;
+  --kanso-color-warning-dim: #c98a00;
+  --kanso-color-warning-deep: #7a4f00;
+  --kanso-color-accent: #7c3aed;
+  --kanso-color-accent-dim: #4c1d95;
+  --kanso-color-accent-deep: #2a0f5c;
+  --kanso-color-accent-film: rgba(124, 58, 237, 0.06);
+  --kanso-color-magenta: #ff4fd8;
+  --kanso-color-magenta-dim: #c02aa0;
+  --kanso-color-lime: #a3e635;
+  --kanso-color-lime-dim: #65a30d;
+  --kanso-color-hazard: #b020ff;
+  --kanso-color-phosphor-orange: #ff9830;
+  --kanso-color-phosphor-amber: #ffdf80;
+  --kanso-color-phosphor-lime: #c9e98a;
+  --kanso-color-phosphor-violet: #c4b5fd;
+  --kanso-color-phosphor-cyan: #20f0ff;
+  --kanso-color-phosphor-green: #50ff50;
+  --kanso-color-phosphor-red: #ff6b6b;
+  --kanso-color-bg: #000000;
+  --kanso-color-panel: #0a0a0c;
+  --kanso-color-panel-2: #121214;
+  --kanso-color-panel-3: #17171b;
+  --kanso-color-well: #050505;
+  --kanso-color-border: #1f1f23;
+  --kanso-color-border-highlight: #2e2e34;
+  --kanso-color-text: #e8e8e4;
+  --kanso-color-text-2: #b8b8b2;
+  --kanso-color-text-dim: #8a8a85;
+  --kanso-color-muted: #767670;
+  --kanso-color-ink: #000000;
+  --kanso-color-scrim: rgba(0, 0, 0, 0.72);
+  --kanso-color-focus: #20f0ff;
+  --kanso-color-zebra: rgba(255, 255, 255, 0.015);
+  --kanso-color-row-hover: rgba(255, 255, 255, 0.04);
+  --kanso-color-sunken: rgba(0, 0, 0, 0.3);
+
+  /* effect */
+  --kanso-effect-grain-opacity: 0.02;
+  --kanso-effect-vignette: radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.45) 100%);
+  --kanso-effect-phosphor-blur: 4px;
+  --kanso-effect-phosphor-alpha: 0.3;
+  --kanso-effect-grid-size: 28px;
+  --kanso-effect-grid-alpha: 0.06;
+  --kanso-effect-focus-ring: 1px;
+  --kanso-effect-focus-offset: 2px;
+
+  /* glass */
+  --kanso-glass-bg: rgba(10, 10, 12, 0.72);
+  --kanso-glass-bg-heavy: rgba(0, 0, 0, 0.85);
+  --kanso-glass-border: rgba(255, 255, 255, 0.06);
+  --kanso-glass-inset: rgba(255, 255, 255, 0.04);
+  --kanso-glass-blur: 18px;
+  --kanso-glass-blur-sm: 8px;
+
+  /* motion */
+  --kanso-motion-ease-mechanical: cubic-bezier(0.83, 0, 0.17, 1);
+  --kanso-motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --kanso-motion-ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --kanso-motion-duration-instant: 60ms;
+  --kanso-motion-duration-tick: 120ms;
+  --kanso-motion-duration-overlay-enter: 140ms;
+  --kanso-motion-duration-overlay-exit: 90ms;
+  --kanso-motion-duration-panel-enter: 160ms;
+  --kanso-motion-duration-panel-exit: 100ms;
+  --kanso-motion-duration-crawl: 1200ms;
+  --kanso-motion-duration-pulse: 1400ms;
+  --kanso-motion-duration-sweep: 2000ms;
+  --kanso-motion-duration-blink: 1000ms;
+
+  /* ramp */
+  --kanso-ramp-nominal: #50ff50;
+  --kanso-ramp-caution: #a3e635;
+  --kanso-ramp-elevated: #ffb700;
+  --kanso-ramp-warning: #ff9830;
+  --kanso-ramp-critical: #ff3030;
+  --kanso-ramp-cool: #20f0ff;
+  --kanso-ramp-void: #1f1f23;
+
+  /* scanline */
+  --kanso-scanline-period: 4px;
+  --kanso-scanline-opacity: 0.06;
+  --kanso-scanline-duration: 10000ms;
+
+  /* series */
+  --kanso-series-1: #ff9830;
+  --kanso-series-2: #20f0ff;
+  --kanso-series-3: #a3e635;
+  --kanso-series-4: #ff4fd8;
+  --kanso-series-5: #c4b5fd;
+  --kanso-series-6: #ffb700;
+  --kanso-series-7: #4ecdc4;
+  --kanso-series-8: #8899aa;
+
+  /* shadow */
+  --kanso-shadow-panel: 0 4px 24px rgba(0, 0, 0, 0.5);
+  --kanso-shadow-float: 0 8px 32px rgba(0, 0, 0, 0.65);
+  --kanso-shadow-dock: 0 -4px 40px rgba(0, 0, 0, 0.75);
+  --kanso-shadow-glow-primary: 0 0 12px rgba(255, 152, 48, 0.25);
+  --kanso-shadow-glow-danger: 0 0 12px rgba(255, 48, 48, 0.25);
+  --kanso-shadow-glow-info: 0 0 12px rgba(32, 240, 255, 0.25);
+  --kanso-shadow-bevel: inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+  --kanso-shadow-halo-alpha: 0.55;
+  --kanso-shadow-halo-blur: 6px;
+  --kanso-shadow-wordmark-glow: 0 0 18px rgba(255, 152, 48, 0.45);
+
+  /* shape */
+  --kanso-shape-notch: 12px;
+  --kanso-shape-notch-sm: 8px;
+  --kanso-shape-cut: 6px;
+  --kanso-shape-cut-sm: 5px;
+  --kanso-shape-cut-lg: 9px;
+  --kanso-shape-shear: 5px;
+  --kanso-shape-bracket: 18px;
+  --kanso-shape-hairline: 1px;
+  --kanso-shape-accent-rule: 2px;
+  --kanso-shape-hazard-height: 6px;
+  --kanso-shape-hazard-period: 10px;
+  --kanso-shape-bar-height: 24px;
+  --kanso-shape-scrollbar: 8px;
+  --kanso-shape-scrollbar-thin: 3px;
+
+  /* spacing */
+  --kanso-spacing-xs: 0.125rem;
+  --kanso-spacing-sm: 0.25rem;
+  --kanso-spacing-md: 0.5rem;
+  --kanso-spacing-lg: 0.75rem;
+  --kanso-spacing-xl: 1rem;
+  --kanso-spacing-2xl: 1.5rem;
+  --kanso-spacing-3xl: 2rem;
+  --kanso-spacing-4xl: 3rem;
+  --kanso-spacing-gutter: 12px;
+
+  /* type */
+  --kanso-type-display: "Noto Serif Display", serif;
+  --kanso-type-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+  --kanso-type-stamp: "Bebas Neue", "Arial Narrow", sans-serif;
+  --kanso-type-jp: "Shippori Mincho B1", serif;
+  --kanso-type-size-xs: 0.5rem;
+  --kanso-type-size-sm: 0.625rem;
+  --kanso-type-size-base: 0.75rem;
+  --kanso-type-size-md: 0.875rem;
+  --kanso-type-size-lg: 1rem;
+  --kanso-type-size-xl: 1.125rem;
+  --kanso-type-size-2xl: 1.25rem;
+  --kanso-type-size-3xl: 1.75rem;
+  --kanso-type-size-4xl: 2.5rem;
+  --kanso-type-weight-regular: 400;
+  --kanso-type-weight-medium: 500;
+  --kanso-type-weight-bold: 700;
+  --kanso-type-weight-black: 900;
+  --kanso-type-tracking-normal: 0;
+  --kanso-type-tracking-wide: 0.025em;
+  --kanso-type-tracking-wider: 0.05em;
+  --kanso-type-tracking-label: 0.14em;
+  --kanso-type-tracking-stamp: 0.2em;
+  --kanso-type-tracking-widest: 0.24em;
+  --kanso-type-leading-tight: 1;
+  --kanso-type-leading-snug: 1.35;
+  --kanso-type-leading-normal: 1.55;
+  --kanso-type-compress: scaleX(0.82);
+
+  /* z */
+  --kanso-z-base: 0;
+  --kanso-z-raised: 10;
+  --kanso-z-hud: 100;
+  --kanso-z-dock: 200;
+  --kanso-z-menu: 900;
+  --kanso-z-modal: 1000;
+  --kanso-z-toast: 1100;
+  --kanso-z-tooltip: 1200;
+  --kanso-z-overlay: 9998;
+  --kanso-z-grain: 9999;
+}

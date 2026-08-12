@@ -1,0 +1,106 @@
+/* Kanso base — opt-in global reset.
+   Imported by kanso.css. Everything here is scoped either to :where()
+   (zero specificity, always overridable) or to the .kanso-root class, so
+   dropping Kanso into an existing app never fights the host stylesheet. */
+
+.kanso-root {
+  background: var(--kanso-color-bg);
+  color: var(--kanso-color-text);
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-base);
+  line-height: var(--kanso-type-leading-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+.kanso-root :where(*, *::before, *::after) {
+  box-sizing: border-box;
+}
+
+/* Brutalist geometry rule: nothing in Kanso is rounded. Chamfers and
+   notches do the corner work instead. Zero specificity so a deliberate
+   `border-radius` on a consumer element still wins. */
+.kanso-root :where(*) {
+  border-radius: 0;
+}
+
+/* Chrome is not selectable — data is. Inputs re-enable below. */
+.kanso-root {
+  user-select: none;
+}
+
+.kanso-root :where(input, textarea, [contenteditable], .kanso-selectable) {
+  user-select: text;
+}
+
+.kanso-root :where(button) {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.kanso-root :where(a) {
+  color: var(--kanso-color-info);
+  text-decoration: none;
+}
+
+.kanso-root :where(a:hover) {
+  text-decoration: underline;
+}
+
+.kanso-root :where(hr) {
+  border: none;
+  border-top: 1px solid var(--kanso-color-border);
+}
+
+.kanso-root ::selection {
+  background: var(--kanso-color-primary);
+  color: var(--kanso-color-ink);
+}
+
+/* --- scrollbars ------------------------------------------------------- */
+
+.kanso-root * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--kanso-color-primary-dim) transparent;
+}
+
+.kanso-root ::-webkit-scrollbar {
+  width: var(--kanso-shape-scrollbar);
+  height: var(--kanso-shape-scrollbar);
+}
+
+.kanso-root ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.kanso-root ::-webkit-scrollbar-thumb {
+  background: var(--kanso-color-primary-glow);
+  border: 1px solid color-mix(in srgb, var(--kanso-color-primary) 15%, transparent);
+}
+
+.kanso-root ::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--kanso-color-primary) 50%, transparent);
+  border-color: color-mix(in srgb, var(--kanso-color-primary) 40%, transparent);
+}
+
+.kanso-root ::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Rail-less scroller for filmstrips and tab bars. */
+.kanso-scroll-hidden {
+  scrollbar-width: none;
+}
+
+.kanso-scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+/* Thin rail for panel bodies and overlay scroll regions. */
+.kanso-scroll-thin::-webkit-scrollbar {
+  width: var(--kanso-shape-scrollbar-thin);
+  height: var(--kanso-shape-scrollbar-thin);
+}

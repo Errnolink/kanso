@@ -1,0 +1,124 @@
+/* Kanso base — shape primitives.
+   Every cut in the system is a clip-path polygon. Six shapes, no more:
+   pick one per element and never nest two clipped boxes.
+
+     .kanso-cut        full ticket   — TL + BR chamfer   (buttons, chips)
+     .kanso-cut-tr     single        — TR chamfer only   (labels, inputs)
+     .kanso-cut-bl     single        — BL chamfer only   (footers, stamps)
+     .kanso-notch      panel notch   — TL + BR, 12px     (HUD panels)
+     .kanso-notch-tr   panel notch   — TR + BL, 12px     (right-anchored)
+     .kanso-shear      parallelogram — sheared 5px       (action tabs)
+
+   Notch direction encodes anchoring: a panel notches away from the screen
+   edge it hugs. Left-anchored panels use .kanso-notch, right-anchored ones
+   use .kanso-notch-tr. */
+
+.kanso-cut {
+  clip-path: polygon(
+    var(--kanso-shape-cut) 0,
+    100% 0,
+    100% calc(100% - var(--kanso-shape-cut)),
+    calc(100% - var(--kanso-shape-cut)) 100%,
+    0 100%,
+    0 var(--kanso-shape-cut)
+  );
+}
+
+.kanso-cut-sm {
+  clip-path: polygon(
+    var(--kanso-shape-cut-sm) 0,
+    100% 0,
+    100% calc(100% - var(--kanso-shape-cut-sm)),
+    calc(100% - var(--kanso-shape-cut-sm)) 100%,
+    0 100%,
+    0 var(--kanso-shape-cut-sm)
+  );
+}
+
+.kanso-cut-lg {
+  clip-path: polygon(
+    var(--kanso-shape-cut-lg) 0,
+    100% 0,
+    100% calc(100% - var(--kanso-shape-cut-lg)),
+    calc(100% - var(--kanso-shape-cut-lg)) 100%,
+    0 100%,
+    0 var(--kanso-shape-cut-lg)
+  );
+}
+
+.kanso-cut-tr {
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--kanso-shape-cut)) 0,
+    100% var(--kanso-shape-cut),
+    100% 100%,
+    0 100%
+  );
+}
+
+.kanso-cut-bl {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    var(--kanso-shape-cut) 100%,
+    0 calc(100% - var(--kanso-shape-cut))
+  );
+}
+
+.kanso-notch {
+  clip-path: polygon(
+    var(--kanso-shape-notch) 0,
+    100% 0,
+    100% calc(100% - var(--kanso-shape-notch)),
+    calc(100% - var(--kanso-shape-notch)) 100%,
+    0 100%,
+    0 var(--kanso-shape-notch)
+  );
+}
+
+.kanso-notch-tr {
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--kanso-shape-notch)) 0,
+    100% var(--kanso-shape-notch),
+    100% 100%,
+    var(--kanso-shape-notch) 100%,
+    0 calc(100% - var(--kanso-shape-notch))
+  );
+}
+
+.kanso-shear {
+  clip-path: polygon(
+    var(--kanso-shape-shear) 0,
+    100% 0,
+    calc(100% - var(--kanso-shape-shear)) 100%,
+    0 100%
+  );
+}
+
+/* --- hazard stripe fill ----------------------------------------------- */
+/* Diagonal caution barber-pole. Used by HazardStripe and by any surface
+   that needs to read as "restricted / in-progress". */
+.kanso-hazard-fill {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--kanso-color-primary) 0,
+    var(--kanso-color-primary) var(--kanso-shape-hazard-period),
+    var(--kanso-color-ink) var(--kanso-shape-hazard-period),
+    var(--kanso-color-ink) calc(var(--kanso-shape-hazard-period) * 2)
+  );
+}
+
+/* --- crosshair grid backdrop ------------------------------------------ */
+/* Faint survey grid. Absolute-positioned child of a relative container. */
+.kanso-grid-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--kanso-effect-grid-alpha);
+  background-image:
+    linear-gradient(currentColor 0.5px, transparent 0.5px),
+    linear-gradient(90deg, currentColor 0.5px, transparent 0.5px);
+  background-size: var(--kanso-effect-grid-size) var(--kanso-effect-grid-size);
+}

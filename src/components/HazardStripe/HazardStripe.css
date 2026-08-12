@@ -1,0 +1,42 @@
+.kanso-hazard {
+  --kanso-hazard-color: var(--kanso-color-primary);
+  height: var(--kanso-shape-hazard-height);
+  flex-shrink: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--kanso-hazard-color) 0,
+    var(--kanso-hazard-color) var(--kanso-shape-hazard-period),
+    var(--kanso-color-ink) var(--kanso-shape-hazard-period),
+    var(--kanso-color-ink) calc(var(--kanso-shape-hazard-period) * 2)
+  );
+  background-size: calc(var(--kanso-shape-hazard-period) * 2 * 1.4142)
+    calc(var(--kanso-shape-hazard-period) * 2 * 1.4142);
+}
+
+.kanso-hazard--primary { --kanso-hazard-color: var(--kanso-color-primary); }
+.kanso-hazard--danger { --kanso-hazard-color: var(--kanso-color-danger); }
+.kanso-hazard--warning { --kanso-hazard-color: var(--kanso-color-warning); }
+.kanso-hazard--accent { --kanso-hazard-color: var(--kanso-color-accent); }
+
+.kanso-hazard--top,
+.kanso-hazard--bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: var(--kanso-z-dock);
+}
+
+.kanso-hazard--top { top: 0; }
+.kanso-hazard--bottom { bottom: 0; }
+
+/* One background-size period of travel, so the loop is seamless. */
+@keyframes kanso-hazard-travel {
+  from { background-position: 0 0; }
+  to {
+    background-position: calc(var(--kanso-shape-hazard-period) * 2 * 1.4142) 0;
+  }
+}
+
+.kanso-hazard--animated {
+  animation: kanso-hazard-travel var(--kanso-motion-duration-crawl) linear infinite;
+}

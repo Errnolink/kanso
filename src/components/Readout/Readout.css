@@ -1,0 +1,83 @@
+/* Readout — stat tile. Label dim and tracked, value large and tabular,
+   a 2px state rule down the left edge instead of a coloured background. */
+
+.kanso-readout {
+  --kanso-readout-tint: var(--kanso-color-text);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-sm);
+  padding: var(--kanso-spacing-lg) var(--kanso-spacing-xl);
+  background: var(--kanso-color-panel);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+  border-left: var(--kanso-shape-accent-rule) solid var(--kanso-readout-tint);
+}
+
+.kanso-readout__label {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-xs);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--kanso-color-muted);
+}
+
+.kanso-readout__row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--kanso-spacing-sm);
+}
+
+.kanso-readout__value {
+  font-family: var(--kanso-type-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-size: var(--kanso-type-size-3xl);
+  font-weight: var(--kanso-type-weight-bold);
+  line-height: var(--kanso-type-leading-tight);
+  color: var(--kanso-readout-tint);
+  transition: color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.kanso-readout__unit {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-base);
+  letter-spacing: var(--kanso-type-tracking-wide);
+  line-height: 1;
+  color: var(--kanso-color-muted);
+}
+
+.kanso-readout__delta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kanso-spacing-xs);
+  font-family: var(--kanso-type-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-size: var(--kanso-type-size-sm);
+  line-height: 1;
+}
+
+.kanso-readout__arrow { font-size: var(--kanso-type-size-xs); }
+
+.kanso-readout__delta--good { color: var(--kanso-ramp-nominal); }
+.kanso-readout__delta--bad { color: var(--kanso-ramp-critical); }
+.kanso-readout__delta--flat { color: var(--kanso-color-muted); }
+
+.kanso-readout__footnote {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-xs);
+  letter-spacing: var(--kanso-type-tracking-wide);
+  line-height: var(--kanso-type-leading-snug);
+  color: var(--kanso-color-text-dim);
+}
+
+/* states */
+.kanso-readout--neutral { --kanso-readout-tint: var(--kanso-color-text); border-left-color: var(--kanso-color-border-highlight); }
+.kanso-readout--nominal { --kanso-readout-tint: var(--kanso-ramp-nominal); }
+.kanso-readout--caution { --kanso-readout-tint: var(--kanso-ramp-caution); }
+.kanso-readout--elevated { --kanso-readout-tint: var(--kanso-ramp-elevated); }
+.kanso-readout--warning { --kanso-readout-tint: var(--kanso-ramp-warning); }
+.kanso-readout--critical { --kanso-readout-tint: var(--kanso-ramp-critical); }
+.kanso-readout--info { --kanso-readout-tint: var(--kanso-color-info); }

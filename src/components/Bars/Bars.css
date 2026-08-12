@@ -1,0 +1,171 @@
+/* TopBar + Brand + StatusBar — the fixed chrome of a Kanso screen. */
+
+.kanso-topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--kanso-spacing-xl);
+  padding: var(--kanso-spacing-lg) var(--kanso-spacing-2xl);
+  border-bottom: 1px solid var(--kanso-color-border);
+  flex-shrink: 0;
+}
+
+/* The opaque skin is scoped away from the glass variant. Setting a flat
+   background on the base class would silently win over `.kanso-glass`
+   (same specificity, imported later) and the bar would pay for a
+   backdrop-filter while rendering solid. */
+.kanso-topbar:not(.kanso-glass) {
+  background: var(--kanso-color-bg);
+  /* Faint violet sheen — EVA system chrome, barely there. */
+  background-image: linear-gradient(
+    180deg,
+    var(--kanso-color-accent-film) 0%,
+    transparent 100%
+  );
+}
+
+.kanso-topbar--glass {
+  background-image: none;
+  box-shadow: var(--kanso-shadow-panel);
+}
+
+.kanso-topbar--sticky {
+  position: sticky;
+  top: 0;
+  z-index: var(--kanso-z-dock);
+}
+
+.kanso-topbar__slot {
+  display: flex;
+  align-items: center;
+  gap: var(--kanso-spacing-lg);
+  min-width: 0;
+}
+
+.kanso-topbar__slot--left {
+  flex-shrink: 0;
+}
+
+.kanso-topbar__slot--center {
+  flex: 1;
+  justify-content: center;
+}
+
+.kanso-topbar__slot--right {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Electron frameless drag regions. */
+.kanso-drag {
+  -webkit-app-region: drag;
+  app-region: drag;
+}
+
+.kanso-no-drag {
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+}
+
+/* --- brand -------------------------------------------------------------- */
+.kanso-brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-xs);
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.kanso-brand__name {
+  font-size: var(--kanso-type-size-3xl);
+  color: var(--kanso-color-primary);
+  /* The wordmark is the one place a wider halo is sanctioned — it reads as
+     an illuminated sign, not as bloom on body text. Tokenised so it can't
+     drift, and so nothing else can reach for the same intensity casually. */
+  text-shadow: var(--kanso-shadow-wordmark-glow);
+  /* Compression is applied here rather than via .kanso-title so the
+     wordmark keeps the condensed stamp face, not the display serif. */
+  transform: var(--kanso-type-compress);
+  transform-origin: left center;
+  white-space: nowrap;
+}
+
+.kanso-brand__sub {
+  display: flex;
+  align-items: baseline;
+  gap: var(--kanso-spacing-md);
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-xs);
+  letter-spacing: var(--kanso-type-tracking-widest);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+  white-space: nowrap;
+}
+
+.kanso-brand__jp {
+  text-transform: none;
+  letter-spacing: var(--kanso-type-tracking-wider);
+  color: var(--kanso-color-text-dim);
+}
+
+.kanso-brand__version {
+  color: var(--kanso-color-info);
+}
+
+/* --- status bar --------------------------------------------------------- */
+.kanso-statusbar {
+  display: flex;
+  align-items: stretch;
+  height: var(--kanso-shape-bar-height);
+  border-top: 1px solid var(--kanso-color-border);
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-xs);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* Same cascade trap as the topbar — see the note above. */
+.kanso-statusbar:not(.kanso-glass) {
+  background: var(--kanso-color-panel);
+}
+
+.kanso-statusbar--fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--kanso-z-dock);
+}
+
+.kanso-statusbar__cell {
+  display: flex;
+  align-items: center;
+  gap: var(--kanso-spacing-md);
+  padding: 0 var(--kanso-spacing-lg);
+  border-right: 1px solid var(--kanso-color-border);
+  white-space: nowrap;
+}
+
+.kanso-statusbar__cell--spacer {
+  margin-left: auto;
+  border-right: none;
+  border-left: 1px solid var(--kanso-color-border);
+}
+
+.kanso-statusbar__label {
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+}
+
+.kanso-statusbar__value {
+  font-variant-numeric: tabular-nums;
+  color: var(--kanso-color-text);
+}
+
+.kanso-statusbar__value--nominal { color: var(--kanso-ramp-nominal); }
+.kanso-statusbar__value--caution { color: var(--kanso-ramp-caution); }
+.kanso-statusbar__value--elevated { color: var(--kanso-ramp-elevated); }
+.kanso-statusbar__value--warning { color: var(--kanso-ramp-warning); }
+.kanso-statusbar__value--critical { color: var(--kanso-ramp-critical); }
+.kanso-statusbar__value--info { color: var(--kanso-color-info); }
+.kanso-statusbar__value--dim { color: var(--kanso-color-text-dim); }

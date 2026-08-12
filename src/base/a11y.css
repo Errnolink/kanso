@@ -1,0 +1,99 @@
+/* Kanso base — focus, motion, and density.
+   The aesthetic is dark, low-contrast chrome; that makes an unmistakable
+   focus ring non-negotiable. Cyan is reserved for it system-wide. */
+
+.kanso-root :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: var(--kanso-effect-focus-ring) solid var(--kanso-color-focus);
+  outline-offset: var(--kanso-effect-focus-offset);
+}
+
+/* Clipped elements crop their own outline, so they draw the ring as a
+   box-shadow inside the clip instead. */
+.kanso-root
+  :where(.kanso-cut, .kanso-cut-sm, .kanso-cut-lg, .kanso-cut-tr, .kanso-cut-bl, .kanso-notch, .kanso-notch-tr, .kanso-shear):focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--kanso-color-focus);
+}
+
+.kanso-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- motion opt-out ----------------------------------------------------
+   Two switches: the OS preference, and a `.kanso-reduce-motion` class the
+   app can set from its own settings screen. Decorative animation stops;
+   state changes stay instant rather than disappearing. */
+
+@media (prefers-reduced-motion: reduce) {
+  .kanso-root *,
+  .kanso-root *::before,
+  .kanso-root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.kanso-reduce-motion *,
+.kanso-reduce-motion *::before,
+.kanso-reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Backdrop blur is the most expensive thing in the system. One class
+   removes every instance for low-end GPUs. */
+.kanso-no-blur * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* --- shared keyframes -------------------------------------------------- */
+
+@keyframes kanso-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.2; }
+}
+
+@keyframes kanso-cursor {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+@keyframes kanso-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@keyframes kanso-sweep {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(100%); }
+}
+
+@keyframes kanso-crt-scroll {
+  from { background-position: 0 0; }
+  to { background-position: 0 100%; }
+}
+
+@keyframes kanso-spin {
+  to { transform: rotate(360deg); }
+}
+
+.kanso-anim-blink { animation: kanso-blink var(--kanso-motion-duration-blink) step-end infinite; }
+.kanso-anim-pulse { animation: kanso-pulse var(--kanso-motion-duration-pulse) ease-in-out infinite; }
+
+/* Travelling scan band. Put it on an absolutely-positioned child of a
+   `position: relative; overflow: hidden` parent — it translates the full
+   height of its container. */
+.kanso-anim-sweep {
+  animation: kanso-sweep var(--kanso-motion-duration-sweep) linear infinite;
+}

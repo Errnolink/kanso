@@ -1,0 +1,86 @@
+/* Meter — btop horizontal bar. The fill animates with transform only:
+   the gradient is over-sized to the track, then scaled back to the filled
+   fraction, which keeps the ramp colours correct at every value. */
+
+.kanso-meter {
+  --kanso-meter-frac: 0;
+  --kanso-meter-span: 100%;
+  --kanso-meter-paint: linear-gradient(90deg, var(--kanso-color-primary), var(--kanso-color-primary));
+  display: block;
+  width: 100%;
+}
+
+.kanso-meter__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--kanso-spacing-md);
+  margin-bottom: var(--kanso-spacing-sm);
+}
+
+.kanso-meter__label {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--kanso-color-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kanso-meter__value {
+  font-family: var(--kanso-type-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-bold);
+  line-height: 1;
+  transition: color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+/* --- smooth bar -------------------------------------------------------- */
+.kanso-meter__track {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  background: var(--kanso-color-well);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+}
+
+.kanso-meter__fill {
+  position: absolute;
+  inset: 0;
+  transform: scaleX(var(--kanso-meter-frac));
+  transform-origin: left center;
+  background-image: var(--kanso-meter-paint);
+  background-size: var(--kanso-meter-span) 100%;
+  background-repeat: no-repeat;
+  transition: transform var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+/* --- discrete cells ---------------------------------------------------- */
+.kanso-meter__segments {
+  display: flex;
+  gap: 1px;
+  width: 100%;
+}
+
+.kanso-meter__cell {
+  flex: 1 1 0;
+  min-width: 2px;
+  background: var(--kanso-ramp-void);
+  transition: background-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+/* Lit cells are painted inline with their ramp colour; this is the fallback
+   for when that style is absent, matching the smooth bar's default paint. */
+.kanso-meter__cell--on { background: var(--kanso-color-primary); }
+
+.kanso-meter--sm .kanso-meter__track,
+.kanso-meter--sm .kanso-meter__cell { height: 4px; }
+
+.kanso-meter--md .kanso-meter__track,
+.kanso-meter--md .kanso-meter__cell { height: 8px; }

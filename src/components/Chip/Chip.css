@@ -1,0 +1,127 @@
+/* Chip — notched selector chip (NERV wtab lineage). Base chrome only:
+   color/border/background/text-shadow state changes are tweened by anime.js.
+
+   Geometry is driven by four locals so the size classes (and the term
+   variant, which has its own scale) each set one small block instead of
+   restating the clip-path. */
+.kanso-chip {
+  --kanso-chip-font: var(--kanso-type-size-lg);
+  --kanso-chip-pad-y: calc(var(--kanso-spacing-sm) + var(--kanso-spacing-xs));
+  --kanso-chip-pad-x: var(--kanso-spacing-lg);
+  --kanso-chip-cut: var(--kanso-shape-cut-lg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--kanso-type-stamp);
+  font-size: var(--kanso-chip-font);
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  padding: var(--kanso-chip-pad-y) var(--kanso-chip-pad-x);
+  cursor: pointer;
+  border: 1px solid var(--kanso-color-border);
+  background: transparent;
+  color: var(--kanso-color-muted);
+  flex-shrink: 0;
+  user-select: none;
+  line-height: 1;
+  clip-path: polygon(
+    var(--kanso-chip-cut) 0,
+    100% 0,
+    100% calc(100% - var(--kanso-chip-cut)),
+    calc(100% - var(--kanso-chip-cut)) 100%,
+    0 100%,
+    0 var(--kanso-chip-cut)
+  );
+}
+
+.kanso-chip:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.kanso-chip:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* sizes — md is the default control height (~30px); sm restores the old
+   caption-scale chip for callers that deliberately want it back. */
+.kanso-chip--sm {
+  --kanso-chip-font: var(--kanso-type-size-base);
+  --kanso-chip-pad-y: var(--kanso-spacing-sm);
+  --kanso-chip-pad-x: var(--kanso-spacing-md);
+  --kanso-chip-cut: var(--kanso-shape-cut);
+}
+
+.kanso-chip--md {
+  --kanso-chip-font: var(--kanso-type-size-lg);
+  --kanso-chip-pad-y: calc(var(--kanso-spacing-sm) + var(--kanso-spacing-xs));
+  --kanso-chip-pad-x: var(--kanso-spacing-lg);
+  --kanso-chip-cut: var(--kanso-shape-cut-lg);
+}
+
+.kanso-chip--lg {
+  --kanso-chip-font: var(--kanso-type-size-xl);
+  --kanso-chip-pad-y: var(--kanso-spacing-md);
+  --kanso-chip-pad-x: var(--kanso-spacing-xl);
+  --kanso-chip-cut: var(--kanso-shape-notch-sm);
+}
+
+/* term variant — mono terminal tab (NERV term-tab lineage). A tab is a
+   rectangle sitting on a strip: no chamfer, a wash fill when active, and a
+   2px baseline that bleeds sideways so a gapped row still reads as one
+   connected strip. The bleed is the pseudo-element, not a border, because
+   anime.js owns `border-color` on this element. */
+.kanso-chip--term {
+  --kanso-chip-font: var(--kanso-type-size-base);
+  --kanso-chip-pad-y: var(--kanso-spacing-md);
+  --kanso-chip-pad-x: var(--kanso-spacing-lg);
+  --kanso-chip-term-bleed: var(--kanso-spacing-md);
+  position: relative;
+  font-family: var(--kanso-type-mono);
+  font-weight: var(--kanso-type-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--kanso-type-tracking-label);
+  padding: var(--kanso-chip-pad-y) var(--kanso-chip-pad-x)
+    calc(var(--kanso-chip-pad-y) + var(--kanso-shape-accent-rule));
+  color: var(--kanso-color-text-dim);
+  border: none;
+  border-radius: 0;
+  clip-path: none;
+}
+
+.kanso-chip--term.kanso-chip--sm {
+  --kanso-chip-font: var(--kanso-type-size-sm);
+  --kanso-chip-pad-y: var(--kanso-spacing-sm);
+  --kanso-chip-pad-x: var(--kanso-spacing-md);
+  --kanso-chip-term-bleed: var(--kanso-spacing-sm);
+}
+
+.kanso-chip--term.kanso-chip--lg {
+  --kanso-chip-font: var(--kanso-type-size-md);
+  --kanso-chip-pad-y: var(--kanso-spacing-lg);
+  --kanso-chip-pad-x: var(--kanso-spacing-xl);
+  --kanso-chip-term-bleed: var(--kanso-spacing-lg);
+}
+
+/* The strip. Each tab paints its own segment plus a sideways bleed; the
+   segments meet (or overlap) across whatever gap the row uses. */
+.kanso-chip--term::after {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--kanso-chip-term-bleed));
+  right: calc(-1 * var(--kanso-chip-term-bleed));
+  bottom: 0;
+  height: var(--kanso-shape-accent-rule);
+  background: var(--kanso-color-border-highlight);
+}
+
+.kanso-chip--term[aria-pressed="true"] {
+  z-index: var(--kanso-z-raised);
+}
+
+.kanso-chip--term[aria-pressed="true"]::after {
+  background: var(--kanso-color-primary);
+}
+
+.kanso-chip--term:active:not(:disabled) {
+  transform: none;
+}
