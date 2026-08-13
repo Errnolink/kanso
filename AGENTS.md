@@ -51,6 +51,11 @@ node scripts/shots.mjs   http://localhost:PORT [sectionId...]
 node scripts/interact.mjs http://localhost:PORT  # opens every overlay, asserts ARIA
 ```
 
+All three resolve a browser through `scripts/chrome.mjs`: `CHROME_PATH` first,
+then a Chromium downloaded under your home directory, then the usual system
+installs for the platform. Set `CHROME_PATH` to override. `playwright-core`
+ships no binary on purpose, which is why this exists at all.
+
 `interact.mjs` is the one that matters for overlays — a static gallery never opens
 them, so Modal/Menu/Palette/Toast regressions are invisible without it. It asserts
 that overlays actually **unmount**: a palette that lingers leaves a scrim that
@@ -211,13 +216,31 @@ Opened by the v2 work:
    changes the composite. The gate measures only the best case (glass over
    `panel-3`) and says so. Proposed rule, not yet enforced: glass may carry `text`
    and `text-2` only, never `muted` or any `-dim` token.
-7. **Adjacent severity-ramp stops still sit ~1.2–1.7:1 apart.** Inherent to five
-   stops on a green→red path, and not a literal 1.4.11 failure since every stop
-   clears 3:1 against the track. The fix is not more hue — it is `showStep`,
-   which prints the step's *word*. Consider defaulting it to `true`.
-8. **`hazard #b020ff` is violet**, which is neither the Eva nor the ISO caution
-   convention (both amber/black). It has a defined meaning here — a level-5 event
-   above `critical` — so it stays, but it is worth revisiting.
+Two more were **resolved as toggles rather than decisions**, on the same
+principle as the theme itself — where the generations disagree, both values
+survive and the attribute picks:
+
+7. **Adjacent severity-ramp stops sit ~1.2–1.7:1 apart.** Inherent to five stops
+   on a green→red path, and not a literal 1.4.11 failure since every stop clears
+   3:1 against the track. More hue would not fix it; the *word* does.
+   `Meter.showStep` is therefore three-state: `true`/`false` pin it, and leaving
+   it undefined defers to the theme — off under classic, **on under eva**. The
+   word is always in the DOM and CSS decides, so switching costs no re-render
+   and v1 renders exactly as before. Measured on the gallery: 8 of 25 meters
+   show it under classic (only the explicitly pinned ones), 24 under eva.
+8. **`hazard` is violet in both themes.** The report's objection was about hazard
+   *striping*, where amber/black is the convention — a different object from a
+   level-5 state colour, and violet-past-red is a real convention there (AQI uses
+   purple and maroon for its worst bands). What was actually wrong is that
+   classic's `#b020ff` is 3.54:1 on `panel-3`, too dark to carry a word. eva
+   lifts it to `#d38bff` at 7.02:1. Both survive behind the toggle.
+
+Still genuinely open:
+
+9. **`scripts/chrome.mjs` picks the newest downloaded Chromium by directory-name
+   sort.** Good enough, and it beats the pinned build number it replaced, but it
+   is a string sort — `win64-9…` would sort above `win64-10…`. Set `CHROME_PATH`
+   if it ever picks wrong.
 
 ## Commit style
 

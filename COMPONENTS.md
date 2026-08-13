@@ -462,7 +462,7 @@ btop's horizontal bar, on the Kanso ramp. Lineage: btop.
 | `segments` | `number` | — | Switches to N discrete btop cells |
 | `size` | `"sm" \| "md"` | `"md"` | 4px / 8px track. No `lg` |
 | `allowOverrange` | `boolean` | `false` | **New in 0.3.0.** Let the *readout* exceed `max` instead of clamping it away. Adds `.kanso-meter--overrange` and a hazard block at the right end |
-| `showStep` | `boolean` | `false` | **New in 0.3.0.** Print the ramp step's word — `NOMINAL` … `CRITICAL`, or `OVERRANGE` — beside the value. **Ignored unless `color="ramp"`** |
+| `showStep` | `boolean \| undefined` | *theme* | **New in 0.3.0.** Print the ramp step's word — `NOMINAL` … `CRITICAL`, or `OVERRANGE` — beside the value. **Ignored unless `color="ramp"`.** Three-state: `true`/`false` pin it; **omitting it defers to the theme** — hidden under `classic`, shown under `eva` |
 
 DOM element: `<div role="meter">` with `aria-valuenow/min/max/text`; extends
 `Omit<HTMLAttributes<HTMLDivElement>, "color">`.
@@ -501,6 +501,14 @@ orange-red axis, which is the axis deuteranopia collapses, so the word is the si
 colour only agrees with it. In overrange the value and the step word both take `danger` from
 the modifier class rather than the inline tint, which is what lets the theme layer restyle
 the state.
+
+Its default is a **toggle rather than a value**, because this is the one place the two
+generations genuinely disagree: v2 wants the word on every meter, v1 shipped without it and
+is preserved as the reference. The word is therefore always in the DOM and CSS decides —
+`.kanso-meter--step` / `--no-step` pin it, and their absence lets `[data-kanso-theme]`
+choose. Switching costs no re-render, and a Meter written against 0.2.0 renders exactly as
+it did. Hidden means `display: none`, so nothing is announced twice; `aria-valuetext` carries
+the value either way.
 
 The two props are independent, and one combination is worth knowing: with `showStep` on,
 `allowOverrange` **off** and `value > max`, the step word reads `OVERRANGE` while the

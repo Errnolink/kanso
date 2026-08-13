@@ -8,7 +8,8 @@
     "rules": [
       "Every value here was measured by scripts/check-contrast.mjs against the real surface stack, not against #000000.",
       "Adjacent ramp stops still sit below 3:1 — inherent to a five-stop green-to-red path. The fix is rampStep()'s NAME rendered as text beside the bar, not more hue.",
-      "The violet family stays as a series/surface colour and never carries text; phosphor-violet is its text form."
+      "The violet family stays as a series/surface colour and never carries text; phosphor-violet is its text form.",
+      "hazard stays violet rather than moving to the amber/black caution convention. The report's objection was about hazard STRIPING, which is a different object; as a level-5 state ABOVE critical, violet-past-red is a real convention — AQI uses purple and maroon for its worst bands. Classic's #b020ff is 3.54:1 on panel-3 and unreadable as text; eva lifts it to 7.02:1 so the state can carry a word. Both values survive behind the toggle."
     ]
   },
 
@@ -44,6 +45,8 @@
     "accent-dim": { "$type": "color", "$value": "#4a3f80" },
     "accent-deep": { "$type": "color", "$value": "#241d3f" },
     "accent-film": { "$type": "color", "$value": "rgba(127, 107, 214, 0.06)" },
+
+    "hazard": { "$type": "color", "$value": "#d38bff" },
 
     "magenta": { "$type": "color", "$value": "#ff7ad9" },
     "magenta-dim": { "$type": "color", "$value": "#bf4ba0" },

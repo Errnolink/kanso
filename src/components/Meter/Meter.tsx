@@ -34,6 +34,12 @@ export interface MeterProps extends Omit<HTMLAttributes<HTMLDivElement>, "color"
    * Render the ramp step's word — NOMINAL … CRITICAL — beside the value, so
    * severity survives the orange-red axis that deuteranopia collapses.
    * Ignored unless `color="ramp"`: a single hue has no severity step.
+   *
+   * Three states, because this is the one place the two generations
+   * genuinely disagree: `true`/`false` pin it, and **leaving it undefined
+   * defers to the theme** — off under classic, on under eva. The word is
+   * always in the DOM and CSS decides, so the switch costs no re-render and
+   * v1 keeps rendering exactly as it did.
    */
   showStep?: boolean;
 }
@@ -48,7 +54,7 @@ export const Meter = forwardRef<HTMLDivElement, MeterProps>(function Meter(
     segments,
     size = "md",
     allowOverrange = false,
-    showStep = false,
+    showStep,
     className = "",
     style,
     "aria-label": ariaLabel,
@@ -62,7 +68,9 @@ export const Meter = forwardRef<HTMLDivElement, MeterProps>(function Meter(
   const overrange = allowOverrange && over;
   // The bar always draws the clamped fraction; only the text escapes the cap.
   const pct = Math.round((overrange ? ratio : frac) * 100);
-  const stepWord = showStep && color === "ramp" ? step.toUpperCase() : null;
+  // Rendered whenever there is a step to show; `--step` / `--no-step` pin the
+  // visibility and their absence lets the theme decide (see Meter.css).
+  const stepWord = color === "ramp" ? step.toUpperCase() : null;
   const tint = color === "ramp" ? rampColor(frac) : HUE[color];
 
   // Gradient spans the whole track, then the fill is scaled to `frac`, so
@@ -85,6 +93,8 @@ export const Meter = forwardRef<HTMLDivElement, MeterProps>(function Meter(
         "kanso-meter",
         size === "sm" ? "kanso-meter--sm" : "kanso-meter--md",
         ...(overrange ? ["kanso-meter--overrange"] : []),
+        ...(showStep === true ? ["kanso-meter--step"] : []),
+        ...(showStep === false ? ["kanso-meter--no-step"] : []),
         className,
       ].join(" ")}
       style={style}

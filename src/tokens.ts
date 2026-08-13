@@ -241,6 +241,7 @@ export const kansoThemes = {
       "accent-dim": "#4a3f80",
       "accent-deep": "#241d3f",
       "accent-film": "rgba(127, 107, 214, 0.06)",
+      hazard: "#d38bff",
       magenta: "#ff7ad9",
       "magenta-dim": "#bf4ba0",
       lime: "#b8e04f",

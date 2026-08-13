@@ -1,36 +1,20 @@
 /**
- * Kanso browser smoke test — Playwright (playwright-core) driving the
- * already-downloaded Chromium binary. No playwright browser install needed.
+ * Kanso browser smoke test — Playwright (playwright-core) driving whatever
+ * Chromium is already on the machine. No playwright browser install needed.
  *
  * Usage: node scripts/smoke.mjs [url]
  * Defaults to the vite dev server at http://localhost:5173
+ * Set CHROME_PATH to choose the browser explicitly.
  */
 import { chromium } from "playwright-core";
-import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-
-const CHROME_CANDIDATES = [
-  // omp's downloaded Chromium (this machine)
-  "C:/Users/Chef/.omp/puppeteer/chrome/win64-150.0.7871.24/chrome-win64/chrome.exe",
-  // system Chrome
-  "C:/Program Files/Google/Chrome/Application/chrome.exe",
-  // system Edge (last resort)
-  "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
-  "C:/Program Files/Microsoft/Edge/Application/msedge.exe",
-];
-
-function resolveExecutable() {
-  for (const p of CHROME_CANDIDATES) {
-    if (existsSync(p)) return p;
-  }
-  throw new Error("No Chromium/Chrome/Edge executable found");
-}
+import { resolveChrome } from "./chrome.mjs";
 
 const url = process.argv[2] ?? "http://localhost:5173";
 
 const browser = await chromium.launch({
-  executablePath: resolveExecutable(),
+  executablePath: resolveChrome(),
   headless: true,
   args: ["--no-sandbox"],
 });

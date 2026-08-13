@@ -4,22 +4,12 @@
  * full-page shot.
  *
  * Usage: node scripts/shots.mjs [url] [...sectionIds]
+ * Set CHROME_PATH to choose the browser explicitly.
  */
 import { chromium } from "playwright-core";
-import { existsSync, mkdirSync } from "node:fs";
+import { mkdirSync } from "node:fs";
 import { join } from "node:path";
-
-const CHROME_CANDIDATES = [
-  "C:/Users/Chef/.omp/puppeteer/chrome/win64-150.0.7871.24/chrome-win64/chrome.exe",
-  "C:/Program Files/Google/Chrome/Application/chrome.exe",
-  "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
-  "C:/Program Files/Microsoft/Edge/Application/msedge.exe",
-];
-
-function resolveExecutable() {
-  for (const p of CHROME_CANDIDATES) if (existsSync(p)) return p;
-  throw new Error("No Chromium/Chrome/Edge executable found");
-}
+import { resolveChrome } from "./chrome.mjs";
 
 const [, , url = "http://localhost:5177", ...ids] = process.argv;
 const sections = ids.length ? ids : ["meters", "graphs", "fields", "menus"];
@@ -28,7 +18,7 @@ const outDir = join(process.cwd(), ".server-logs", "shots");
 mkdirSync(outDir, { recursive: true });
 
 const browser = await chromium.launch({
-  executablePath: resolveExecutable(),
+  executablePath: resolveChrome(),
   headless: true,
   args: ["--no-sandbox"],
 });

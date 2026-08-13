@@ -111,7 +111,22 @@
 /* --- ramp step word ----------------------------------------------------
    WCAG 1.4.1: adjacent ramp stops sit ~1.2-1.7:1 apart on the orange-red
    axis, which is the axis deuteranopia collapses. The word is the signal;
-   the colour only agrees with it. */
+   the colour only agrees with it.
+
+   Visibility is a three-state toggle rather than a prop default, so the two
+   generations can disagree without either being deleted: `--step` and
+   `--no-step` pin it, and a Meter that passes neither defers to the theme —
+   hidden under classic, shown under eva. Hidden means `display: none`, so
+   nothing is announced twice; the numeric and `aria-valuetext` carry the
+   value either way. */
+.kanso-meter__step { display: none; }
+
+[data-kanso-theme="eva"] .kanso-meter__step,
+.kanso-meter--step .kanso-meter__step { display: block; }
+
+/* An explicit `showStep={false}` outranks the theme in both directions. */
+.kanso-meter--no-step .kanso-meter__step { display: none; }
+
 .kanso-meter__step {
   font-family: var(--kanso-type-mono);
   font-variant-numeric: tabular-nums;
