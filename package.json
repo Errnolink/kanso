@@ -1,7 +1,7 @@
 {
   "name": "@kanso/ui",
-  "version": "0.2.0",
-  "description": "Kanso — the in-house design language. Tokens + React components distilled from NERV-UI, Evangelion interface design, btop telemetry and cyberpunk chrome.",
+  "version": "0.3.0",
+  "description": "Kanso — the in-house design language. Tokens + React components distilled from NERV-UI, Evangelion interface design, btop telemetry and cyberpunk chrome. Two themes: v1 classic and the eva synthesis.",
   "type": "module",
   "files": [
     "dist"
@@ -22,8 +22,9 @@
   "scripts": {
     "build:tokens": "node scripts/build-tokens.mjs",
     "check:contrast": "node scripts/check-contrast.mjs",
+    "check:type": "node scripts/check-type-floor.mjs",
     "typecheck": "tsc --noEmit",
-    "verify": "npm run build:tokens && npm run check:contrast && npm run typecheck",
+    "verify": "npm run build:tokens && npm run check:contrast && npm run check:type && npm run typecheck",
     "build": "npm run build:tokens && vite build",
     "dev": "npm run build:tokens && vite",
     "preview": "vite preview",

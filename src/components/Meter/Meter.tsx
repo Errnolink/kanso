@@ -4,12 +4,15 @@
 // spans the whole *track*, then scaled down to the filled fraction: 30%
 // reads green→caution, 95% runs green→red. `segments` switches to btop's
 // discrete block cells, each cell coloured by its own ramp position.
+//
+// The bar is always capped at `max`; `allowOverrange` caps only the paint,
+// never the number — a silent clamp is a lie about the telemetry.
 import {
   type CSSProperties,
   type HTMLAttributes,
   forwardRef,
 } from "react";
-import { HUE, type Hue, rampColor, rampGradient } from "../../ramp";
+import { HUE, type Hue, rampColor, rampGradient, rampOverrange } from "../../ramp";
 
 export interface MeterProps extends Omit<HTMLAttributes<HTMLDivElement>, "color"> {
   value: number;
@@ -21,10 +24,18 @@ export interface MeterProps extends Omit<HTMLAttributes<HTMLDivElement>, "color"
   /** When set, render as N discrete block segments instead of a smooth bar. */
   segments?: number;
   size?: "sm" | "md";
-}
-
-function clamp01(n: number): number {
-  return n < 0 ? 0 : n > 1 ? 1 : Number.isFinite(n) ? n : 0;
+  /**
+   * Let `value` exceed `max` instead of clamping it away. The bar caps, a
+   * hazard block flags the excess, and the readout carries the true number —
+   * the sync-ratio case, where 412% must never render as 100%.
+   */
+  allowOverrange?: boolean;
+  /**
+   * Render the ramp step's word — NOMINAL … CRITICAL — beside the value, so
+   * severity survives the orange-red axis that deuteranopia collapses.
+   * Ignored unless `color="ramp"`: a single hue has no severity step.
+   */
+  showStep?: boolean;
 }
 
 export const Meter = forwardRef<HTMLDivElement, MeterProps>(function Meter(
@@ -36,6 +47,8 @@ export const Meter = forwardRef<HTMLDivElement, MeterProps>(function Meter(
     color = "ramp",
     segments,
     size = "md",
+    allowOverrange = false,
+    showStep = false,
     className = "",
     style,
     "aria-label": ariaLabel,
@@ -45,8 +58,11 @@ export const Meter = forwardRef<HTMLDivElement, MeterProps>(function Meter(
 ) {
   // role="meter" is nothing to a screen reader without a name, and `label`
   // is optional — so fall back rather than ship an anonymous meter.
-  const frac = clamp01(max > 0 ? value / max : 0);
-  const pct = Math.round(frac * 100);
+  const { frac, ratio, over, step } = rampOverrange(value, max);
+  const overrange = allowOverrange && over;
+  // The bar always draws the clamped fraction; only the text escapes the cap.
+  const pct = Math.round((overrange ? ratio : frac) * 100);
+  const stepWord = showStep && color === "ramp" ? step.toUpperCase() : null;
   const tint = color === "ramp" ? rampColor(frac) : HUE[color];
 
   // Gradient spans the whole track, then the fill is scaled to `frac`, so
@@ -63,21 +79,35 @@ export const Meter = forwardRef<HTMLDivElement, MeterProps>(function Meter(
       aria-valuenow={value}
       aria-valuemin={0}
       aria-valuemax={max}
-      aria-valuetext={`${pct}%`}
+      aria-valuetext={overrange ? `${pct}% — OVERRANGE` : `${pct}%`}
       aria-label={ariaLabel ?? label ?? "meter"}
       className={[
         "kanso-meter",
         size === "sm" ? "kanso-meter--sm" : "kanso-meter--md",
+        ...(overrange ? ["kanso-meter--overrange"] : []),
         className,
       ].join(" ")}
       style={style}
       {...rest}
     >
-      {(label !== undefined || showValue) && (
+      {(label !== undefined || showValue || stepWord) && (
         <div className="kanso-meter__head">
           {label !== undefined && <span className="kanso-meter__label">{label}</span>}
+          {/* Overrange text takes its colour from the modifier class, so the
+              theme layer can restyle the state the inline tint would pin. */}
+          {stepWord && (
+            <span
+              className="kanso-meter__step"
+              style={overrange ? undefined : { color: tint }}
+            >
+              {stepWord}
+            </span>
+          )}
           {showValue && (
-            <span className="kanso-meter__value" style={{ color: tint }}>
+            <span
+              className="kanso-meter__value"
+              style={overrange ? undefined : { color: tint }}
+            >
               {pct}%
             </span>
           )}
@@ -98,6 +128,7 @@ export const Meter = forwardRef<HTMLDivElement, MeterProps>(function Meter(
               />
             );
           })}
+          {overrange && <span className="kanso-meter__overflow" />}
         </div>
       ) : (
         <div className="kanso-meter__track" aria-hidden="true">
@@ -111,6 +142,7 @@ export const Meter = forwardRef<HTMLDivElement, MeterProps>(function Meter(
               } as CSSProperties
             }
           />
+          {overrange && <span className="kanso-meter__overflow" />}
         </div>
       )}
     </div>

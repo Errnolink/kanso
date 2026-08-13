@@ -17,10 +17,11 @@ import {
   MARK,
 } from "../../src";
 import { Demo, Grid, Section } from "../Showcase";
+import { Split } from "../ThemeSwitch";
 
 type View = "grid" | "list" | "split";
 
-export function Controls() {
+export function Controls({ split }: { split: boolean }) {
   const [clicks, setClicks] = useState(0);
   const [pollutant, setPollutant] = useState("PM2.5");
   const [termTab, setTermTab] = useState("LOG");
@@ -97,11 +98,20 @@ export function Controls() {
           </Demo>
 
           <Demo title="BADGES">
-            <Badge label="DEFAULT" />
-            <Badge variant="success" label="NOMINAL" />
-            <Badge variant="warning" label="PRIORITY" />
-            <Badge variant="info" label="RESOLVED" />
-            <Badge variant="danger" label="PURGED" />
+            <Split
+              on={split}
+              note="Five badges is the whole functional palette in one row at the size it is actually read at, which makes this the cheapest test of a palette change: v2 lifts the badge off the 8px floor and pulls info away from the cyan reserved for focus."
+            >
+              {() => (
+                <div className="row">
+                  <Badge label="DEFAULT" />
+                  <Badge variant="success" label="NOMINAL" />
+                  <Badge variant="warning" label="PRIORITY" />
+                  <Badge variant="info" label="RESOLVED" />
+                  <Badge variant="danger" label="PURGED" />
+                </div>
+              )}
+            </Split>
           </Demo>
         </Grid>
       </Section>

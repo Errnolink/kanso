@@ -30,16 +30,45 @@ export function Scanlines({
     const el = scanRef.current;
     if (!el || !speed) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    // Loop restarts are invisible because the gradient period divides the
-    // shifted distance exactly.
-    animRef.current = animate(el, {
-      backgroundPosition: ["0 0", "0 100%"],
-      duration: speed,
-      ease: linear(0, 1),
-      loop: true,
+
+    // Both attributes pin the mask in CSS, which stops the pixels but not the
+    // rAF tween — it would keep repainting the full viewport to no effect.
+    // eva ships static scanlines (SC 2.2.2: a 10s auto-starting loop needs a
+    // pause control), and `data-kanso-effects="off"` is the app's own switch.
+    const pinned = () =>
+      el.closest('[data-kanso-theme="eva"], [data-kanso-effects="off"]') !== null;
+
+    // Re-checked rather than read once: both attributes are written by an
+    // ancestor — typically `useKansoTheme`, whose effect runs *after* this
+    // one — and the user can flip either at any time.
+    const sync = () => {
+      if (pinned()) {
+        animRef.current?.revert();
+        animRef.current = null;
+      } else if (!animRef.current) {
+        // Loop restarts are invisible because the gradient period divides the
+        // shifted distance exactly.
+        animRef.current = animate(el, {
+          backgroundPosition: ["0 0", "0 100%"],
+          duration: speed,
+          ease: linear(0, 1),
+          loop: true,
+        });
+      }
+    };
+
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      subtree: true,
+      attributeFilter: ["data-kanso-theme", "data-kanso-effects"],
     });
+
     return () => {
+      observer.disconnect();
       animRef.current?.revert();
+      animRef.current = null;
     };
   }, [speed]);
 

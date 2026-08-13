@@ -5,8 +5,21 @@
 import "./kanso.css";
 
 // --- foundations --------------------------------------------------------
-export { kanso, cssVar } from "./tokens";
-export type { Kanso } from "./tokens";
+export { kanso, cssVar, kansoThemes, KANSO_THEMES } from "./tokens";
+export type { Kanso, KansoThemeId } from "./tokens";
+export {
+  THEMES,
+  THEME_ATTR,
+  THEME_STORAGE_KEY,
+  DEFAULT_THEME,
+  applyTheme,
+  readTheme,
+  storedTheme,
+  storeTheme,
+  isThemeId,
+  useKansoTheme,
+} from "./theme";
+export type { ThemeId, ThemeInfo, UseThemeOptions } from "./theme";
 export {
   EASE_MECHANICAL,
   EASE_OUT,
@@ -27,9 +40,10 @@ export {
   rampColor,
   rampStep,
   rampGradient,
+  rampOverrange,
   resolveHue,
 } from "./ramp";
-export type { RampName, Hue } from "./ramp";
+export type { RampName, RampReading, Hue } from "./ramp";
 export {
   BOX,
   TREE,
@@ -122,6 +136,8 @@ export type {
 } from "./components/CommandPalette/CommandPalette";
 export { Alert } from "./components/Alert/Alert";
 export type { AlertProps, AlertLevel } from "./components/Alert/Alert";
+export { Takeover } from "./components/Takeover/Takeover";
+export type { TakeoverProps, TakeoverLevel } from "./components/Takeover/Takeover";
 export { BootSequence } from "./components/BootSequence/BootSequence";
 export type {
   BootSequenceProps,
@@ -134,6 +150,8 @@ export type { SpinnerProps, SpinnerColor } from "./components/Spinner/Spinner";
 // --- display ------------------------------------------------------------
 export { Badge } from "./components/Badge/Badge";
 export type { BadgeProps } from "./components/Badge/Badge";
+export { DataTexture } from "./components/DataTexture/DataTexture";
+export type { DataTextureProps } from "./components/DataTexture/DataTexture";
 
 // --- telemetry ----------------------------------------------------------
 export { BarChart } from "./components/BarChart/BarChart";
@@ -152,6 +170,12 @@ export { Gauge } from "./components/Gauge/Gauge";
 export type { GaugeProps } from "./components/Gauge/Gauge";
 export { LED } from "./components/LED/LED";
 export type { LEDProps, LEDState } from "./components/LED/LED";
+export { MagiConsensus } from "./components/MagiConsensus/MagiConsensus";
+export type {
+  MagiConsensusProps,
+  MagiNode,
+  MagiNodeState,
+} from "./components/MagiConsensus/MagiConsensus";
 export { Meter } from "./components/Meter/Meter";
 export type { MeterProps } from "./components/Meter/Meter";
 export { Progress } from "./components/Progress/Progress";

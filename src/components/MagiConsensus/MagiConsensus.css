@@ -1,0 +1,215 @@
+/* MagiConsensus — n named nodes wired to the aggregate they add up to.
+   The nodes are deliberately quiet: name in muted, state word in the state
+   colour, hairline border. The aggregate is the one bright thing in the
+   box, because the aggregate is the actual answer. */
+
+.kanso-magi {
+  --kanso-magi-count: 3;
+  --kanso-magi-color: var(--kanso-color-text-dim);
+  display: flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-lg);
+}
+
+.kanso-magi__label {
+  margin: 0;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+  line-height: var(--kanso-type-leading-tight);
+}
+
+.kanso-magi__field {
+  position: relative;
+  display: grid;
+  gap: var(--kanso-spacing-xl);
+}
+
+/* --- wires --------------------------------------------------------------
+   One SVG for every connector, behind the boxes. Endpoints are nominal
+   viewBox percentages; the boxes are opaque, so each line is only visible
+   in the gap it crosses. */
+.kanso-magi__wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.kanso-magi__wires line {
+  stroke: var(--kanso-color-border);
+  stroke-width: 1;
+}
+
+/* --- layout ------------------------------------------------------------ */
+.kanso-magi--triangle .kanso-magi__field {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    "n1  n2"
+    "agg agg"
+    "n3  n3";
+}
+
+.kanso-magi--triangle .kanso-magi__node--pos-1 { grid-area: n1; }
+.kanso-magi--triangle .kanso-magi__node--pos-2 { grid-area: n2; }
+
+/* The apex node sits centred under the aggregate, one column wide — the
+   gap has to be subtracted or it reads as slightly too broad. */
+.kanso-magi--triangle .kanso-magi__node--pos-3 {
+  grid-area: n3;
+  justify-self: center;
+  width: calc(50% - var(--kanso-spacing-xl) / 2);
+}
+
+.kanso-magi--triangle .kanso-magi__verdict { grid-area: agg; }
+
+.kanso-magi--row .kanso-magi__field {
+  grid-template-columns: repeat(var(--kanso-magi-count), minmax(0, 1fr));
+}
+
+.kanso-magi--row .kanso-magi__verdict { grid-column: 1 / -1; }
+
+/* --- node -------------------------------------------------------------- */
+.kanso-magi__node {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-sm);
+  padding: var(--kanso-spacing-lg) var(--kanso-spacing-xl);
+  background: var(--kanso-color-panel);
+  border: var(--kanso-shape-hairline) solid var(--kanso-color-border);
+}
+
+.kanso-magi__node--pending { --kanso-magi-color: var(--kanso-color-text-dim); }
+.kanso-magi__node--affirm { --kanso-magi-color: var(--kanso-color-success); }
+.kanso-magi__node--deny { --kanso-magi-color: var(--kanso-color-danger); }
+
+.kanso-magi__node--abstain {
+  --kanso-magi-color: var(--kanso-color-muted);
+  border-style: dashed;
+}
+
+.kanso-magi__node--compromised {
+  --kanso-magi-color: var(--kanso-color-danger);
+  border-color: var(--kanso-color-danger-dim);
+}
+
+/* The compromised node's hazard fill runs edge to edge. It is pinned to
+   the top rather than un-padded with negative margins, so it stays
+   correct when the padding changes at narrow widths. */
+.kanso-magi__node .kanso-hazard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.kanso-magi__name {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+  line-height: var(--kanso-type-leading-tight);
+}
+
+.kanso-magi__state {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-base);
+  font-weight: var(--kanso-type-weight-bold);
+  letter-spacing: var(--kanso-type-tracking-label);
+  color: var(--kanso-magi-color);
+  line-height: var(--kanso-type-leading-tight);
+}
+
+.kanso-magi__detail {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-wide);
+  color: var(--kanso-color-text-dim);
+  line-height: var(--kanso-type-leading-snug);
+  overflow-wrap: anywhere;
+}
+
+/* --- aggregate --------------------------------------------------------- */
+.kanso-magi__verdict {
+  --kanso-magi-color: var(--kanso-color-primary);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--kanso-spacing-md);
+  padding: var(--kanso-spacing-xl) var(--kanso-spacing-2xl);
+  background: var(--kanso-color-panel-2);
+  border: var(--kanso-shape-hairline) solid var(--kanso-magi-color);
+  border-top: var(--kanso-shape-accent-rule) solid var(--kanso-magi-color);
+  text-align: center;
+}
+
+.kanso-magi__verdict--approved { --kanso-magi-color: var(--kanso-color-success); }
+.kanso-magi__verdict--rejected { --kanso-magi-color: var(--kanso-color-danger); }
+.kanso-magi__verdict--deliberating { --kanso-magi-color: var(--kanso-color-primary); }
+
+.kanso-magi__verdict-label {
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-widest);
+  text-transform: uppercase;
+  color: var(--kanso-color-muted);
+  line-height: var(--kanso-type-leading-tight);
+}
+
+.kanso-magi__verdict-word {
+  font-family: var(--kanso-type-stamp);
+  font-size: var(--kanso-type-size-3xl);
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  text-transform: uppercase;
+  color: var(--kanso-magi-color);
+  line-height: var(--kanso-type-leading-tight);
+}
+
+.kanso-magi__tally {
+  font-family: var(--kanso-type-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-wide);
+  text-transform: uppercase;
+  color: var(--kanso-color-text-dim);
+  line-height: var(--kanso-type-leading-tight);
+}
+
+/* --- narrow ------------------------------------------------------------
+   The triangle degrades to a row. The wires go with it: their endpoints
+   are written for the triangle, and a decorative line in the wrong place
+   is worse than no line. */
+@media (max-width: 480px) {
+  .kanso-magi--triangle .kanso-magi__field {
+    grid-template-columns: repeat(var(--kanso-magi-count), minmax(0, 1fr));
+    grid-template-areas: none;
+  }
+
+  .kanso-magi--triangle .kanso-magi__node--pos-1,
+  .kanso-magi--triangle .kanso-magi__node--pos-2,
+  .kanso-magi--triangle .kanso-magi__node--pos-3 {
+    grid-area: auto;
+    justify-self: stretch;
+    width: auto;
+  }
+
+  .kanso-magi--triangle .kanso-magi__verdict {
+    grid-area: auto;
+    grid-column: 1 / -1;
+  }
+
+  .kanso-magi--triangle .kanso-magi__wires { display: none; }
+
+  .kanso-magi__node { padding: var(--kanso-spacing-md) var(--kanso-spacing-lg); }
+}

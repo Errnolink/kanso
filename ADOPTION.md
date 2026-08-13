@@ -6,6 +6,10 @@ migration: nothing outside this repository has been touched.
 [KANSO.md](./KANSO.md) is the spec. Where a project disagrees with it, §3 of this
 document says which side loses.
 
+Written against **0.3.0**, which ships two design generations. Every token table in §2 maps
+to v1 (`classic`), which is what a consumer gets by default and by doing nothing; §4.4
+covers what opting into `eva` would cost each project.
+
 ---
 
 ## 1. The projects
@@ -609,19 +613,89 @@ it's another reason that project doesn't need this.
   `<link>` requests IBM Plex Mono and must change (§3.3); app-launcher's already requests
   JetBrains Mono and Bebas Neue and needs no edit.
 
+### 4.4 Which generation — and the cost of `eva`
+
+0.3.0 ships two design generations. **Doing nothing keeps you on v1, byte-for-byte.**
+`tokens/*.json` still compiles to `:root` and still *is* v1; `eva` is one override block
+behind `[data-kanso-theme="eva"]`, and `classic` is the **absence** of that attribute rather
+than `="classic"`. A project that never writes the attribute gets the same custom-property
+values, the same DOM and the same rendering it got from 0.2.0. Nothing in this document's
+token tables (§2) changes.
+
+Opting in is one line — `applyTheme("eva")`, `useKansoTheme()`, or a literal attribute in
+the HTML for a project with no JS. What it costs:
+
+1. **Your own hardcoded hex stops looking wrong before the tokens do.** This is the real
+   cost, and it lands hardest on the projects that still paint in JS. `eva` moves `primary`
+   `#ff9830 → #ff6a00`, `info` `#20f0ff → #4aa8ff` and the whole severity ramp; anything
+   reading `kanso.color.primary` (a compile-time constant) or an inlined literal keeps the
+   v1 value and will sit beside re-themed chrome. Seele's five hardcoded hex maps (§4.1.3)
+   and NERV AQI's `WAVE_COLS` (§5.3) are exactly this. Route them through `cssVar()` or a
+   CSS class **before** switching, not after.
+2. **A different focus colour.** `--kanso-color-focus` goes from cyan `#20f0ff` to
+   pattern-blue `#4aa8ff`, which stays distinct from that theme's orange chrome. §3.4 is
+   unaffected — the projects still have to stop drawing their own rings — but a project
+   that hardcoded `#20f0ff` to match Kanso's has re-created the same problem one level
+   down.
+3. **An 11px type floor.** `eva` raises `size-xs` from 8px to 11px and `size-sm` from 10px
+   to 12px. Anything laid out to fit v1's 8px labels — dense table headers, badge rows,
+   status strips — gets taller. This is the change most likely to need layout work, and the
+   one worth budgeting a pass for.
+4. **Visible borders.** `border-highlight` goes `#2e2e34 → #6c6c78`. Divider- and
+   rail-heavy screens read considerably busier; that is the intended correction, not a bug.
+
+What it buys: 0 contrast failures across 230 measured pairs, against v1's 11, and no text
+below 11px. Both numbers come from `npm run verify` and are printed per theme.
+
+Per project: **app-launcher** should ship `classic` first (§6.1 is a packaging proof, and
+one variable at a time), then flip the attribute as a second commit — it is the cheapest
+place to see the type floor land. **NERV Style AQI** benefits most from `eva`'s focus and
+border work, and is also the project where §5.24 (glass carries no verified ratio) actually
+bites, so treat glass text there as `text` / `text-2` only. **Seele** is the upstream and
+the one that must not fork: adopt on `classic`, do the hex-map cleanup in item 1 as its own
+commit, and treat the generation choice as a separate later decision.
+
+Mixing generations is legal — the selector is unqualified and custom properties inherit, so
+one panel can carry the attribute while the rest of the app does not. It is legal and it is
+almost always wrong: two oranges on one screen reads as a bug, not as a theme.
+
 ---
 
 ## 5. What Kanso is still missing
 
-Gaps found by reading these five codebases. Each names the file and the pattern.
+Gaps found by reading these five codebases. Each names the file and the pattern. Two later
+blocks have a different origin and say so: the ones v2 closed came from the research report,
+and the ones v2 opened came from the theme layer itself.
 
 **Closed since this list was written** — do not re-implement these:
 `5.3` (`tokens/series.json`, `--kanso-series-1..8`) · `5.7` (`.kanso-surface-checker`) ·
 `5.11` (`--kanso-color-text-2`, though nothing consumes it yet) · `5.12`
-(`font-variant-ligatures: none` on `.kanso-value`) · `5.17` (`.kanso-phosphor-red`).
+(`font-variant-ligatures: none` on `.kanso-value`) · `5.17` (`.kanso-phosphor-red`) ·
+`5.18` (`scripts/check-contrast.mjs`, now gating 230 composited pairs per theme in
+`npm run verify`, which is also what closed §3.12).
 `5.14` is **half** closed: `.kanso-chip--term` has a CSS-only active state via
 `[aria-pressed="true"]`, but the default `tab` variant still has none — which is the half
 that actually blocks the vanilla consumers.
+
+### Closed by v2 (0.3.0)
+
+These four were not found by reading the five codebases. They come from
+`../theme-research/REPORT.md` §B2, which audited this library against the source material
+rather than against its consumers, and they are recorded here so the list stays a complete
+account of what the system was missing and when.
+
+| # | Gap | Closed by |
+| --- | --- | --- |
+| 5.19 ✔ | **No full-bleed alert takeover** (§B2.1). `Alert` and `Toast` covered the inline-strip and banner registers; the third rung — `position: fixed; inset: 0`, one word, everything else gone — did not exist, and it is the most recognisable single device in the source material | `<Takeover>`, reusing `Modal`'s focus-trap / scroll-lock / Escape machinery |
+| 5.20 ✔ | **No quorum / consensus component** (§B2.2). The only major NERV screen with no equivalent anywhere, and a real pattern underneath: CI shards, replica health, multi-region status, approval workflows, ensemble voting | `<MagiConsensus>` — n named voters plus the derived aggregate |
+| 5.21 ✔ | **No meter overrange state** (§B2.3). `clamp01` meant a value above `max` rendered identically to exactly `max`, silently. Sync ratio canonically exceeds 100% and peaks over 400% | `rampOverrange()` + `<Meter allowOverrange>`. Opt-in; the bar still caps, only the readout escapes |
+| 5.22 ✔ | **No bottom-edge panel title** (§B2.7). btop's `createBox` `title2` — a free density win for last-updated, record count, source | `<Panel title2>` |
+
+The same release also closed §B2.4 (`scripts/check-type-floor.mjs` gates the 11px floor),
+§B2.5 and §B2.6 (`prefers-contrast: more`, `prefers-reduced-transparency` and a
+`forced-colors` focus-ring strategy in `src/base/a11y.css`), and §B2.8 (`<DataTexture>` plus
+the decorative-only `text-faint` token, which is the text-as-texture policy made
+enforceable). None of those four were on this list either.
 
 The rest below are still open.
 
@@ -644,7 +718,21 @@ The rest below are still open.
 | 5.15 | **A `data-fx-*` effects registry** | `cadence-planner/src/themes/effects.js` allowlists nine composable toggles (`crt-scanlines`, `grid-background`, `hazard-border`, `chamfer`, `glow`, `hud-flicker`, `status-pulse`, `hex-labels`, `force-uppercase`), each gated `:root[data-fx-*]`. Kanso has two global opt-outs and no way to expose the atmosphere layer as user settings. Seele built the same thing independently in `SettingsModal.tsx` |
 | 5.16 | **A density scale** (`.kanso-dense`) | `cadence-planner/src/index.css` `:root[data-density="compact"]` re-declares the whole `--cad-fs-*` scale. Kanso hardcodes its sizes. Seele's four `MasonryGrid` view modes want the same lever |
 | 5.17 | **A red phosphor** | `.kanso-phosphor-*` covers orange, amber, lime, violet, cyan, green — no red, while `cadence-planner` ships `.glow-danger` and `NERV AQI`'s `.terminal-line--error` hand-rolls `text-shadow: 0 0 4px rgba(255,48,48,0.3)`. An asymmetry with no reason behind it |
-| 5.18 | **Port `check-contrast.mjs`** | `cadence-planner/scripts/check-contrast.mjs` plus the measured ratios in `src/themes/nerv/tokens.css:19-26`. The most transferable artifact in the portfolio, and the fix for §3.12 |
+| 5.18 | **Port `check-contrast.mjs`** ✔ **CLOSED** | `cadence-planner/scripts/check-contrast.mjs` plus the measured ratios in `src/themes/nerv/tokens.css:19-26`. The most transferable artifact in the portfolio, and the fix for §3.12. Ported, then extended to composite layer stacks and resolve each theme's palette |
+
+### Opened by v2 (0.3.0)
+
+Four gaps the theme layer created or made visible. None of them blocks adoption, and they
+are not all the same kind of thing: two are refusals, one is a measurement limit that cannot
+be closed at all, and one already has its fix shipped but not switched on by default. The
+document should say which is which.
+
+| # | Gap | Where it stands |
+| --- | --- | --- |
+| 5.23 | **No light mode, and none planned** | A refusal, not an omission. The research report and this library agree: a tonally-inverted Eva theme is incoherent, because the aesthetic is *constituted* by black being the majority of the frame — on white an AA-safe alarm red is calmer than the orange beside it, which inverts the severity hierarchy, and a white screen filled with the word EMERGENCY reads as a Word document. If one is ever wanted it has to be a separate **document register** — ink on bone paper, effects layer off by definition — not an inversion. `filter: invert()` is not a light mode. This is the one thing cadence-planner has (two themes) that Kanso still has no answer for, and §6.5 already counted it against adoption |
+| 5.24 | **`glass` can never carry a verified contrast number** | A ratio against a translucent surface is a range, not a value, and `prefers-reduced-transparency` changes the composite underneath it. `check-contrast.mjs` measures only the best case — glass over `panel-3` — and prints that it is doing so. Proposed rule, **not yet enforced**: glass may carry `text` and `text-2` only, never `muted` or any `-dim` token. This lands on NERV Style AQI, the portfolio's only legitimate glass consumer (§3.13), where all four HUD surfaces float over a live map |
+| 5.25 | **Adjacent severity-ramp stops sit ~1.2–1.7:1 apart** | Inherent to five stops on a green→red path, and not a literal 1.4.11 failure — every stop clears 3:1 against the track it is drawn on. The gate reports the adjacencies as `NOTE`, not `fail`. The fix is not more hue, it is `<Meter showStep>`, which prints the step's *word* on the axis deuteranopia collapses. Currently `false` by default; **consider defaulting it to `true`** |
+| 5.26 | **`hazard #b020ff` is violet** | Neither the Eva nor the ISO caution convention, both of which are amber-on-black. It has a defined meaning here — a level-5 event, one rung above `critical` — so it stays, but it is the one colour in the system whose hue does not carry its meaning to anyone who has not read §4 |
 
 ---
 
@@ -691,6 +779,11 @@ Close the gaps that 6.1 and 6.2 surfaced before touching Seele. At minimum: CSS-
 states (§5.14), `--kanso-color-active` (§5.6), the series palette (§5.3), the contrast
 script and whatever it says about `muted` (§5.18, §3.12), and the one-line ligature fix
 (§5.12).
+
+Three of those five bullets are done as of 0.3.0 — §5.3, §5.12, and §5.18 with the §3.12
+`muted` decision that came out of it. What is left on this step is §5.6, and §5.14's second
+half: the `tab` variant still has no CSS-only active state, which is the half that blocks
+both vanilla projects.
 
 Adopting into Seele while known gaps remain guarantees Seele re-forks, and Seele is the one
 project where a fork is fatal — it's the upstream.

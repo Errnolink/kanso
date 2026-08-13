@@ -58,45 +58,86 @@
 /* --- phosphor glow ----------------------------------------------------
    CRT emission. One class per text node — never stack two. Each is a
    single subdued 4px shadow; stacking reads as bloom, which the system
-   explicitly rejects. */
+   explicitly rejects.
+
+   The glow is decoration and can never be load-bearing: forced-colors
+   mode forces `text-shadow: none` by specification, so it is simply not
+   there for a High Contrast user. Two bounds on it:
+
+   (a) It stops below `size-md`. A 4px blur on an 8–11px glyph is a large
+       fraction of the stroke width. CSS cannot branch on a computed font
+       size, but `1em` *is* the element's own font size, so the blur gates
+       on it: full value at md, and the 1000x ramp collapses it to 0
+       within a hundredth of a pixel below, which parks the shadow behind
+       its own glyph. Holds whoever set the size — a utility class, a
+       component, or an inline style.
+   (b) It is off entirely under `prefers-contrast: more`, below. */
+
+.kanso-phosphor-orange,
+.kanso-phosphor-amber,
+.kanso-phosphor-lime,
+.kanso-phosphor-violet,
+.kanso-phosphor-cyan,
+.kanso-phosphor-green,
+.kanso-phosphor-red {
+  --kanso-phosphor-glow: clamp(
+    0px,
+    var(--kanso-effect-phosphor-blur) + (1em - var(--kanso-type-size-md)) * 1000,
+    var(--kanso-effect-phosphor-blur)
+  );
+}
 
 .kanso-phosphor-orange {
   color: var(--kanso-color-phosphor-orange);
-  text-shadow: 0 0 var(--kanso-effect-phosphor-blur) rgba(255, 152, 48, 0.3);
+  text-shadow: 0 0 var(--kanso-phosphor-glow) rgba(255, 152, 48, 0.3);
 }
 
 .kanso-phosphor-amber {
   color: var(--kanso-color-phosphor-amber);
-  text-shadow: 0 0 var(--kanso-effect-phosphor-blur) rgba(255, 183, 0, 0.3);
+  text-shadow: 0 0 var(--kanso-phosphor-glow) rgba(255, 183, 0, 0.3);
 }
 
 .kanso-phosphor-lime {
   color: var(--kanso-color-phosphor-lime);
-  text-shadow: 0 0 var(--kanso-effect-phosphor-blur) rgba(163, 230, 53, 0.3);
+  text-shadow: 0 0 var(--kanso-phosphor-glow) rgba(163, 230, 53, 0.3);
 }
 
 .kanso-phosphor-violet {
   color: var(--kanso-color-phosphor-violet);
-  text-shadow: 0 0 var(--kanso-effect-phosphor-blur) rgba(124, 58, 237, 0.3);
+  text-shadow: 0 0 var(--kanso-phosphor-glow) rgba(124, 58, 237, 0.3);
 }
 
 .kanso-phosphor-cyan {
   color: var(--kanso-color-phosphor-cyan);
-  text-shadow: 0 0 var(--kanso-effect-phosphor-blur) rgba(32, 240, 255, 0.3);
+  text-shadow: 0 0 var(--kanso-phosphor-glow) rgba(32, 240, 255, 0.3);
 }
 
 .kanso-phosphor-green {
   color: var(--kanso-color-phosphor-green);
-  text-shadow: 0 0 var(--kanso-effect-phosphor-blur) rgba(80, 255, 80, 0.3);
+  text-shadow: 0 0 var(--kanso-phosphor-glow) rgba(80, 255, 80, 0.3);
 }
 
 .kanso-phosphor-red {
   color: var(--kanso-color-phosphor-red);
-  text-shadow: 0 0 var(--kanso-effect-phosphor-blur) rgba(255, 48, 48, 0.3);
+  text-shadow: 0 0 var(--kanso-phosphor-glow) rgba(255, 48, 48, 0.3);
 }
 
 .kanso-phosphor-dim {
   color: var(--kanso-color-text-dim);
+}
+
+/* A glow raises the local background luminance behind the glyph, so it
+   works against the one thing this preference asks for. Colour stays. */
+@media (prefers-contrast: more) {
+  .kanso-phosphor-orange,
+  .kanso-phosphor-amber,
+  .kanso-phosphor-lime,
+  .kanso-phosphor-violet,
+  .kanso-phosphor-cyan,
+  .kanso-phosphor-green,
+  .kanso-phosphor-red {
+    text-shadow: none;
+  }
 }
 
 /* --- text state colors ------------------------------------------------ */

@@ -58,6 +58,8 @@ export const Gauge = forwardRef<HTMLDivElement, GaugeProps>(function Gauge(
   // The dial carries role="meter", which is anonymous without a name and
   // `label` is optional — hence the fallback.
   const frac = clamp01(max > 0 ? value / max : 0);
+  // A `var()`/`color-mix()` paint value only resolves in a CSS context, so
+  // the arc takes its colour from `style` and not a `stroke=` attribute.
   const tint = resolveHue(color, frac);
 
   const stroke = Math.max(3, Math.round(size * 0.075));
@@ -122,7 +124,7 @@ export const Gauge = forwardRef<HTMLDivElement, GaugeProps>(function Gauge(
             strokeDasharray="100"
             strokeDashoffset={100 - frac * 100}
             strokeWidth={stroke}
-            stroke={tint}
+            style={{ stroke: tint }}
             fill="none"
           />
         </svg>

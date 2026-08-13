@@ -1,0 +1,52 @@
+/* DataTexture — a field of the application's own real data, used as
+   texture. Faint, mono, static, unselectable and aria-hidden: it must
+   register as a surface and never as content. No animation — a moving
+   wall of text behind live data is hostile, and regenerating it per
+   frame is the one way this effect stops being free. */
+
+.kanso-data-texture {
+  --kanso-data-texture-width: auto;
+  display: flex;
+  flex-direction: column;
+  width: var(--kanso-data-texture-width);
+  max-width: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  font-variant-ligatures: none;
+  letter-spacing: var(--kanso-type-tracking-wide);
+  line-height: var(--kanso-type-leading-snug);
+  /* `text-faint` is the one token deliberately below the AA floor. It is
+     declared decorative-only for exactly this use, which is why the field
+     can be a real colour instead of `muted` behind an opacity fudge —
+     an opacity multiplier makes the delivered ratio unmeasurable. */
+  color: var(--kanso-color-text-faint);
+}
+
+.kanso-data-texture__line {
+  display: block;
+  white-space: pre;
+  overflow: hidden;
+}
+
+/* The mask uses `ink` purely as an opaque stop — a mask samples alpha, so
+   this is a shape, not a colour decision. */
+.kanso-data-texture--fade {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    var(--kanso-color-ink) 12%,
+    var(--kanso-color-ink) 88%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    var(--kanso-color-ink) 12%,
+    var(--kanso-color-ink) 88%,
+    transparent 100%
+  );
+}

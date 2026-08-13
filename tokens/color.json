@@ -51,6 +51,7 @@
   "text-2": { "$type": "color", "$value": "#b8b8b2" },
   "text-dim": { "$type": "color", "$value": "#8a8a85" },
   "muted": { "$type": "color", "$value": "#767670" },
+  "text-faint": { "$type": "color", "$value": "#6a6a65" },
   "ink": { "$type": "color", "$value": "#000000" },
 
   "scrim": { "$type": "color", "$value": "rgba(0, 0, 0, 0.72)" },

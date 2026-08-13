@@ -62,7 +62,10 @@
 }
 
 /* --- discrete cells ---------------------------------------------------- */
+/* Positioned so the overrange block can hang off the right end of either
+   variant from a single rule. */
 .kanso-meter__segments {
+  position: relative;
   display: flex;
   gap: 1px;
   width: 100%;
@@ -78,6 +81,52 @@
 /* Lit cells are painted inline with their ramp colour; this is the fallback
    for when that style is absent, matching the smooth bar's default paint. */
 .kanso-meter__cell--on { background: var(--kanso-color-primary); }
+
+/* --- overrange ---------------------------------------------------------
+   Past `max` the bar is full and has nothing left to say, so the excess is
+   flagged rather than measured: a hazard block welded to the right end, with
+   the true magnitude carried by the readout. Sized by the stripe period so
+   the block is exactly one caution cycle wide at any meter height. */
+.kanso-meter__overflow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--kanso-shape-hazard-period);
+  border-left: var(--kanso-shape-hairline) solid var(--kanso-color-ink);
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--kanso-color-danger) 0,
+    var(--kanso-color-danger) calc(var(--kanso-shape-hazard-period) / 4),
+    var(--kanso-color-ink) calc(var(--kanso-shape-hazard-period) / 4),
+    var(--kanso-color-ink) calc(var(--kanso-shape-hazard-period) / 2)
+  );
+}
+
+.kanso-meter--overrange .kanso-meter__value,
+.kanso-meter--overrange .kanso-meter__step {
+  color: var(--kanso-color-danger);
+}
+
+/* --- ramp step word ----------------------------------------------------
+   WCAG 1.4.1: adjacent ramp stops sit ~1.2-1.7:1 apart on the orange-red
+   axis, which is the axis deuteranopia collapses. The word is the signal;
+   the colour only agrees with it. */
+.kanso-meter__step {
+  font-family: var(--kanso-type-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-medium);
+  letter-spacing: var(--kanso-type-tracking-label);
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  /* Auto margin beats space-between, so the word parks next to the value
+     instead of being spread to the centre of the head. */
+  margin-left: auto;
+  transition: color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
 
 .kanso-meter--sm .kanso-meter__track,
 .kanso-meter--sm .kanso-meter__cell { height: 4px; }

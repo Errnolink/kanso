@@ -14,13 +14,16 @@ import {
   TopBar,
 } from "../../src";
 import { Demo, Grid, Section } from "../Showcase";
+import { Split } from "../ThemeSwitch";
 
 export function Chrome({
   crt,
   onToggleCrt,
+  split,
 }: {
   crt: { scanlines: boolean; grain: boolean; vignette: boolean };
   onToggleCrt: (key: "scanlines" | "grain" | "vignette") => void;
+  split: boolean;
 }) {
   const [tab, setTab] = useState("OVERVIEW");
 
@@ -41,15 +44,24 @@ export function Chrome({
   …
 </Panel>`}
           >
-            <Panel title="MAGI // CORE STATUS" meta="03 UNITS" accent="primary" notch="left">
-              <span className="kanso-value">MELCHIOR · BALTHASAR · CASPER</span>
-            </Panel>
-            <Panel title="CONTAINMENT BREACH" accent="danger">
-              <span className="kanso-value">PATTERN BLUE — SECTOR 7</span>
-            </Panel>
-            <Panel title="TELEMETRY LINK" accent="info" notch="right">
-              <span className="kanso-value">42.6 kbit/s · 12 ms</span>
-            </Panel>
+            <Split
+              on={split}
+              note="The titled panel is the most-repeated surface in any Kanso app, so it is the first thing the redesign has to justify: v2 lifts the hairline out of the near-black band it was hiding in, raises the type floor, and moves primary off the amber that was competing with the ramp's warning stop."
+            >
+              {() => (
+                <div className="col">
+                  <Panel title="MAGI // CORE STATUS" meta="03 UNITS" accent="primary" notch="left">
+                    <span className="kanso-value">MELCHIOR · BALTHASAR · CASPER</span>
+                  </Panel>
+                  <Panel title="CONTAINMENT BREACH" accent="danger">
+                    <span className="kanso-value">PATTERN BLUE — SECTOR 7</span>
+                  </Panel>
+                  <Panel title="TELEMETRY LINK" accent="info" notch="right">
+                    <span className="kanso-value">42.6 kbit/s · 12 ms</span>
+                  </Panel>
+                </div>
+              )}
+            </Split>
           </Demo>
 
           <Demo title="HEADER ACTIONS + FOOTER" stack>

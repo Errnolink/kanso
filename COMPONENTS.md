@@ -20,6 +20,11 @@ a DOM element — the "DOM element" line under each props table names which one,
 public API**, not implementation detail: the vanilla consumers in §6 of ADOPTION.md write
 against them directly, so they are versioned alongside the props.
 
+This is **v0.3.0 — 41 components, 172 tokens, 2 themes.** The second theme is a palette
+swap, not a second component set: every prop, class name and default below is identical
+under `data-kanso-theme="eva"`, and only the values the tokens resolve to change. The theme
+API itself is in §8.
+
 ---
 
 ## 2. Component index
@@ -35,6 +40,7 @@ against them directly, so they are versioned alongside the props.
 | `TopBar` / `Brand` | The command masthead: wordmark left, telemetry right |
 | `StatusBar` | The always-visible bottom strip of label/value cells |
 | `Scanlines` / `Vignette` / `Grain` / `CRT` | Atmosphere at the app root. `CRT` is all three |
+| `DataTexture` | A dense field of the app's **own real data**, used as texture behind the chrome |
 
 ### Telemetry
 
@@ -54,6 +60,7 @@ against them directly, so they are versioned alongside the props.
 | `DataList` | A parameter block of label/value rows |
 | `Table` | A process list, a manifest, anything sortable and selectable |
 | `Terminal` | A scrolling log feed with levels and a block cursor |
+| `MagiConsensus` | Several named voters produce one answer: quorum, replica health, approvals |
 
 ### Controls
 
@@ -83,6 +90,7 @@ against them directly, so they are versioned alongside the props.
 | Component | Use it when |
 | --- | --- |
 | `Alert` | A persistent inline banner that stays until the condition clears |
+| `Takeover` | The rung above `Alert`: the whole screen, one word, nothing else on it |
 | `BootSequence` | The EVA cold open. Theatre, never a gate |
 | `Spinner` | Indeterminate activity: a reticle, or an inline braille throbber |
 | `Badge` | A label tag, one step below `Chip` on the type ramp |
@@ -90,7 +98,7 @@ against them directly, so they are versioned alongside the props.
 
 ### Shared props that are not shared
 
-Four concepts have more than one spelling. Read the per-component table, not the pattern.
+Five concepts have more than one spelling. Read the per-component table, not the pattern.
 
 | Concept | The disagreement |
 | --- | --- |
@@ -98,6 +106,7 @@ Four concepts have more than one spelling. Read the per-component table, not the
 | `color` | `Hue \| "ramp"` on `Meter`, `Gauge`, `Sparkline`, `BrailleGraph`, `BarChart`, `CoreGrid`; bare `Hue` on `Frame`, `TermBox`, `Progress` and `SegmentBarSegment`; private unions on `Divider` (adds `"muted"`), `HazardStripe` (four hues only) and `Spinner` (`SpinnerColor`, adds `"dim"`) |
 | severity state | `ReadoutState` and `DataListState` are `RampName \| "info" \| "neutral"`; `StatusCell.state` is `RampName \| "info" \| "dim"` — no `neutral`, and it is optional rather than defaulted |
 | value visibility | `showValue` on `Meter`, `Progress`, `Slider`; `showValues` on `BarChart`, `CoreGrid`; `showLegend` on `SegmentBar`; `showLabel` on `Spinner` |
+| `level` | `AlertLevel` and `ToastLevel` are both `"info" \| "success" \| "warning" \| "danger"` but are separate types; `TakeoverLevel` is **`"danger" \| "warning"` only** — nothing below `warning` earns the whole screen |
 
 Two more worth knowing: `max` defaults to `1` on `Meter`, `Gauge`, `CoreGrid` and
 `Progress` (the value is a fraction) but to **the series peak** on `Sparkline`,
@@ -120,6 +129,7 @@ uppercase mono header, optional notched corners. Lineage: NERV.
 | `meta` | `ReactNode` | — | Small dim text after the title |
 | `actions` | `ReactNode` | — | Right-hand header slot |
 | `footer` | `ReactNode` | — | Footer strip below the body |
+| `title2` | `ReactNode` | — | **New in 0.3.0.** Secondary readout notched into the *bottom* rule, right-aligned — btop's `createBox` title2. Metadata, never a heading |
 | `accent` | `"primary" \| "danger" \| "info" \| "success" \| "accent" \| "none"` | `"primary"` | Sets both the `.kanso-rule-*` top border and the header film tint |
 | `notch` | `"left" \| "right" \| "none"` | `"none"` | `left` → `.kanso-notch`, `right` → `.kanso-notch-tr` |
 | `glass` | `boolean` | `false` | Swaps `.kanso-surface` for `.kanso-glass`. Costs a `backdrop-filter` |
@@ -141,7 +151,16 @@ spread onto the section, `className` appended to the root class list.
 is a plain framed box to a screen reader — that is deliberate, not a gap. The header only
 renders when `title` or `actions` is set; `meta` alone will not produce one. `accent="none"`
 still emits `kanso-panel__header--none`, which greys the title rather than removing the
-header. The ref is typed `HTMLDivElement` while the element is a `<section>`.
+header. The ref is typed `HTMLElement`, not `HTMLDivElement`, because the element is a
+`<section>`; the props still extend `HTMLAttributes<HTMLDivElement>`.
+
+`title2` is additive and defaults to `undefined` — **a Panel that does not pass it renders
+exactly the markup it rendered in 0.2.0.** When it is set the panel adds
+`.kanso-panel--title2`, which turns its own `border-bottom` transparent and hands the
+bottom edge to the `.kanso-panel__title2` strip, because the panel clips to its padding box
+and a label straddling the real border would lose its lower half. It composes with `footer`
+rather than replacing it: the footer is a content strip, `title2` is the edge itself. The
+label is `muted`, uppercase and tabular, and it ellipsises rather than wrapping.
 
 ---
 
@@ -355,6 +374,48 @@ Mount `CRT` once, at the app root.
 
 ---
 
+### DataTexture
+
+Text-as-texture: a dense mono field rendered at `text-faint`, `aria-hidden`, unselectable.
+Eva fills its screens with blocks nobody is meant to read; the field's job is to say "this
+system is doing more than it is telling you". Lineage: EVA. **New in 0.3.0.**
+
+| Prop | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `lines` | `string[]` | **required** | Real application data. Nothing is ever generated for you |
+| `rows` | `number` | — | Cap on rendered lines. Fewer lines than this simply render shorter |
+| `columns` | `number` | — | Field width in `ch`, written to `--kanso-data-texture-width`. Long lines are clipped, never wrapped |
+| `fade` | `boolean` | `false` | Masks the top and bottom 12% so the field reads as a fragment |
+
+DOM element: `<div aria-hidden="true">`; extends `HTMLAttributes<HTMLDivElement>`. `style`
+is merged with the component's own custom property rather than replaced. Renders `null`
+when there is nothing to show.
+
+```tsx
+<DataTexture fade rows={24} columns={48} lines={requests.map(
+  (r) => `${r.ts} ${r.id} ${r.method.padEnd(6)} ${r.path} ${r.ms}ms`
+)} />
+```
+
+**Notes.** `lines` is required and the component **never pads or repeats to reach `rows`** —
+a caller who wants a taller field supplies more real data. Filling a dashboard with
+meaningless content to look busy is the anti-pattern this component exists to replace.
+
+Ornamental CJK is the thing it replaces specifically: it is techno-orientalist, it is
+frequently wrong (Blade Runner's signage is partly gibberish and forty years of design has
+copied it), and a screen reader reads it aloud. Hex dumps, request ids, commit SHAs,
+timestamps and IPs give the identical optical texture and are what NERV's own screens are
+actually showing.
+
+It paints with `--kanso-color-text-faint` (`#6a6a65` classic, `#6e6961` eva), the one text
+token deliberately below the AA floor and declared decorative-only — see §9. That is why
+the field is a *declared* colour instead of `muted` behind an `opacity` multiplier: an
+opacity fudge makes the delivered ratio unmeasurable. Nothing here may ever be the only
+place a fact appears. There is no animation: a moving wall of text behind live data is
+hostile, and re-rendering it per frame is the one way this effect stops being free.
+
+---
+
 ## 4. Telemetry
 
 ### TermBox
@@ -394,12 +455,14 @@ btop's horizontal bar, on the Kanso ramp. Lineage: btop.
 | Prop | Type | Default | Notes |
 | --- | --- | --- | --- |
 | `value` | `number` | **required** | |
-| `max` | `number` | `1` | `value / max`, clamped to 0..1 |
+| `max` | `number` | `1` | `value / max`. The *bar* is always clamped to 0..1 |
 | `label` | `string` | — | Also the `aria-label` fallback |
 | `showValue` | `boolean` | `true` | Renders the rounded percent, tinted |
 | `color` | `Hue \| "ramp"` | `"ramp"` | |
 | `segments` | `number` | — | Switches to N discrete btop cells |
 | `size` | `"sm" \| "md"` | `"md"` | 4px / 8px track. No `lg` |
+| `allowOverrange` | `boolean` | `false` | **New in 0.3.0.** Let the *readout* exceed `max` instead of clamping it away. Adds `.kanso-meter--overrange` and a hazard block at the right end |
+| `showStep` | `boolean` | `false` | **New in 0.3.0.** Print the ramp step's word — `NOMINAL` … `CRITICAL`, or `OVERRANGE` — beside the value. **Ignored unless `color="ramp"`** |
 
 DOM element: `<div role="meter">` with `aria-valuenow/min/max/text`; extends
 `Omit<HTMLAttributes<HTMLDivElement>, "color">`.
@@ -408,6 +471,7 @@ DOM element: `<div role="meter">` with `aria-valuenow/min/max/text`; extends
 <Meter label="THERM" value={0.81} />
 <Meter label="CORE 02" value={0.92} segments={24} />
 <Meter label="INDEX" value={0.55} color="info" size="sm" showValue={false} />
+<Meter label="SYNC RATIO" value={412} max={100} allowOverrange showStep />
 ```
 
 **Notes.** The gradient spans the whole *track* and the fill is then scaled to the
@@ -417,6 +481,31 @@ identical across apps. Fills animate with `transform: scaleX()`, never `width`. 
 lit cell at index 20 of 24 is red regardless of the current value. `aria-label` falls back
 to `label` and then to the literal `"meter"`, because `role="meter"` is anonymous without
 a name.
+
+**Both new props default to `false`, so a Meter written against 0.2.0 renders and announces
+exactly as it did.** With `allowOverrange` left off, `value > max` still clamps to 100% the
+way it always has.
+
+`allowOverrange` splits the value through `rampOverrange` (§8): the bar draws the clamped
+fraction, while the percent and `aria-valuetext` carry the true `value / max` — 412%, not
+100% — and `aria-valuetext` becomes `"412% — OVERRANGE"`. `aria-valuenow` is always the raw
+`value` and `aria-valuemax` always `max`, so an overrange is a genuine out-of-range meter to
+AT, not a relabelled full one. **The overrange block is a flag, not a quantity:** it is a
+fixed-width hazard strip welded to the right end, one caution cycle wide, and it does not
+encode *how far* past `max` the value went. The number carries the magnitude, as btop does.
+Encoding the excess as width would mean either animating `width` or distorting the stripes
+under `scaleX`.
+
+`showStep` exists for WCAG 1.4.1. Adjacent ramp stops sit ~1.2–1.7:1 apart along the
+orange-red axis, which is the axis deuteranopia collapses, so the word is the signal and the
+colour only agrees with it. In overrange the value and the step word both take `danger` from
+the modifier class rather than the inline tint, which is what lets the theme layer restyle
+the state.
+
+The two props are independent, and one combination is worth knowing: with `showStep` on,
+`allowOverrange` **off** and `value > max`, the step word reads `OVERRANGE` while the
+percent reads `100%`. The step comes from `rampOverrange`, which sees the real ratio
+whatever the paint does. Pass both together, or neither.
 
 ---
 
@@ -815,6 +904,60 @@ feed, batch updates or the screen reader will not keep up. The log region's acce
 name is `aria-label`, then `title` **only if `title` is a string**, then the literal
 `"log"`. Keys use the array index plus `ts`, so prepending to `lines` re-keys everything
 below — append. The cursor's blink is disabled under `prefers-reduced-motion`.
+
+---
+
+### MagiConsensus
+
+N named voters and the one answer they add up to. The MAGI screen is the NERV device with
+no equivalent anywhere else, and there is a real pattern under the fiction: CI shard status,
+replica/quorum health, multi-region availability, approval workflows, ensemble voting.
+Lineage: EVA. **New in 0.3.0.**
+
+| Prop | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `nodes` | `MagiNode[]` | **required** | The voters, in display order |
+| `verdict` | `ReactNode` | — | Overrides the derived aggregate word only — the tally line is still computed |
+| `quorum` | `number` | `Math.floor(nodes.length / 2) + 1` | Votes needed to carry |
+| `label` | `string` | — | Visible caption **and** the group's accessible name; falls back to `"consensus"` |
+| `layout` | `"triangle" \| "row"` | `"triangle"` | `triangle` applies **only at exactly 3 nodes**; anything else falls back to a row |
+
+`MagiNode`: `id: string` (**required**, the React key), `name: string` (**required**),
+`state: MagiNodeState` (**required**), `detail?: string` (dim line under the state word — a
+reason, a region, a shard id).
+
+`MagiNodeState` is `"pending" | "affirm" | "deny" | "abstain" | "compromised"` →
+`text-dim` / `success` / `danger` / `muted` / `danger` with a hazard stripe across the node.
+
+DOM element: `<div role="group">` with `aria-label`; extends `HTMLAttributes<HTMLDivElement>`.
+`style` is merged with `--kanso-magi-count`. The verdict box is `role="status"`.
+
+```tsx
+<MagiConsensus label="MAGI // DEPLOY GATE" nodes={[
+  { id: "mel", name: "MELCHIOR", state: "affirm", detail: "eu-west-1" },
+  { id: "bal", name: "BALTHASAR", state: "affirm", detail: "us-east-1" },
+  { id: "cas", name: "CASPER", state: "deny", detail: "p99 regression" },
+]} />
+```
+
+**Notes.** Only `affirm` and `deny` count as votes. `pending`, `abstain` and `compromised`
+count as nothing — a compromised node has not decided anything, and counting it either way
+is the actual failure mode this display exists to make visible. The outcome is `APPROVED`
+when `affirm >= quorum`, `REJECTED` when `deny >= quorum`, and `DELIBERATING` otherwise, so
+a three-node board with one compromised unit sits in `DELIBERATING` rather than resolving.
+The tally line always prints `AFFIRM n · DENY n · QUORUM carry/count`, including when
+`verdict` overrides the word, so a hand-written verdict can never hide the count it came
+from.
+
+**It does not measure its own wires.** The connector SVG is a single `aria-hidden` element
+on a fixed `0 0 100 100` viewBox with `preserveAspectRatio="none"` and non-scaling strokes,
+drawn from nominal percentages — no `ResizeObserver`. The lines run *behind* opaque node
+boxes, so approximate endpoints are invisible. Below 480px the triangle collapses to a row
+and the wires are `display: none` rather than drawn wrong.
+
+The verdict box is `role="status"`, so a change in outcome is announced politely; the node
+states are not live regions, and a board that changes several nodes per second will not
+narrate them.
 
 ---
 
@@ -1395,6 +1538,62 @@ otherwise. Extends `Omit<HTMLAttributes<HTMLDivElement>, "title">`.
 
 ---
 
+### Takeover
+
+The full-bleed alert, and the third rung of the escalation ladder: strip → banner →
+takeover. `position: fixed; inset: 0` on opaque black, one enormous word in the level
+colour, hazard chevrons top and bottom, everything else gone. A critical alert rendered as a
+slightly redder toast has thrown away the point. Lineage: EVA. **New in 0.3.0.**
+
+| Prop | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `open` | `boolean` | **required** | |
+| `word` | `string` | **required** | The single enormous word. One word — this is not a headline slot |
+| `detail` | `ReactNode` | — | Dim mono line under the word. Becomes `aria-describedby` when set |
+| `level` | `TakeoverLevel` = `"danger" \| "warning"` | `"danger"` | Two levels only — nothing below `warning` earns the screen |
+| `code` | `string` | — | Hex or ordinal prefix — `05:`, `0B:`. Joins `word` in the accessible name |
+| `actions` | `ReactNode` | — | Button row under the detail |
+| `onDismiss` | `() => void` | — | **Omit for an alert the user cannot silence:** no Escape listener, no close control |
+| `strobe` | `boolean` | `false` | 1 Hz opacity strobe on the word. Withheld under either reduce-motion switch |
+
+DOM element: portalled to `document.body`; `className` and the rest land on the
+`role="alertdialog"` plate. Extends `HTMLAttributes<HTMLDivElement>`.
+
+```tsx
+<Takeover open={breach} level="danger" code="05:" word="PATTERN BLUE"
+          detail="AT field detected, sector 7. Closing 61 m/s."
+          actions={<Button variant="danger" onClick={sortie}>LAUNCH</Button>}
+          onDismiss={ack} />
+```
+
+**Notes.** The mount, focus-trap, scroll-lock and Escape machinery is `Modal`'s, deliberately
+identical in shape so the two dialogs behave the same way: it stays mounted for one
+`panelExit` beat after `open` flips false (zero under `prefers-reduced-motion`), traps Tab,
+locks `document.body` scroll, focuses the first focusable node or the plate itself, and
+restores focus to the trigger on the way out.
+
+`onDismiss` is the whole dismissibility contract. With no handler there is no Escape
+listener and no close button, which is the point for an alert that must be acted on rather
+than cleared — but it also means the only way out is an `actions` control or the `open` prop
+going false, so do not ship one without either.
+
+`code` and `word` are joined into `aria-labelledby` in that order, so the ordinal is read
+before the word. Real ordinals only: a decorative hex prefix is a fabricated fact in the
+accessible name.
+
+**The reduce-motion checks run in JS as well as in CSS**, and both are load-bearing. The
+component portals to `<body>`, outside `.kanso-root`, where the global opt-outs in
+`base/a11y.css` cannot reach it by descent — so `Takeover.css` writes its own unscoped
+`prefers-reduced-motion` and `.kanso-reduce-motion` rules, and the component additionally
+withholds the strobe class when either switch is on. The strobe itself runs on the `blink`
+token (1000ms, step-end) — 1 Hz, well under WCAG 2.3.1's 3/sec ceiling — and dims the *word*
+rather than the plate, so the flashing area is a glyph run and not the whole viewport.
+
+`role="alertdialog"` is assertive by definition. One takeover at a time; two stacked plates
+are two interruptions and one unreadable screen.
+
+---
+
 ### BootSequence
 
 The EVA cold open: lines type themselves out, each closing with an `[ OK ]` / `[ FAIL ]` /
@@ -1526,25 +1725,34 @@ These are part of the public API, not internals. Import them from the package ro
 
 | Export | Signature / type | Returns |
 | --- | --- | --- |
-| `RAMP_STOPS` | `readonly [string, string, string, string, string]` | The five hex stops: `#50ff50 #a3e635 #ffb700 #ff9830 #ff3030` |
+| `RAMP_STOPS` | `readonly [string, string, string, string, string]` | The classic hex stops, for swatches and docs: `#50ff50 #a3e635 #ffb700 #ff9830 #ff3030`. Literal, so it does **not** follow the theme — paint with `rampColor`/`rampGradient` instead |
 | `RAMP_NAMES` | `readonly RampName[]` | `["nominal","caution","elevated","warning","critical"]` |
 | `RampName` | type | `"nominal" \| "caution" \| "elevated" \| "warning" \| "critical"` |
-| `rampColor` | `(value: number, invert = false) => string` | An `rgb(r, g, b)` string, interpolated in sRGB between the two nearest stops |
+| `rampColor` | `(value: number, invert = false) => string` | `color-mix(in srgb, var(--kanso-ramp-<a>) <p>%, var(--kanso-ramp-<b>))` between the two nearest stops |
 | `rampStep` | `(value: number, invert = false) => RampName` | The snapped stop name — for text classes and discrete labels |
-| `rampGradient` | `(direction = "90deg") => string` | A `linear-gradient(...)` across all five stops at 0/25/50/75/100% |
-| `HUE` | `Record<Hue, string>` | The eight semantic hexes: `primary info success warning danger accent magenta lime` |
+| `rampOverrange` | `(value: number, max = 1) => RampReading` | The magnitude split against its bound, so an overrange survives to the screen instead of being clamped away |
+| `RampReading` | type | `{ frac, ratio, excess, over, step }` — `step` adds `"overrange"` above `critical` |
+| `rampGradient` | `(direction = "90deg") => string` | A `linear-gradient(...)` across all five `var(--kanso-ramp-*)` stops at 0/25/50/75/100% |
+| `HUE` | `Record<Hue, string>` | The eight semantic hues as `var(--kanso-color-*)` references: `primary info success warning danger accent magenta lime` |
 | `Hue` | type | `keyof typeof HUE` |
 | `resolveHue` | `(hue: Hue \| "ramp", value = 0) => string` | `HUE[hue]`, or `rampColor(value)` when `hue === "ramp"` |
 
+Every paint value above is **CSS, not hex** — a `var()` reference or a `color-mix()` over
+two of them, resolved by the browser against whichever theme is live. That is what lets
+`data-kanso-theme="eva"` reach telemetry, and it carries one constraint: the string only
+substitutes in a CSS context. In SVG it must go through `style`, never a presentation
+attribute — `style={{ fill: … }}`, not `fill={…}`.
+
 Reach for `rampColor` when you are painting something the components do not cover — an SVG
-`fill`, a canvas stroke, a map marker. Reach for `rampStep` when you need a *word* or a
-class name rather than a colour: `` `kanso-text-${rampStep(load)}` ``. Reach for
-`rampGradient` only if you are hand-rolling a fill; every built-in meter already does the
-span-then-scale trick for you.
+`fill`, a map marker. Reach for `rampStep` when you need a *word* or a class name rather
+than a colour: `` `kanso-text-${rampStep(load)}` ``. Reach for `rampGradient` only if you
+are hand-rolling a fill; every built-in meter already does the span-then-scale trick for
+you. A canvas takes none of them — `getContext("2d")` has no cascade to resolve a custom
+property against, so read the token off `getComputedStyle(el)` yourself.
 
 ```tsx
 const load = 0.87;
-<circle fill={rampColor(load)} />
+<circle style={{ fill: rampColor(load) }} />
 <span className={`kanso-value kanso-text-${rampStep(load)}`}>{(load * 100).toFixed(0)}%</span>
 ```
 
@@ -1616,14 +1824,79 @@ they carry **seconds**, while `DURATION` carries **milliseconds**.
 
 ### Tokens — `src/tokens.ts`
 
-`kanso` is the whole token tree as a typed `as const` object: `kanso.color.primary`,
-`kanso.motion["duration-tick"]`, `kanso.z.modal`. `Kanso` is its type. `cssVar(group, name)`
-builds the custom-property reference — `cssVar("color", "primary")` →
-`"var(--kanso-color-primary)"`.
+`kanso` is the whole token tree as a typed `as const` object — 172 tokens across 12 groups:
+`kanso.color.primary`, `kanso.motion["duration-tick"]`, `kanso.z.modal`. `Kanso` is its
+type. `cssVar(group, name)` builds the custom-property reference — `cssVar("color",
+"primary")` → `"var(--kanso-color-primary)"`.
+
+`kanso` is **v1 (`classic`) only**, because it is a compile-time constant and a theme is a
+runtime cascade. The per-theme override maps ship alongside it:
+
+| Export | Type | What it is |
+| --- | --- | --- |
+| `kansoThemes` | `{ eva: { color: {...}, ramp: {...}, ... } }` | The override maps, group by group — only the tokens a theme re-declares. `classic` has no entry, because it *is* the base |
+| `KansoThemeId` | type | `keyof typeof kansoThemes` — the override maps only, so `"eva"`. **Not** the same union as `ThemeId` below |
+| `KANSO_THEMES` | `readonly ["classic", "eva"]` | Every selectable id, base included |
 
 Use `kanso` wherever a class cannot reach: SVG `fill`, canvas, an inline `style` object, a
 third-party chart config. Use `cssVar` when you want the value to stay live against the
-cascade rather than being frozen at render.
+cascade rather than being frozen at render — which under two themes is almost always what
+you want. **Resolving a token to a literal in JS is how a component silently keeps the v1
+palette under `data-kanso-theme="eva"`;** `kansoThemes` exists for swatches and theme
+tooling, not as a lookup to paint with.
+
+### Themes — `src/theme.ts`
+
+Two design generations, one component set. `tokens/*.json` compiles to `:root` and **is**
+v1; `tokens/themes/eva.json` compiles to one block behind a bare `[data-kanso-theme="eva"]`
+attribute selector that re-declares 86 of the 172 tokens. Components never learn which theme
+is live — they read `var(--kanso-*)` and the cascade does the rest. See KANSO.md §3.
+
+| Export | Signature / type | Notes |
+| --- | --- | --- |
+| `ThemeId` | type | `"classic" \| "eva"` — `(typeof KANSO_THEMES)[number]` |
+| `DEFAULT_THEME` | `ThemeId` | `"classic"`. The base palette, i.e. no override block and **no attribute** |
+| `THEME_ATTR` | `string` | `"data-kanso-theme"` |
+| `THEME_STORAGE_KEY` | `string` | `"kanso.theme"` |
+| `THEMES` | `readonly ThemeInfo[]` | `classic` first, then one entry per override map in `kansoThemes`. The list to build a theme switcher from |
+| `ThemeInfo` | type | `{ id: ThemeId; label: string; description: string }` |
+| `isThemeId` | `(value: unknown) => value is ThemeId` | The guard for anything coming out of storage, a URL or a config file |
+| `applyTheme` | `(theme: ThemeId, target?: Element \| null) => void` | Writes the attribute. Target defaults to `<html>`; no-ops when there is no `document` |
+| `readTheme` | `(target?: Element \| null) => ThemeId` | The attribute, or `DEFAULT_THEME` when it is absent or unrecognised |
+| `storedTheme` | `() => ThemeId` | Last stored choice, or the default |
+| `storeTheme` | `(theme: ThemeId) => void` | Writes `localStorage` |
+| `useKansoTheme` | `(options?: UseThemeOptions) => [ThemeId, (theme: ThemeId) => void]` | State plus the DOM write, as one hook |
+| `UseThemeOptions` | type | `{ target?: Element \| null; persist?: boolean; initial?: ThemeId }` — `persist` defaults to `true`, `initial` wins over the stored value |
+
+```tsx
+const [theme, setTheme] = useKansoTheme();          // writes <html>, persists the choice
+<Segmented value={theme} onChange={setTheme}
+           options={THEMES.map((t) => ({ value: t.id, label: t.label }))} />
+```
+
+**`classic` is the absence of the attribute, not `="classic"`.** `applyTheme("classic")`
+calls `removeAttribute`, so an app that never opts in has exactly the DOM it had before
+themes existed — and adding `@kanso/ui@0.3.0` to an app that ignores this section changes
+nothing it renders.
+
+The default target is `<html>`, not the app root, because modals and toasts portal to
+`document.body` and would otherwise keep the old palette. The selector is unqualified on
+purpose: custom properties inherit, so setting the attribute on **any** element re-themes
+that subtree. That is what lets one page show both generations side by side, and lets an app
+theme a single panel without a second stylesheet.
+
+`useKansoTheme` writes the attribute in an effect rather than during render, because a theme
+swap is a document-level side effect and the first paint has to match the HTML for apps that
+pre-set the attribute themselves. `storedTheme` / `storeTheme` swallow their exceptions, so
+private mode and blocked storage degrade to a session-only choice rather than throwing.
+Both are SSR-safe, as are `applyTheme` and `readTheme`.
+
+**Only `classic`'s `ThemeInfo` currently carries prose.** `theme.ts` reads each other
+theme's `label` and `description` from a `$meta` key, but `build-tokens.mjs` strips `$meta`
+before emitting `kansoThemes` — so today `eva` resolves to `label: "EVA"` (the uppercased
+id) and `description: ""`. A switcher built from `THEMES` renders correctly; one that prints
+`description` renders one blank line. Do not hardcode the strings in the app — the fix is
+either to emit `$meta` or to drop the field.
 
 ---
 
@@ -1683,6 +1956,16 @@ only.
 `.kanso-text-dim`, `.kanso-text-muted`, and the ramp set `.kanso-text-nominal`,
 `-caution`, `-elevated`, `-warning`, `-critical`. Pair them with `rampStep()` to colour a
 number by its own magnitude.
+
+**`--kanso-color-text-faint` is not part of that scale and has no class.** It is `#6a6a65`
+in classic and `#6e6961` in eva, both below the AA floor, and it is **decorative-only**: it
+exists for `DataTexture`'s field of real application data and nothing else. It is excluded
+from `check-contrast.mjs`'s text tier by declaration, so nothing will catch a misuse, and
+anything painted with it must be `aria-hidden`. It is a token rather than `muted` behind an
+`opacity` multiplier because an opacity fudge makes the delivered ratio unmeasurable, which
+is the exact failure this system is built to avoid — a *declared* out-of-spec colour can at
+least be found by grep. Promoting it to a caption is a bug. `muted` (4.60:1) remains the
+floor for anything a user is expected to read.
 
 ### Surfaces
 

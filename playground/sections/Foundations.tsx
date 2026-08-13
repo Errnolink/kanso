@@ -1,21 +1,69 @@
 // Foundations — tokens, type, geometry, surfaces. The part of the gallery
 // that documents the design language rather than the component API.
+import { useEffect, useState } from "react";
 import { kanso } from "../../src/tokens";
-import { rampGradient, RAMP_STOPS } from "../../src/ramp";
+import { rampGradient, RAMP_NAMES } from "../../src/ramp";
 import { Demo, Grid, Section } from "../Showcase";
+
+/**
+ * Resolved values of CSS custom properties, re-read whenever the theme
+ * attribute changes.
+ *
+ * The palette and ramp sections *document* whichever generation is on
+ * screen, so they cannot be built from `kanso.color` / `RAMP_STOPS` — those
+ * are compile-time v1 constants and would keep printing classic's hexes
+ * under eva. A swatch strip that disagrees with the page around it is worse
+ * than no swatch strip.
+ */
+function useTokenValues(vars: readonly string[]): Record<string, string> {
+  const key = vars.join(",");
+  const [values, setValues] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const read = () => {
+      const cs = getComputedStyle(document.documentElement);
+      setValues(
+        Object.fromEntries(vars.map((v) => [v, cs.getPropertyValue(v).trim()]))
+      );
+    };
+    read();
+    const observer = new MutationObserver(read);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-kanso-theme"],
+    });
+    return () => observer.disconnect();
+    // `key` stands in for `vars`, which is a fresh array on every render.
+  }, [key]);
+
+  return values;
+}
 
 const NEUTRALS = new Set([
   "bg", "panel", "panel-2", "panel-3", "well",
   "border", "border-highlight", "text", "text-dim", "muted", "ink", "scrim",
 ]);
 
-function Swatch({ name, value }: { name: string; value: string }) {
+/** `fallback` is the compile-time value, used only for the first paint
+    before the effect has read the live one. */
+function Swatch({
+  name,
+  live,
+  fallback,
+}: {
+  name: string;
+  live?: string;
+  fallback: string;
+}) {
   return (
     <div className="swatch">
-      <span className="swatch-chip" style={{ background: value }} />
+      <span
+        className="swatch-chip"
+        style={{ background: `var(--kanso-color-${name}, ${fallback})` }}
+      />
       <span className="swatch-text">
         <code className="swatch-name">{name}</code>
-        <code className="swatch-value">{value}</code>
+        <code className="swatch-value">{live || fallback}</code>
       </span>
     </div>
   );
@@ -40,6 +88,11 @@ export function Foundations() {
   );
   const neutrals = colors.filter(([n]) => NEUTRALS.has(n));
 
+  const live = useTokenValues([
+    ...colors.map(([n]) => `--kanso-color-${n}`),
+    ...RAMP_NAMES.map((n) => `--kanso-ramp-${n}`),
+  ]);
+
   return (
     <>
       <Section
@@ -53,14 +106,24 @@ export function Foundations() {
           <Demo title="FUNCTIONAL" wide>
             <div className="swatch-grid">
               {functional.map(([name, value]) => (
-                <Swatch key={name} name={name} value={value} />
+                <Swatch
+                  key={name}
+                  name={name}
+                  live={live[`--kanso-color-${name}`]}
+                  fallback={value}
+                />
               ))}
             </div>
           </Demo>
           <Demo title="NEUTRALS" wide>
             <div className="swatch-grid">
               {neutrals.map(([name, value]) => (
-                <Swatch key={name} name={name} value={value} />
+                <Swatch
+                  key={name}
+                  name={name}
+                  live={live[`--kanso-color-${name}`]}
+                  fallback={value}
+                />
               ))}
             </div>
           </Demo>
@@ -80,15 +143,20 @@ export function Foundations() {
           stack
           code={`import { rampColor, rampGradient, rampStep } from "@kanso/ui";
 
-rampColor(0.72)     // -> "rgb(255, 152, 48)"
+// Paint values are CSS, not hex — they follow the live theme.
+rampColor(0.72)     // -> "color-mix(in srgb, var(--kanso-ramp-elevated) 12%, var(--kanso-ramp-warning))"
 rampStep(0.72)      // -> "warning"
 rampGradient("90deg")`}
         >
           <div style={{ height: 28, width: "100%", background: rampGradient() }} />
           <div className="row" style={{ justifyContent: "space-between", width: "100%" }}>
-            {RAMP_STOPS.map((c, i) => (
-              <span key={c} className="type-label" style={{ width: "auto", color: c }}>
-                {["NOMINAL", "CAUTION", "ELEVATED", "WARNING", "CRITICAL"][i]} {c}
+            {RAMP_NAMES.map((name) => (
+              <span
+                key={name}
+                className="type-label"
+                style={{ width: "auto", color: `var(--kanso-ramp-${name})` }}
+              >
+                {name.toUpperCase()} {live[`--kanso-ramp-${name}`]}
               </span>
             ))}
           </div>

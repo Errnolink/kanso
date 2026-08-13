@@ -21,10 +21,18 @@
 /* stamp — wordmarks, banners, selector chips */
 @import "@fontsource/bebas-neue/400.css";
 
-/* display — EVA title cards (weight-black is 900) */
+/* display — EVA title cards (weight-black is 900).
+ * v1 sets `type-display` to Noto Serif Display; the eva theme repoints it at
+ * Shippori Mincho B1 ExtraBold, because the title-card signature is a heavy
+ * *Mincho* — the stroke contrast is the whole tell — not a Latin transitional
+ * serif. Both are loaded so the theme toggle has nothing to fall back to. */
 @import "@fontsource/noto-serif-display/700.css";
 @import "@fontsource/noto-serif-display/900.css";
 
-/* jp — institutional subtitles */
+/* jp — institutional subtitles, and (at 800) the eva display face.
+ * These are the CHUNKED entrypoints: ~120 unicode-range slices ordered by
+ * character frequency, so a Latin page fetches kana/latin and nothing else.
+ * Never import `japanese.css` — the monolith is ~9 MB. */
 @import "@fontsource/shippori-mincho-b1/400.css";
 @import "@fontsource/shippori-mincho-b1/700.css";
+@import "@fontsource/shippori-mincho-b1/800.css";

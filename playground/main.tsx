@@ -3,13 +3,15 @@
 // the dogfooding test: it is built entirely from Kanso's own primitives.
 import { createRoot } from "react-dom/client";
 import { useState } from "react";
-import { Badge, CRT, HazardStripe } from "../src";
+import { Badge, CRT, HazardStripe, useKansoTheme } from "../src";
 import { Nav } from "./Showcase";
+import { ThemeSwitch } from "./ThemeSwitch";
 import { Foundations } from "./sections/Foundations";
 import { Chrome } from "./sections/Chrome";
 import { Telemetry } from "./sections/Telemetry";
 import { Controls } from "./sections/Controls";
 import { Overlays } from "./sections/Overlays";
+import { NextGen } from "./sections/NextGen";
 import "./fonts.css";
 import "./playground.css";
 
@@ -43,10 +45,20 @@ const NAV = [
   { id: "menus", label: "Menu / Palette", group: "OVERLAYS" },
   { id: "feedback", label: "Alert / Spinner", group: "OVERLAYS" },
   { id: "boot", label: "Boot sequence", group: "OVERLAYS" },
+
+  { id: "consensus", label: "MAGI consensus", group: "V2 ADDITIONS" },
+  { id: "takeover", label: "Takeover", group: "V2 ADDITIONS" },
+  { id: "texture", label: "Data texture", group: "V2 ADDITIONS" },
+  { id: "overrange", label: "Meter overrange", group: "V2 ADDITIONS" },
+  { id: "title2", label: "Panel title2", group: "V2 ADDITIONS" },
 ];
 
 function App() {
   const [crt, setCrt] = useState({ scanlines: true, grain: true, vignette: true });
+  // Written to <html>, not to the shell, so portalled overlays — modals,
+  // toasts, menus — are inside the themed subtree too.
+  const [theme, setTheme] = useKansoTheme();
+  const [split, setSplit] = useState(false);
 
   const toggleCrt = (key: "scanlines" | "grain" | "vignette") =>
     setCrt((c) => ({ ...c, [key]: !c[key] }));
@@ -57,6 +69,7 @@ function App() {
       <HazardStripe edge="top" />
 
       <Nav items={NAV} />
+      <ThemeSwitch theme={theme} onTheme={setTheme} split={split} onSplit={setSplit} />
 
       <div className="page">
         <header className="masthead">
@@ -71,18 +84,23 @@ function App() {
             tabular values, and one severity ramp shared by every meter in every app.
           </p>
           <div className="masthead-badges">
-            <Badge label="v0.2.0" />
+            <Badge label="v0.3.0" />
             <Badge variant="info" label="REACT + TS" />
             <Badge variant="success" label="TOKENS-FIRST" />
-            <Badge variant="warning" label="145 TOKENS" />
+            <Badge variant="warning" label="172 TOKENS" />
+            <Badge variant="danger" label="41 COMPONENTS" />
           </div>
         </header>
 
+        {/* `split` is threaded rather than contexted: only a handful of
+            deliberately chosen specimens compare the two generations, and a
+            provider would imply the whole page does. */}
         <Foundations />
-        <Chrome crt={crt} onToggleCrt={toggleCrt} />
-        <Telemetry />
-        <Controls />
+        <Chrome crt={crt} onToggleCrt={toggleCrt} split={split} />
+        <Telemetry split={split} />
+        <Controls split={split} />
         <Overlays />
+        <NextGen split={split} />
 
         <footer className="footer">
           <span>KANSO — 簡素 — SIMPLICITY</span>

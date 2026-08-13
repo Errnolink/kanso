@@ -1,0 +1,135 @@
+{
+  "$meta": {
+    "id": "eva",
+    "label": "EVA",
+    "description": "v2 — black paper, orange ink, red only when something is actually wrong. 11px type floor, visible borders, wider severity ramp.",
+    "rationale": "The theme-research synthesis. Overrides only; every token not named here inherits the v1 (classic) value from tokens/*.json. `description` is surfaced in UI (THEMES) and is kept short for that reason; this field is the long form and is not emitted.",
+    "source": "theme-research/REPORT.md — Part A spec, Part B change list items 1,2,5,9,12",
+    "rules": [
+      "Every value here was measured by scripts/check-contrast.mjs against the real surface stack, not against #000000.",
+      "Adjacent ramp stops still sit below 3:1 — inherent to a five-stop green-to-red path. The fix is rampStep()'s NAME rendered as text beside the bar, not more hue.",
+      "The violet family stays as a series/surface colour and never carries text; phosphor-violet is its text form."
+    ]
+  },
+
+  "color": {
+    "primary": { "$type": "color", "$value": "#ff6a00" },
+    "primary-hot": { "$type": "color", "$value": "#ff8a2b" },
+    "primary-dim": { "$type": "color", "$value": "#a34400" },
+    "primary-deep": { "$type": "color", "$value": "#4a1f00" },
+    "primary-glow": { "$type": "color", "$value": "rgba(255, 106, 0, 0.25)" },
+    "primary-wash": { "$type": "color", "$value": "rgba(255, 106, 0, 0.12)" },
+    "primary-film": { "$type": "color", "$value": "rgba(255, 106, 0, 0.05)" },
+
+    "success": { "$type": "color", "$value": "#4fd37b" },
+    "success-dim": { "$type": "color", "$value": "#2f9a52" },
+    "success-deep": { "$type": "color", "$value": "#10331d" },
+    "success-film": { "$type": "color", "$value": "rgba(79, 211, 123, 0.05)" },
+
+    "info": { "$type": "color", "$value": "#4aa8ff" },
+    "info-dim": { "$type": "color", "$value": "#2f7cbe" },
+    "info-deep": { "$type": "color", "$value": "#0b2b47" },
+    "info-film": { "$type": "color", "$value": "rgba(74, 168, 255, 0.05)" },
+
+    "danger": { "$type": "color", "$value": "#ff3b2f" },
+    "danger-dim": { "$type": "color", "$value": "#c9291d" },
+    "danger-deep": { "$type": "color", "$value": "#4a0a05" },
+    "danger-film": { "$type": "color", "$value": "rgba(255, 59, 47, 0.05)" },
+
+    "warning": { "$type": "color", "$value": "#ffb000" },
+    "warning-dim": { "$type": "color", "$value": "#c08400" },
+    "warning-deep": { "$type": "color", "$value": "#3d2800" },
+
+    "accent": { "$type": "color", "$value": "#7f6bd6" },
+    "accent-dim": { "$type": "color", "$value": "#4a3f80" },
+    "accent-deep": { "$type": "color", "$value": "#241d3f" },
+    "accent-film": { "$type": "color", "$value": "rgba(127, 107, 214, 0.06)" },
+
+    "magenta": { "$type": "color", "$value": "#ff7ad9" },
+    "magenta-dim": { "$type": "color", "$value": "#bf4ba0" },
+    "lime": { "$type": "color", "$value": "#b8e04f" },
+    "lime-dim": { "$type": "color", "$value": "#7d9c25" },
+
+    "phosphor-orange": { "$type": "color", "$value": "#ff8a2b" },
+    "phosphor-amber": { "$type": "color", "$value": "#ffd48a" },
+    "phosphor-lime": { "$type": "color", "$value": "#cfe89a" },
+    "phosphor-violet": { "$type": "color", "$value": "#c4b5fd" },
+    "phosphor-cyan": { "$type": "color", "$value": "#8cc8ff" },
+    "phosphor-green": { "$type": "color", "$value": "#7fdf9f" },
+    "phosphor-red": { "$type": "color", "$value": "#ff8078" },
+
+    "bg": { "$type": "color", "$value": "#000000" },
+    "panel": { "$type": "color", "$value": "#0e0e12" },
+    "panel-2": { "$type": "color", "$value": "#16161d" },
+    "panel-3": { "$type": "color", "$value": "#1e1e26" },
+    "well": { "$type": "color", "$value": "#08080a" },
+
+    "border": { "$type": "color", "$value": "#22222a" },
+    "border-highlight": { "$type": "color", "$value": "#6c6c78" },
+
+    "text": { "$type": "color", "$value": "#f5f1e8" },
+    "text-2": { "$type": "color", "$value": "#cfc9bd" },
+    "text-dim": { "$type": "color", "$value": "#9a948a" },
+    "muted": { "$type": "color", "$value": "#918b81" },
+    "text-faint": { "$type": "color", "$value": "#6e6961" },
+    "ink": { "$type": "color", "$value": "#050505" },
+
+    "focus": { "$type": "color", "$value": "#4aa8ff" },
+    "zebra": { "$type": "color", "$value": "rgba(255, 255, 255, 0.02)" },
+    "row-hover": { "$type": "color", "$value": "rgba(255, 255, 255, 0.05)" }
+  },
+
+  "ramp": {
+    "nominal": { "$type": "color", "$value": "#3fbf6a" },
+    "caution": { "$type": "color", "$value": "#b8e04f" },
+    "elevated": { "$type": "color", "$value": "#ffb000" },
+    "warning": { "$type": "color", "$value": "#ff7a1a" },
+    "critical": { "$type": "color", "$value": "#ff3b2f" },
+    "cool": { "$type": "color", "$value": "#4aa8ff" },
+    "void": { "$type": "color", "$value": "#26262e" }
+  },
+
+  "series": {
+    "1": { "$type": "color", "$value": "#ff8a2b" },
+    "2": { "$type": "color", "$value": "#4aa8ff" },
+    "3": { "$type": "color", "$value": "#b8e04f" },
+    "4": { "$type": "color", "$value": "#ff7ad9" },
+    "5": { "$type": "color", "$value": "#c4b5fd" },
+    "6": { "$type": "color", "$value": "#c07f00" },
+    "7": { "$type": "color", "$value": "#2f9a90" },
+    "8": { "$type": "color", "$value": "#a8b4c2" }
+  },
+
+  "type": {
+    "display": {
+      "$type": "fontFamily",
+      "$value": "\"Shippori Mincho B1\", \"Zen Old Mincho\", \"Noto Serif Display\", serif"
+    },
+    "size-xs": { "$type": "fontSize", "$value": "0.6875rem" },
+    "size-sm": { "$type": "fontSize", "$value": "0.75rem" },
+    "size-base": { "$type": "fontSize", "$value": "0.8125rem" },
+    "size-md": { "$type": "fontSize", "$value": "0.9375rem" },
+    "size-lg": { "$type": "fontSize", "$value": "1.0625rem" },
+    "size-xl": { "$type": "fontSize", "$value": "1.375rem" },
+    "size-2xl": { "$type": "fontSize", "$value": "1.75rem" },
+    "size-3xl": { "$type": "fontSize", "$value": "2.25rem" },
+    "size-4xl": { "$type": "fontSize", "$value": "3rem" }
+  },
+
+  "glass": {
+    "bg": { "$type": "color", "$value": "rgba(14, 14, 18, 0.88)" },
+    "bg-heavy": { "$type": "color", "$value": "rgba(0, 0, 0, 0.94)" },
+    "border": { "$type": "color", "$value": "rgba(255, 255, 255, 0.10)" }
+  },
+
+  "effect": {
+    "phosphor-blur": { "$type": "dimension", "$value": "3px" },
+    "phosphor-alpha": { "$type": "number", "$value": "0.22" },
+    "focus-ring": { "$type": "dimension", "$value": "2px" }
+  },
+
+  "scanline": {
+    "opacity": { "$type": "number", "$value": "0.05" },
+    "period": { "$type": "dimension", "$value": "3px" }
+  }
+}

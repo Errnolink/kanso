@@ -1,7 +1,14 @@
 /* Atmosphere overlays. All three are fixed, pointer-events:none, and
    aria-hidden — they must never intercept input or reach a screen reader.
    The scanline scroll is tweened by anime.js in the component; this file
-   only paints. */
+   only paints.
+
+   A `repeating-linear-gradient` beats against the physical display grid
+   whenever the two do not share a period — fractional `devicePixelRatio`,
+   fractional OS scaling, browser zoom. Emulator shaders avoid it by
+   forcing integer scaling; a web page cannot. The moiré is therefore not
+   preventable, only made stationary, which is one of the two reasons a
+   static mask is the right default. The other is below. */
 
 .kanso-scanlines {
   position: fixed;
@@ -30,4 +37,41 @@
   inset: 0;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* --- the scroll -------------------------------------------------------
+   The geometry is safe on its own: a 4px period is five times finer than
+   the ~15-16px visual-stress band (≈3 cycles/degree), at 6% opacity. The
+   motion is the problem. SC 2.2.2 Pause, Stop, Hide covers auto-starting
+   movement that runs past five seconds beside other content, and a 10s
+   infinite loop is exactly that — with a full-viewport repaint per frame
+   to pay for it. Classic keeps the scroll for v1 compatibility; eva pins
+   it. The tween is an anime.js inline style rather than a CSS animation,
+   so killing the keyframes is not enough — the position has to be held,
+   which is what `!important` is doing here. Stopping the tween itself
+   belongs in Scanlines.tsx. */
+
+[data-kanso-theme="eva"] .kanso-scanlines {
+  animation: none;
+  background-position: 0 0 !important;
+}
+
+/* One attribute takes the whole atmosphere layer off — the app's switch,
+   for a settings screen or a content-heavy route. */
+[data-kanso-effects="off"] .kanso-scanlines,
+[data-kanso-effects="off"] .kanso-grain,
+[data-kanso-effects="off"] .kanso-vignette {
+  display: none;
+}
+
+/* The OS's switch. Scanlines and grain lay a repeating mask over every
+   glyph on the page, which is the opposite of what this preference asks
+   for. The vignette stays — it is transparent across the middle of the
+   viewport where the content is, and darkens only the outer falloff.
+   Token promotions for this preference live in a11y.css. */
+@media (prefers-contrast: more) {
+  .kanso-scanlines,
+  .kanso-grain {
+    display: none;
+  }
 }

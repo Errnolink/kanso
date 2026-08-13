@@ -115,6 +115,61 @@
   padding: 0;
 }
 
+/* --- bottom-edge secondary title ---------------------------------------
+   btop's `createBox` title2: the rule closes on both sides of the label
+   (`┘ LABEL └`) so the text sits *in* the bottom edge rather than on top of
+   it — Frame's gutter mechanic, moved to the other rule.
+
+   The panel clips to its padding box, so a label straddling the real border
+   would lose its lower half. The strip therefore draws the bottom edge
+   itself and the panel hands its own bottom hairline over. */
+.kanso-panel--title2 {
+  border-bottom-color: transparent;
+}
+
+.kanso-panel__title2 {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 var(--kanso-spacing-xl);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Full-bleed, so it reads as the panel edge and not as a divider. */
+.kanso-panel__title2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: var(--kanso-shape-hairline);
+  background: var(--kanso-color-border);
+}
+
+.kanso-panel__title2-label {
+  position: relative;
+  padding: 0 var(--kanso-spacing-md);
+  background: var(--kanso-color-panel);
+  font-family: var(--kanso-type-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--kanso-color-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+}
+
+/* The gutter has to match whatever it is punched through. */
+.kanso-glass .kanso-panel__title2-label {
+  background: var(--kanso-glass-bg);
+}
+
 .kanso-panel__footer {
   display: flex;
   align-items: center;

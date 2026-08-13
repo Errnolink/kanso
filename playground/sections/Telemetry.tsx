@@ -19,6 +19,7 @@ import {
   type TerminalLine,
 } from "../../src";
 import { Demo, Grid, Section, series } from "../Showcase";
+import { Split } from "../ThemeSwitch";
 
 const CPU = series(64, 11);
 const NET = series(48, 29);
@@ -52,7 +53,7 @@ const LOG: TerminalLine[] = [
   { ts: "02:41:22", level: "system", text: "escalating to level 2 alert" },
 ];
 
-export function Telemetry() {
+export function Telemetry({ split }: { split: boolean }) {
   const [progress, setProgress] = useState(0.15);
   const [sortKey, setSortKey] = useState<{ key: string; direction: "asc" | "desc" }>({
     key: "cpu",
@@ -261,39 +262,48 @@ export function Telemetry() {
         blurb="The process list and the log. Between them they cover most of what a monitoring surface actually shows."
       >
         <Demo title="PROCESS TABLE" wide>
-          <Table<Proc>
-            rows={rows}
-            rowKey={(r) => String(r.pid)}
-            selectedKey={selected}
-            onSelect={(r) => setSelected(String(r.pid))}
-            sort={sortKey}
-            onSortChange={(key) =>
-              setSortKey((s) =>
-                s.key === key
-                  ? { key, direction: s.direction === "asc" ? "desc" : "asc" }
-                  : { key, direction: "desc" }
-              )
-            }
-            columns={[
-              { key: "pid", header: "PID", align: "right", width: 70 },
-              { key: "name", header: "COMMAND" },
-              { key: "user", header: "USER", width: 90 },
-              {
-                key: "cpu",
-                header: "CPU%",
-                align: "right",
-                width: 110,
-                render: (r) => <Meter value={r.cpu} size="sm" showValue />,
-              },
-              {
-                key: "mem",
-                header: "MEM",
-                align: "right",
-                width: 80,
-                render: (r) => `${r.mem.toFixed(1)} GB`,
-              },
-            ]}
-          />
+          <Split
+            on={split}
+            note="The table head carries the most small tracked type on any screen in the system, so it is where the v2 type floor and the visible-border change earn or lose their argument. Sort state is held above the panes, so both sides stay on the same column."
+          >
+            {() => (
+              <div className="col">
+                <Table<Proc>
+                  rows={rows}
+                  rowKey={(r) => String(r.pid)}
+                  selectedKey={selected}
+                  onSelect={(r) => setSelected(String(r.pid))}
+                  sort={sortKey}
+                  onSortChange={(key) =>
+                    setSortKey((s) =>
+                      s.key === key
+                        ? { key, direction: s.direction === "asc" ? "desc" : "asc" }
+                        : { key, direction: "desc" }
+                    )
+                  }
+                  columns={[
+                    { key: "pid", header: "PID", align: "right", width: 70 },
+                    { key: "name", header: "COMMAND" },
+                    { key: "user", header: "USER", width: 90 },
+                    {
+                      key: "cpu",
+                      header: "CPU%",
+                      align: "right",
+                      width: 110,
+                      render: (r) => <Meter value={r.cpu} size="sm" showValue />,
+                    },
+                    {
+                      key: "mem",
+                      header: "MEM",
+                      align: "right",
+                      width: 80,
+                      render: (r) => `${r.mem.toFixed(1)} GB`,
+                    },
+                  ]}
+                />
+              </div>
+            )}
+          </Split>
         </Demo>
 
         <Grid>

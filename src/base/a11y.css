@@ -15,6 +15,24 @@
   box-shadow: inset 0 0 0 1px var(--kanso-color-focus);
 }
 
+/* ...which forced-colors mode then deletes: `box-shadow` is forced to
+   `none` there by specification, so every chamfered control — most of the
+   interactive set — would lose its focus ring in Windows High Contrast.
+   A chamfered `::after` does not rescue it either; a pseudo-element is
+   clipped by its host's clip-path too, so its border still disappears
+   along the diagonals. A real `outline` does survive the clip, but only
+   pulled inside the border box — at a positive offset the whole ring sits
+   outside the polygon and is clipped away entirely. So: negative offset,
+   which costs the two chamfered corners and keeps everything else.
+   System keywords, because our custom properties are overridden here. */
+@media (forced-colors: active) {
+  .kanso-root
+    :where(.kanso-cut, .kanso-cut-sm, .kanso-cut-lg, .kanso-cut-tr, .kanso-cut-bl, .kanso-notch, .kanso-notch-tr, .kanso-shear):focus-visible {
+    outline: var(--kanso-effect-focus-ring) solid Highlight;
+    outline-offset: calc(-1 * var(--kanso-effect-focus-offset));
+  }
+}
+
 .kanso-sr-only {
   position: absolute;
   width: 1px;
@@ -50,11 +68,48 @@
   transition-duration: 0.01ms !important;
 }
 
-/* Backdrop blur is the most expensive thing in the system. One class
-   removes every instance for low-end GPUs. */
+/* --- contrast opt-in ---------------------------------------------------
+   The chrome is deliberately low-contrast, which is the exact case this
+   preference exists for. Promote the decorative text token to the readable
+   one and let the hairline carry its highlight value — redeclaring tokens
+   on the root is what keeps this one block instead of a second stylesheet.
+   Two effects can't be reached from here and opt out in their own files:
+   the atmosphere layer (Scanlines.css) and the phosphor glow (text.css),
+   neither of which reads a token we can turn down. */
+
+@media (prefers-contrast: more) {
+  .kanso-root {
+    --kanso-color-muted: var(--kanso-color-text-dim);
+    --kanso-color-border: var(--kanso-color-border-highlight);
+  }
+}
+
+/* --- transparency opt-out ----------------------------------------------
+   Backdrop blur is the most expensive thing in the system. One class
+   removes every instance for low-end GPUs...
+
+   ...and the OS preference removes it for a different reason: a contrast
+   ratio against a translucent background is a range, not a number. When
+   the user asks for less transparency, give them the opaque surface whose
+   ratio we can actually verify. `!important` because component rules land
+   after this file in the cascade. */
+
 .kanso-no-blur * {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .kanso-root {
+    --kanso-glass-bg: var(--kanso-color-panel);
+    --kanso-glass-bg-heavy: var(--kanso-color-bg);
+  }
+
+  .kanso-root,
+  .kanso-root * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
 }
 
 /* --- shared keyframes -------------------------------------------------- */

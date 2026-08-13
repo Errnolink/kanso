@@ -51,6 +51,7 @@
   --kanso-color-text-2: #b8b8b2;
   --kanso-color-text-dim: #8a8a85;
   --kanso-color-muted: #767670;
+  --kanso-color-text-faint: #6a6a65;
   --kanso-color-ink: #000000;
   --kanso-color-scrim: rgba(0, 0, 0, 0.72);
   --kanso-color-focus: #20f0ff;
@@ -156,7 +157,7 @@
 
   /* type */
   --kanso-type-display: "Noto Serif Display", serif;
-  --kanso-type-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+  --kanso-type-mono: "JetBrains Mono", "Noto Sans Symbols 2", ui-monospace, "Cascadia Code", Consolas, monospace;
   --kanso-type-stamp: "Bebas Neue", "Arial Narrow", sans-serif;
   --kanso-type-jp: "Shippori Mincho B1", serif;
   --kanso-type-size-xs: 0.5rem;
@@ -168,6 +169,7 @@
   --kanso-type-size-2xl: 1.25rem;
   --kanso-type-size-3xl: 1.75rem;
   --kanso-type-size-4xl: 2.5rem;
+  --kanso-type-size-hero: clamp(3rem, 12vw, 8rem);
   --kanso-type-weight-regular: 400;
   --kanso-type-weight-medium: 500;
   --kanso-type-weight-bold: 700;
@@ -194,4 +196,108 @@
   --kanso-z-tooltip: 1200;
   --kanso-z-overlay: 9998;
   --kanso-z-grain: 9999;
+}
+
+/* theme: eva — EVA. Overrides only; everything else inherits :root. */
+[data-kanso-theme="eva"] {
+
+  /* color */
+  --kanso-color-primary: #ff6a00;
+  --kanso-color-primary-hot: #ff8a2b;
+  --kanso-color-primary-dim: #a34400;
+  --kanso-color-primary-deep: #4a1f00;
+  --kanso-color-primary-glow: rgba(255, 106, 0, 0.25);
+  --kanso-color-primary-wash: rgba(255, 106, 0, 0.12);
+  --kanso-color-primary-film: rgba(255, 106, 0, 0.05);
+  --kanso-color-success: #4fd37b;
+  --kanso-color-success-dim: #2f9a52;
+  --kanso-color-success-deep: #10331d;
+  --kanso-color-success-film: rgba(79, 211, 123, 0.05);
+  --kanso-color-info: #4aa8ff;
+  --kanso-color-info-dim: #2f7cbe;
+  --kanso-color-info-deep: #0b2b47;
+  --kanso-color-info-film: rgba(74, 168, 255, 0.05);
+  --kanso-color-danger: #ff3b2f;
+  --kanso-color-danger-dim: #c9291d;
+  --kanso-color-danger-deep: #4a0a05;
+  --kanso-color-danger-film: rgba(255, 59, 47, 0.05);
+  --kanso-color-warning: #ffb000;
+  --kanso-color-warning-dim: #c08400;
+  --kanso-color-warning-deep: #3d2800;
+  --kanso-color-accent: #7f6bd6;
+  --kanso-color-accent-dim: #4a3f80;
+  --kanso-color-accent-deep: #241d3f;
+  --kanso-color-accent-film: rgba(127, 107, 214, 0.06);
+  --kanso-color-magenta: #ff7ad9;
+  --kanso-color-magenta-dim: #bf4ba0;
+  --kanso-color-lime: #b8e04f;
+  --kanso-color-lime-dim: #7d9c25;
+  --kanso-color-phosphor-orange: #ff8a2b;
+  --kanso-color-phosphor-amber: #ffd48a;
+  --kanso-color-phosphor-lime: #cfe89a;
+  --kanso-color-phosphor-violet: #c4b5fd;
+  --kanso-color-phosphor-cyan: #8cc8ff;
+  --kanso-color-phosphor-green: #7fdf9f;
+  --kanso-color-phosphor-red: #ff8078;
+  --kanso-color-bg: #000000;
+  --kanso-color-panel: #0e0e12;
+  --kanso-color-panel-2: #16161d;
+  --kanso-color-panel-3: #1e1e26;
+  --kanso-color-well: #08080a;
+  --kanso-color-border: #22222a;
+  --kanso-color-border-highlight: #6c6c78;
+  --kanso-color-text: #f5f1e8;
+  --kanso-color-text-2: #cfc9bd;
+  --kanso-color-text-dim: #9a948a;
+  --kanso-color-muted: #918b81;
+  --kanso-color-text-faint: #6e6961;
+  --kanso-color-ink: #050505;
+  --kanso-color-focus: #4aa8ff;
+  --kanso-color-zebra: rgba(255, 255, 255, 0.02);
+  --kanso-color-row-hover: rgba(255, 255, 255, 0.05);
+
+  /* ramp */
+  --kanso-ramp-nominal: #3fbf6a;
+  --kanso-ramp-caution: #b8e04f;
+  --kanso-ramp-elevated: #ffb000;
+  --kanso-ramp-warning: #ff7a1a;
+  --kanso-ramp-critical: #ff3b2f;
+  --kanso-ramp-cool: #4aa8ff;
+  --kanso-ramp-void: #26262e;
+
+  /* series */
+  --kanso-series-1: #ff8a2b;
+  --kanso-series-2: #4aa8ff;
+  --kanso-series-3: #b8e04f;
+  --kanso-series-4: #ff7ad9;
+  --kanso-series-5: #c4b5fd;
+  --kanso-series-6: #c07f00;
+  --kanso-series-7: #2f9a90;
+  --kanso-series-8: #a8b4c2;
+
+  /* type */
+  --kanso-type-display: "Shippori Mincho B1", "Zen Old Mincho", "Noto Serif Display", serif;
+  --kanso-type-size-xs: 0.6875rem;
+  --kanso-type-size-sm: 0.75rem;
+  --kanso-type-size-base: 0.8125rem;
+  --kanso-type-size-md: 0.9375rem;
+  --kanso-type-size-lg: 1.0625rem;
+  --kanso-type-size-xl: 1.375rem;
+  --kanso-type-size-2xl: 1.75rem;
+  --kanso-type-size-3xl: 2.25rem;
+  --kanso-type-size-4xl: 3rem;
+
+  /* glass */
+  --kanso-glass-bg: rgba(14, 14, 18, 0.88);
+  --kanso-glass-bg-heavy: rgba(0, 0, 0, 0.94);
+  --kanso-glass-border: rgba(255, 255, 255, 0.10);
+
+  /* effect */
+  --kanso-effect-phosphor-blur: 3px;
+  --kanso-effect-phosphor-alpha: 0.22;
+  --kanso-effect-focus-ring: 2px;
+
+  /* scanline */
+  --kanso-scanline-opacity: 0.05;
+  --kanso-scanline-period: 3px;
 }

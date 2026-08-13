@@ -40,6 +40,7 @@
 @import "./components/BarChart/BarChart.css";
 @import "./components/SegmentBar/SegmentBar.css";
 @import "./components/CoreGrid/CoreGrid.css";
+@import "./components/MagiConsensus/MagiConsensus.css";
 @import "./components/Progress/Progress.css";
 @import "./components/LED/LED.css";
 
@@ -50,6 +51,7 @@
 @import "./components/Table/Table.css";
 @import "./components/Terminal/Terminal.css";
 @import "./components/Skeleton/Skeleton.css";
+@import "./components/DataTexture/DataTexture.css";
 
 /* --- overlays ---------------------------------------------------------- */
 @import "./components/Modal/Modal.css";
@@ -58,5 +60,6 @@
 @import "./components/Menu/Menu.css";
 @import "./components/CommandPalette/CommandPalette.css";
 @import "./components/Alert/Alert.css";
+@import "./components/Takeover/Takeover.css";
 @import "./components/BootSequence/BootSequence.css";
 @import "./components/Spinner/Spinner.css";

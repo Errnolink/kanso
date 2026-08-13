@@ -1,6 +1,6 @@
 {
   "display": { "$type": "fontFamily", "$value": "\"Noto Serif Display\", serif" },
-  "mono": { "$type": "fontFamily", "$value": "\"JetBrains Mono\", ui-monospace, \"Cascadia Code\", Consolas, monospace" },
+  "mono": { "$type": "fontFamily", "$value": "\"JetBrains Mono\", \"Noto Sans Symbols 2\", ui-monospace, \"Cascadia Code\", Consolas, monospace" },
   "stamp": { "$type": "fontFamily", "$value": "\"Bebas Neue\", \"Arial Narrow\", sans-serif" },
   "jp": { "$type": "fontFamily", "$value": "\"Shippori Mincho B1\", serif" },
 
@@ -13,6 +13,7 @@
   "size-2xl": { "$type": "fontSize", "$value": "1.25rem" },
   "size-3xl": { "$type": "fontSize", "$value": "1.75rem" },
   "size-4xl": { "$type": "fontSize", "$value": "2.5rem" },
+  "size-hero": { "$type": "fontSize", "$value": "clamp(3rem, 12vw, 8rem)" },
 
   "weight-regular": { "$type": "fontWeight", "$value": "400" },
   "weight-medium": { "$type": "fontWeight", "$value": "500" },

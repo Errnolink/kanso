@@ -53,6 +53,9 @@ export const Sparkline = forwardRef<HTMLDivElement, SparklineProps>(function Spa
   const floor = Math.min(baseline, ...series);
   const range = Math.max(1e-9, peak - floor);
   const last = series[series.length - 1];
+  // A `var()`/`color-mix()` paint value only resolves in a CSS context, so
+  // the line and the gradient stops take it from `style`, not from
+  // `stroke=`/`stop-color=` presentation attributes.
   const tint = resolveHue(color, (last - floor) / range);
 
   // Half-pixel inset so a 1px stroke lands on the pixel grid.
@@ -93,8 +96,8 @@ export const Sparkline = forwardRef<HTMLDivElement, SparklineProps>(function Spa
         {fill && (
           <defs>
             <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={tint} stopOpacity="0.28" />
-              <stop offset="100%" stopColor={tint} stopOpacity="0" />
+              <stop offset="0%" style={{ stopColor: tint, stopOpacity: 0.28 }} />
+              <stop offset="100%" style={{ stopColor: tint, stopOpacity: 0 }} />
             </linearGradient>
           </defs>
         )}
@@ -102,7 +105,7 @@ export const Sparkline = forwardRef<HTMLDivElement, SparklineProps>(function Spa
         <path
           className="kanso-sparkline__line"
           d={line}
-          stroke={tint}
+          style={{ stroke: tint }}
           fill="none"
           vectorEffect="non-scaling-stroke"
         />

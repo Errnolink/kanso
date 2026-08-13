@@ -392,3 +392,196 @@ body {
   .nav { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--kanso-color-border); }
   .page { padding: 0 var(--kanso-spacing-xl) var(--kanso-spacing-3xl); }
 }
+
+/* --- design-generation switch ------------------------------------------- */
+/* Fixed HUD dock. It sits above the atmosphere layer because it is chrome
+   for the page, not part of the specimen. */
+.themeswitch {
+  position: fixed;
+  top: var(--kanso-spacing-xl);
+  right: var(--kanso-spacing-xl);
+  z-index: var(--kanso-z-dock);
+  width: 208px;
+  padding: var(--kanso-spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-md);
+  border: 1px solid var(--kanso-color-border-highlight);
+  box-shadow: var(--kanso-shadow-float);
+}
+
+.themeswitch-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.themeswitch-label {
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-widest);
+  color: var(--kanso-color-muted);
+}
+
+.themeswitch-gen {
+  font-size: var(--kanso-type-size-sm);
+  font-weight: var(--kanso-type-weight-bold);
+  letter-spacing: var(--kanso-type-tracking-label);
+  color: var(--kanso-color-primary);
+}
+
+.themeswitch-split {
+  display: flex;
+  align-items: center;
+  gap: var(--kanso-spacing-md);
+  padding: var(--kanso-spacing-md);
+  background: transparent;
+  border: 1px solid var(--kanso-color-border);
+  color: var(--kanso-color-text-dim);
+  font-family: var(--kanso-type-mono);
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-wider);
+  cursor: pointer;
+  transition: color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical),
+    border-color var(--kanso-motion-duration-tick) var(--kanso-motion-ease-mechanical);
+}
+
+.themeswitch-split:hover {
+  color: var(--kanso-color-text);
+  border-color: var(--kanso-color-border-highlight);
+}
+
+.themeswitch-split--on {
+  color: var(--kanso-color-primary);
+  border-color: var(--kanso-color-primary-dim);
+  background: var(--kanso-color-primary-film);
+}
+
+.themeswitch-split-box {
+  color: var(--kanso-color-primary);
+}
+
+.themeswitch-note {
+  margin: 0;
+  font-size: var(--kanso-type-size-sm);
+  line-height: var(--kanso-type-leading-snug);
+  color: var(--kanso-color-muted);
+}
+
+/* --- split compare ------------------------------------------------------ */
+/* Each pane re-declares the palette for its own subtree, so the two sides
+   are the *same components* under different tokens — not two mock-ups. */
+.split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1px;
+  background: var(--kanso-color-border);
+  border: 1px solid var(--kanso-color-border);
+}
+
+.split-pane {
+  background: var(--kanso-color-panel);
+  min-width: 0;
+}
+
+.split-tag {
+  padding: var(--kanso-spacing-sm) var(--kanso-spacing-lg);
+  border-bottom: 1px solid var(--kanso-color-border);
+  background: var(--kanso-color-primary-film);
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-stamp);
+  color: var(--kanso-color-primary);
+}
+
+.split-body {
+  padding: var(--kanso-spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--kanso-spacing-lg);
+  align-items: flex-start;
+}
+
+.split-note {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: var(--kanso-spacing-md) var(--kanso-spacing-lg);
+  background: var(--kanso-color-panel);
+  font-size: var(--kanso-type-size-sm);
+  color: var(--kanso-color-muted);
+}
+
+/* Keep the dock clear of the page gutter on narrow viewports. */
+@media (max-width: 1100px) {
+  .themeswitch {
+    position: static;
+    width: auto;
+    margin-bottom: var(--kanso-spacing-xl);
+  }
+}
+
+/* --- split compare, tightened ------------------------------------------- */
+/* The strip goes to flex, for two reasons that only show up once real
+   specimens are in it:
+
+   1. `.split-note` spans every column, so `auto-fit` never saw an empty
+      track to collapse — a full-width strip with a note grew a third, empty
+      column and left both panes at two thirds of the width they had. A wrap
+      basis has no tracks to leave empty.
+   2. The 300px floor is wider than half of a two-up demo card, so every
+      in-column comparison silently fell to stacked. 240px is what these
+      specimens actually need, and stacking is still what happens when the
+      card genuinely cannot hold two. */
+.split {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.split-pane {
+  flex: 1 1 240px;
+}
+
+.split-note {
+  flex: 1 1 100%;
+}
+
+/* --- v2 specimens ------------------------------------------------------- */
+/* DataTexture's real job is to sit *behind* live content, so the demo has to
+   show it doing that rather than as a block of text on its own. The field is
+   absolutely positioned, so the bed takes its height from the readouts. */
+.texture-bed {
+  position: relative;
+  width: 100%;
+  padding: var(--kanso-spacing-xl);
+  overflow: hidden;
+}
+
+.texture-bed .kanso-data-texture {
+  position: absolute;
+  inset: 0;
+  padding: var(--kanso-spacing-md);
+}
+
+.texture-bed-content {
+  position: relative;
+}
+
+/* The ramp specimen, drawn from var(--kanso-ramp-*) so it follows whichever
+   palette its subtree declares — the baked RAMP_STOPS hex list cannot. */
+.ramp-bar {
+  width: 100%;
+  height: var(--kanso-spacing-2xl);
+}
+
+.ramp-stops {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--kanso-spacing-sm);
+  width: 100%;
+}
+
+.ramp-stop {
+  font-size: var(--kanso-type-size-sm);
+  letter-spacing: var(--kanso-type-tracking-wider);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

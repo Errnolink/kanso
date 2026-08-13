@@ -103,9 +103,41 @@ component's base CSS block (so the component still renders if the inline style i
 stripped), and are never read from outside their own component.
 
 Groups: `color`, `ramp`, `type`, `spacing`, `shape`, `shadow`, `glass`, `motion`,
-`scanline`, `effect`, `z`.
+`scanline`, `effect`, `series`, `z`.
 
 There is deliberately **no radius group**. Rule 2 forbids using one.
+
+### Themes — two design generations, one component set
+
+`tokens/themes/<id>.json` is an **override map**, `{ <group>: { <name>: token } }`.
+It compiles to one extra CSS block that re-declares only the tokens it names;
+everything else inherits from `:root`. A theme may only override a token the base
+already defines — inventing one there fails the build, because a property that
+exists in a single theme is how a component silently loses its colour in the other.
+
+| Theme | Attribute | What it is |
+| --- | --- | --- |
+| `classic` | *(none)* | **v1.** The palette this library shipped with. `:root`, unchanged. |
+| `eva` | `data-kanso-theme="eva"` | **v2.** The `theme-research` synthesis — NERV orange `#ff6a00`, an 11px type floor, borders that are actually visible, a wider severity ramp. |
+
+The selector is a bare attribute selector, deliberately unqualified. Custom
+properties inherit, so putting `data-kanso-theme` on **any** element re-themes
+that subtree — which is what lets the gallery render both generations side by
+side on one page, and lets an app theme a single panel without a second
+stylesheet.
+
+```tsx
+const [theme, setTheme] = useKansoTheme();   // writes <html>, persists the choice
+```
+
+`applyTheme`, `readTheme`, `THEMES` and `ThemeId` are exported for apps that
+manage their own state. `classic` is represented by the **absence** of the
+attribute, so an app that never opts in has exactly the DOM it had before themes
+existed.
+
+**v1 is kept, not deprecated.** It is the reference the redesign is measured
+against, which is why the contrast and type-floor gates report its known defects
+without failing on them — see §10.
 
 Durations carry their unit in CSS (`140ms`) and are plain numbers in TS (`140`).
 Write `transition: color var(--kanso-motion-duration-tick) ...` — never append `ms`.
@@ -142,6 +174,14 @@ quantities where low is bad (signal strength, battery, free space).
 `bg #000` → `panel #0a0a0c` → `panel-2 #121214` → `panel-3 #17171b`, with `well
 #050505` for recessed beds. Borders: `border #1f1f23`, `border-highlight #2e2e34`.
 Text: `text #e8e8e4` → `text-2 #b8b8b2` → `text-dim #8a8a85` → `muted #767670`.
+
+One token sits **below** that floor and is not part of the scale: `text-faint`
+(`#6a6a65`) is **decorative-only**, for `DataTexture`'s field of real
+application data and nothing else. It is deliberately excluded from the contrast
+gate's text tier, and anything using it must be `aria-hidden`. It exists so that
+effect can be a declared colour rather than `muted` behind an opacity
+multiplier — an opacity fudge makes the delivered ratio unmeasurable, which is
+the failure this system is built to avoid. Promoting it to a caption is a bug.
 
 ### The severity ramp — btop's idea, made a primitive
 
@@ -319,8 +359,21 @@ anything content-heavy — a moving mask over a wall of text is hostile.
 Dark chrome, low contrast, and small type make three things mandatory:
 
 1. **Cyan focus rings, always visible.** `#20f0ff` is reserved for focus and never
-   used decoratively on an interactive element. Clipped elements draw the ring as an
-   inset `box-shadow` because a `clip-path` crops an `outline`.
+   used decoratively on an interactive element (eva repoints it to pattern-blue
+   `#4aa8ff`, which stays distinct from that theme's orange chrome). Clipped
+   elements draw the ring as an inset `box-shadow` because a `clip-path` crops an
+   `outline` — **and `forced-colors: active` forces `box-shadow: none` by
+   specification**, which would delete the focus indicator from most of the
+   interactive set. `a11y.css` restores a real `outline` there at a *negative*
+   offset: at a positive offset the ring lands outside the clip polygon and is
+   clipped away entirely. The cost is the two chamfered corners.
+
+   Three user preferences beyond reduced motion are honoured: `prefers-contrast:
+   more` promotes `muted` to `text-dim` and `border` to `border-highlight`, and
+   drops phosphor, scanlines and grain; `prefers-reduced-transparency` makes glass
+   opaque and kills every `backdrop-filter`; `forced-colors` is assumed to delete
+   the whole effects layer, so glow, shadow, gradient and stripe may **never** be
+   the sole carrier of state, focus or boundary.
 2. **`muted` is the floor, and it is measured.** `#767670` on black is 4.60:1 —
    the lowest-contrast text the system allows, and only for labels. It was
    `#6a6a65` until a contrast audit put that at 3.86:1, which fails AA for the
@@ -398,14 +451,24 @@ neither.
    not the library.
 
 ```bash
-npm run build:tokens     # tokens/*.json -> tokens.ts / tokens.css / tokens.json
-npm run check:contrast   # gate every text token against AA on black
-npm run verify           # tokens + contrast + typecheck
+npm run build:tokens     # tokens/*.json + tokens/themes/*.json -> ts / css / json
+npm run check:contrast   # 230 pairs per theme, against real composited surfaces
+npm run check:type       # the 11px floor, across CSS, inline styles and tokens
+npm run verify           # tokens + contrast + type + typecheck
 npm run dev              # playground gallery at localhost
 npm run build            # library bundle to dist/
 npm run smoke            # render the gallery in a real browser
 ```
 
 `check:contrast` is not optional ceremony. It is the thing that caught `muted`
-shipping at 3.86:1. Any token that can carry text belongs in its `TEXT_TOKENS`
-map with the tier it must clear.
+shipping at 3.86:1 — and then, once it stopped testing against pure black alone,
+eleven more pairs that the old gate called clean. **Pure black is the most
+favourable surface in the system**, so a token is now measured against every
+surface it can actually land on, with `zebra`, `row-hover`, `wash` and `glass`
+alpha-composited over their base before measurement. Surfaces, pairs, minimums
+and tiers are declared as data at the top of the script: extend the table, not
+the loop. If you add a colour that can carry text, add its pair there.
+
+Both gates print v1's known failures and still exit 0 — see §3 "Themes". Green
+does **not** mean classic is clean; it means v2 is, and v1 is preserved
+deliberately.

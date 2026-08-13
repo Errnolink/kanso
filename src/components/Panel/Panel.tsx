@@ -4,6 +4,10 @@
 //
 // Notch direction encodes anchoring — a panel notches away from the screen
 // edge it hugs, so a left-docked panel uses notch="left".
+//
+// `title2` is btop's bottom-edge secondary title: a readout notched into the
+// bottom rule, which the strip has to draw itself because the panel clips to
+// its padding box.
 import {
   forwardRef,
   useId,
@@ -22,6 +26,13 @@ export interface PanelProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"
   actions?: ReactNode;
   /** Footer strip below the body. */
   footer?: ReactNode;
+  /**
+   * Secondary readout notched into the bottom rule, right-aligned — btop's
+   * `createBox` title2. For last-updated, record count, source. It is
+   * metadata, never a heading, and it composes with `footer`: the footer is
+   * a content strip, `title2` is the edge itself.
+   */
+  title2?: ReactNode;
   /** Colour of the 2px top rule. Declares what the panel is for. */
   accent?: PanelAccent;
   /** Corner treatment. Notch away from the edge the panel is docked to. */
@@ -57,6 +68,7 @@ export const Panel = forwardRef<HTMLElement, PanelProps>(function Panel(
     meta,
     actions,
     footer,
+    title2,
     accent = "primary",
     notch = "none",
     glass = false,
@@ -81,6 +93,7 @@ export const Panel = forwardRef<HTMLElement, PanelProps>(function Panel(
         glass ? "kanso-glass" : "kanso-surface",
         accentClass[accent],
         notchClass[notch],
+        title2 ? "kanso-panel--title2" : "",
         className,
       ]
         .filter(Boolean)
@@ -110,6 +123,11 @@ export const Panel = forwardRef<HTMLElement, PanelProps>(function Panel(
         {children}
       </div>
       {footer && <footer className="kanso-panel__footer">{footer}</footer>}
+      {title2 && (
+        <div className="kanso-panel__title2">
+          <span className="kanso-panel__title2-label">{title2}</span>
+        </div>
+      )}
     </section>
   );
 });
